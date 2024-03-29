@@ -3,9 +3,10 @@
 
 enum HeroDirection
 {
-	Down = 0,
-	Up = 1,
-	right = 2
+	Nondirect = 0,
+	Back = 1,
+	Up = 2,
+	right = 3
 };
 
 struct Spleet—haracteristic

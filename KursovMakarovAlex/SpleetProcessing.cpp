@@ -9,7 +9,7 @@ Spleet—haracteristic HeroAnimatic[4];
 Spleet—haracteristic HeroRunBack(SDL_Renderer* ren)
 {
 	Spleet—haracteristic spleet;
-	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_back.png",ren);
+	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_back.png", ren);
 	spleet.drect = RectOfTexture(spleet.texture);
 	spleet.drect.x = 400;
 	spleet.drect.y = 400;
@@ -22,12 +22,29 @@ Spleet—haracteristic HeroRunBack(SDL_Renderer* ren)
 	return spleet;
 }
 
-void HeroInit(SDL_Renderer * ren)
+Spleet—haracteristic HeroRunStay(SDL_Renderer* ren)
 {
-	HeroAnimatic[Down] = HeroRunBack(ren);
+	Spleet—haracteristic spleet;
+	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_front_stay.png", ren);
+	spleet.drect = RectOfTexture(spleet.texture);
+	spleet.drect.h = 54;
+	
+	spleet.drect.x = 500;
+	spleet.drect.y = 400;
+	spleet.currenfaze = 0;
+	spleet.maxfaze = 2;
+	spleet.crect[0] = { 0,0,20,25 };
+	spleet.crect[1] = { 20,0,20,25 };
+	return spleet;
 }
 
-void SpleetAnimatic(SDL_Renderer* ren,Spleet—haracteristic &spleet)
+void HeroInit(SDL_Renderer* ren)
+{
+	HeroAnimatic[Nondirect] = HeroRunStay(ren);
+	HeroAnimatic[Back] = HeroRunBack(ren);
+}
+
+void SpleetAnimatic(SDL_Renderer* ren, Spleet—haracteristic& spleet)
 {
 	static int  dt, lasttime;
 	int currentime = SDL_GetTicks();

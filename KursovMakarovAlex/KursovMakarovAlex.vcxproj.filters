@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов\ttffonts">
+      <UniqueIdentifier>{55735066-349a-47f3-8513-e9e300496b9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\textures">
+      <UniqueIdentifier>{78557ace-cdd1-4290-bc3d-4beff63cd300}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\textures\splites">
+      <UniqueIdentifier>{58945241-ac1a-4386-a384-ce802dd032d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\textures\backgrounds">
+      <UniqueIdentifier>{b9ebebeb-024e-4577-a75d-b1fec690e0da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\TextureProcessing">
+      <UniqueIdentifier>{7c742967-ca70-4d0f-b0ab-27f6cf1d9d0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\TextureProcessing">
+      <UniqueIdentifier>{d0001ebc-b1e7-40a5-abf5-0609738191b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Utility">
+      <UniqueIdentifier>{471140c4-011a-42da-91c9-5a44c27268bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Utility\SDL_free_init">
+      <UniqueIdentifier>{b473ae29-b28b-4178-967b-c4958f4acc4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Utility">
+      <UniqueIdentifier>{96cf279b-3037-439e-bc0b-9b79e07dc5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Utility\SDL_free_init">
+      <UniqueIdentifier>{54362046-a641-4811-8f0f-e2c466530d94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\textures\splites\knight">
+      <UniqueIdentifier>{7b369ac6-cfac-48e2-8193-722411440afa}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="KursovMakarovAlex.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="texturesimport.cpp">
+      <Filter>Исходные файлы\TextureProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLProcessing.cpp">
+      <Filter>Исходные файлы\Utility\SDL_free_init</Filter>
+    </ClCompile>
+    <ClCompile Include="SpleetProcessing.cpp">
+      <Filter>Исходные файлы\TextureProcessing</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="BrownieStencil-8O8MJ.ttf">
+      <Filter>Файлы ресурсов\ttffonts</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="texturesimport.h">
+      <Filter>Файлы заголовков\TextureProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLProcessing.h">
+      <Filter>Файлы заголовков\Utility\SDL_free_init</Filter>
+    </ClInclude>
+    <ClInclude Include="SpleetProcessing.h">
+      <Filter>Файлы заголовков\TextureProcessing</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="soul_knight_animation_cuted_run_back.png">
+      <Filter>Файлы ресурсов\textures\splites\knight</Filter>
+    </Image>
+    <Image Include="soul_knight_animation_cuted_run_front.png">
+      <Filter>Файлы ресурсов\textures\splites\knight</Filter>
+    </Image>
+    <Image Include="soul_knight_animation_cuted_run_right.png">
+      <Filter>Файлы ресурсов\textures\splites\knight</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

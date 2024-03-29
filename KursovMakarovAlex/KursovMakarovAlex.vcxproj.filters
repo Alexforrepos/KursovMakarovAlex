@@ -87,5 +87,11 @@
     <Image Include="soul_knight_animation_cuted_run_right.png">
       <Filter>Файлы ресурсов\textures\splites\knight</Filter>
     </Image>
+    <Image Include="soul_knight_animation_cuted_run_front_right.png">
+      <Filter>Файлы ресурсов\textures\splites\knight</Filter>
+    </Image>
+    <Image Include="soul_knight_animation_cuted_run_front_stay.png">
+      <Filter>Файлы ресурсов\textures\splites\knight</Filter>
+    </Image>
   </ItemGroup>
 </Project>

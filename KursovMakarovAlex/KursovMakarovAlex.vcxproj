@@ -148,6 +148,8 @@
   <ItemGroup>
     <Image Include="soul_knight_animation_cuted_run_back.png" />
     <Image Include="soul_knight_animation_cuted_run_front.png" />
+    <Image Include="soul_knight_animation_cuted_run_front_right.png" />
+    <Image Include="soul_knight_animation_cuted_run_front_stay.png" />
     <Image Include="soul_knight_animation_cuted_run_right.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -4,7 +4,7 @@
 #include "SpleetProcessing.h"
 #include "texturesimport.h"
 
-Spleet—haracteristic HeroAnimatic[3];
+Spleet—haracteristic HeroAnimatic[4];
 
 Spleet—haracteristic HeroRunBack(SDL_Renderer* ren)
 {

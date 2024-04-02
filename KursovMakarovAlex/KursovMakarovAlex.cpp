@@ -13,22 +13,16 @@ int HEIGHT = 1000;
 #pragma endregion
 
 extern TextureСharacteristic* Textures;
-extern SpleetСharacteristic HeroAnimatic[4];
 
 int main(int argc, char* argv[])
 {
 	Init();
-	HeroInit(ren);
 	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 	while (1)
 	{
-		SDL_RenderClear(ren);
-		SpleetAnimatic(ren, HeroAnimatic[Nondirect]);
-		SpleetAnimatic(ren, HeroAnimatic[Back]);
-
-		SDL_RenderPresent(ren);
-		SDL_Delay(1000 / 25);
+	
 	}
+
 	Deinit(1);
 	return 0;
 }

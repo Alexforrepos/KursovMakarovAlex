@@ -5,8 +5,8 @@ enum HeroDirection
 {
 	Nondirect = 0,
 	Back = 1,
-	Up = 2,
-	right = 3
+	Right = 2,
+	FrontRun = 3
 };
 
 struct Spleet—haracteristic
@@ -18,6 +18,10 @@ struct Spleet—haracteristic
 	int maxfaze;
 };
 
+extern Spleet—haracteristic* HeroAnimatic;
+
+void FreeAllHeroTextures(Spleet—haracteristic* Herot);
+
 void SpleetAnimatic(SDL_Renderer* ren, Spleet—haracteristic& spleet);
 
-void HeroInit(SDL_Renderer* ren);
+void HeroInit(SDL_Renderer* ren, double scale);

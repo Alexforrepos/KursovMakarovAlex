@@ -23,6 +23,7 @@ Texture—haracteristic NewTextureInit(const char filename[], SDL_Renderer* ren);
 
 SDL_Texture* CreateUTexture(const char filename[], SDL_Renderer* ren);
 
-void MemoryReallocForTexture();
+
+extern Texture—haracteristic* BackgrTextures;
 
 void FreeAllTexture();

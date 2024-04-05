@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="KursovMakarovAlex.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="SDLProcessing.cpp" />
     <ClCompile Include="SpleetProcessing.cpp" />
     <ClCompile Include="texturesimport.cpp" />
@@ -141,11 +142,13 @@
     <Font Include="BrownieStencil-8O8MJ.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="SDLProcessing.h" />
     <ClInclude Include="SpleetProcessing.h" />
     <ClInclude Include="texturesimport.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="proba.png" />
     <Image Include="soul_knight_animation_cuted_run_back.png" />
     <Image Include="soul_knight_animation_cuted_run_front_right.png" />
     <Image Include="soul_knight_animation_cuted_run_front_stay.png" />

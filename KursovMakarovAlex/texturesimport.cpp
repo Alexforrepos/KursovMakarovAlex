@@ -5,9 +5,9 @@
 #include "SDLProcessing.h"
 #include "texturesimport.h"
 
-int TextureQuant = 0;
+int TextureQuant = 10;
 
-TextureÑharacteristic* Textures = (TextureÑharacteristic*)malloc(sizeof(TextureÑharacteristic) * TextureQuant);
+TextureÑharacteristic* BackgrTextures = (TextureÑharacteristic*)malloc(sizeof(TextureÑharacteristic) * TextureQuant);
 
 SDL_Texture* CreateTextTexture(const char massage[], const char filename[], SDL_Color color, int size_of_font, SDL_Renderer* ren)
 {
@@ -45,12 +45,6 @@ SDL_Rect RectOfTexture(SDL_Texture* t)
 	return r;
 }
 
-void MemoryReallocForTexture()
-{
-	TextureQuant++;
-	Textures = (TextureÑharacteristic*)realloc(Textures, TextureQuant);
-}
-
 SDL_Texture* CreateUTexture(const char filename[], SDL_Renderer* ren)
 {
 	SDL_Surface* surface = IMG_Load(filename);
@@ -68,17 +62,17 @@ SDL_Texture* CreateUTexture(const char filename[], SDL_Renderer* ren)
 TextureÑharacteristic NewTextureInit(const char filename[], SDL_Renderer* ren)
 {
 	TextureÑharacteristic texture;
-	MemoryReallocForTexture();
 	texture.texture = CreateUTexture(filename, ren);
 	texture.drect = RectOfTexture(texture.texture);
 	return texture;
 } //ñîçäàíèå è äîáàâîåíèå íîâîé òåêñòóğû â ìàññèâ
 
-void FreeAllTexture()
+void FreeBackgrounds()
 {
-	for (int i = 0; i < TextureQuant; i++)
-	{
-		SDL_DestroyTexture(Textures[i].texture);
-	}
-	free(Textures);
+	free(BackgrTextures);
+}
+
+void MenuTextureInit()
+{
+
 }

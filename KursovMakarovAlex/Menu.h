@@ -1,4 +1,4 @@
 #pragma once
 #include <SDL.h>
 
-void MenuDrow(SDL_Renderer* ren, int x, int y);
+void MenuDrow(SDL_Renderer* ren);

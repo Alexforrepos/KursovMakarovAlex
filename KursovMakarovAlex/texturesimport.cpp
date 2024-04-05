@@ -5,26 +5,34 @@
 #include "SDLProcessing.h"
 #include "texturesimport.h"
 
-int TextureQuant = 10;
+int TextureQuant = 10,TextTexturesQuant = 10;
+
+#pragma region DdynamicMassesInit
 
 TextureÑharacteristic* BackgrTextures = (TextureÑharacteristic*)malloc(sizeof(TextureÑharacteristic) * TextureQuant);
+TextureÑharacteristic* TextTextures = (TextureÑharacteristic*)calloc(sizeof(TextureÑharacteristic) * TextTexturesQuant,NULL);
+#pragma endregion
+
 
 SDL_Texture* CreateTextTexture(const char massage[], const char filename[], SDL_Color color, int size_of_font, SDL_Renderer* ren)
 {
 	TTF_Font* font = TTF_OpenFont(filename, size_of_font);
 	if (font == NULL)
 	{
+		printf("errn ttf file font open\n");
 		return NULL;
 	}
 	SDL_Surface* surf = TTF_RenderText_Blended(font, massage, color);
 	if (surf == NULL)
 	{
+		printf("errn ttf file font open\n");
 		TTF_CloseFont(font);
 		return NULL;
 	}
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(ren, surf);
 	if (texture == NULL)
 	{
+		printf("errn ttf file font open\n");
 		return NULL;
 	}
 	SDL_FreeSurface(surf);
@@ -37,11 +45,11 @@ void TextureInfo(SDL_Texture* t, int* w, int* h)
 	SDL_QueryTexture(t, NULL, NULL, w, h);
 }
 
-SDL_Rect RectOfTexture(SDL_Texture* t)
+SDL_Rect RectOfTexture(SDL_Texture* t, int x,int y)
 {
 	int w, h;
 	TextureInfo(t, &w, &h);
-	SDL_Rect r = { 0,0,w,h };
+	SDL_Rect r = { x,y,w,h };
 	return r;
 }
 
@@ -59,20 +67,47 @@ SDL_Texture* CreateUTexture(const char filename[], SDL_Renderer* ren)
 	return  texture;
 }
 
-TextureÑharacteristic NewTextureInit(const char filename[], SDL_Renderer* ren)
+TextureÑharacteristic NewTextureInit(SDL_Renderer* ren, const char filename[], int x,int y)
 {
 	TextureÑharacteristic texture;
 	texture.texture = CreateUTexture(filename, ren);
-	texture.drect = RectOfTexture(texture.texture);
+	texture.drect = RectOfTexture(texture.texture,x,y);
 	return texture;
 } //ñîçäàíèå è äîáàâîåíèå íîâîé òåêñòóğû â ìàññèâ
 
-void FreeBackgrounds()
+void FreeTextures()
 {
 	free(BackgrTextures);
+	free(TextTextures);
 }
 
-void MenuTextureInit()
+#pragma region Menu
+void MenuTextureInit(SDL_Renderer* ren)
 {
+#pragma region text
+	TextTextures[0].texture = CreateTextTexture("Íîâàÿ Èãğà", "BrownieStencil-8O8MJ.ttf", { 255,255,255,255 }, 32, ren);
+	TextTextures[1].texture = CreateTextTexture("Íîâàÿ Èãğà", "BrownieStencil-8O8MJ.ttf", { 255,0,0,255 }, 32, ren);
+	TextTextures[0].drect = RectOfTexture(TextTextures[0].texture,100,100);
+	TextTextures[1].drect = RectOfTexture(TextTextures[0].texture,100,100);
+
+	TextTextures[2].texture = CreateTextTexture("Çàãğóçèòü Èãğó", "BrownieStencil-8O8MJ.ttf", { 255,255,255,255 }, 32, ren);
+	TextTextures[3].texture = CreateTextTexture("Çàãğóçèòü Èãğó", "BrownieStencil-8O8MJ.ttf", { 255,0,0,255 }, 32, ren);
+	TextTextures[2].drect = RectOfTexture(TextTextures[0].texture,100,200);
+	TextTextures[3].drect = RectOfTexture(TextTextures[0].texture,100,200);
+
+	TextTextures[4].texture = CreateTextTexture("Èíôîğìàöèÿ", "BrownieStencil-8O8MJ.ttf", { 255,255,255,255 }, 32, ren);
+	TextTextures[5].texture = CreateTextTexture("Èíôîğìàöèÿ", "BrownieStencil-8O8MJ.ttf", { 255,0,0,255 }, 32, ren);
+	TextTextures[4].drect = RectOfTexture(TextTextures[0].texture,100,300);
+	TextTextures[5].drect = RectOfTexture(TextTextures[0].texture,100,300);
+
+	TextTextures[4].texture = CreateTextTexture("Âûõîä", "BrownieStencil-8O8MJ.ttf", { 255,255,255,255 }, 32, ren);
+	TextTextures[5].texture = CreateTextTexture("Âûõîä", "BrownieStencil-8O8MJ.ttf", { 255,0,0,255 }, 32, ren);
+	TextTextures[4].drect = RectOfTexture(TextTextures[0].texture,100,400);
+	TextTextures[5].drect = RectOfTexture(TextTextures[0].texture,100,400);
+#pragma endregion
+#pragma region MenuBackground
+	BackgrTextures[0] = NewTextureInit(ren, "proba.png", NULL, NULL);
+#pragma endregion
 
 }
+#pragma endregion

@@ -28,9 +28,6 @@
     <Filter Include="Исходные файлы\TextureProcessing">
       <UniqueIdentifier>{7c742967-ca70-4d0f-b0ab-27f6cf1d9d0d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы заголовков\TextureProcessing">
-      <UniqueIdentifier>{d0001ebc-b1e7-40a5-abf5-0609738191b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Исходные файлы\Utility">
       <UniqueIdentifier>{471140c4-011a-42da-91c9-5a44c27268bb}</UniqueIdentifier>
     </Filter>
@@ -39,9 +36,6 @@
     </Filter>
     <Filter Include="Файлы заголовков\Utility">
       <UniqueIdentifier>{96cf279b-3037-439e-bc0b-9b79e07dc5f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы заголовков\Utility\SDL_free_init">
-      <UniqueIdentifier>{54362046-a641-4811-8f0f-e2c466530d94}</UniqueIdentifier>
     </Filter>
     <Filter Include="Файлы ресурсов\textures\splites\knight">
       <UniqueIdentifier>{7b369ac6-cfac-48e2-8193-722411440afa}</UniqueIdentifier>
@@ -71,19 +65,22 @@
     <Font Include="BrownieStencil-8O8MJ.ttf">
       <Filter>Файлы ресурсов\ttffonts</Filter>
     </Font>
+    <Font Include="Zodchiy-Regular.ttf">
+      <Filter>Файлы ресурсов\ttffonts</Filter>
+    </Font>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="texturesimport.h">
-      <Filter>Файлы заголовков\TextureProcessing</Filter>
-    </ClInclude>
-    <ClInclude Include="SDLProcessing.h">
-      <Filter>Файлы заголовков\Utility\SDL_free_init</Filter>
+      <Filter>Исходные файлы\TextureProcessing</Filter>
     </ClInclude>
     <ClInclude Include="SpleetProcessing.h">
-      <Filter>Файлы заголовков\TextureProcessing</Filter>
+      <Filter>Исходные файлы\TextureProcessing</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Исходные файлы\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLProcessing.h">
+      <Filter>Исходные файлы\Utility\SDL_free_init</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

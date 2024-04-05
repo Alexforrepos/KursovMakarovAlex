@@ -17,11 +17,13 @@ extern TextureСharacteristic* Textures;
 
 int main(int argc, char* argv[])
 {
+	system("chcp 1251 > NULL");
 	Init();
 #pragma region glavperemen
 	SDL_Event ev;
 	bool isrunning = true;
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+	MenuTextureInit(ren);
 #pragma endregion
 	while (isrunning)
 	{
@@ -56,9 +58,11 @@ int main(int argc, char* argv[])
 #pragma endregion
 		SDL_RenderClear(ren);
 
-		MenuDrow(ren,100,100);
+		MenuDrow(ren);
 		SDL_RenderPresent(ren);
 	}
+	FreeTextures();
+	FreeAllHeroTextures(HeroAnimatic);
 	Deinit(1);
 	return 0;
 }

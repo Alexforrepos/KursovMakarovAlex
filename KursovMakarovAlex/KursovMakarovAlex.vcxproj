@@ -135,20 +135,33 @@
     <ClCompile Include="KursovMakarovAlex.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="SDLProcessing.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="SpleetProcessing.cpp" />
     <ClCompile Include="texturesimport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="BrownieStencil-8O8MJ.ttf" />
+    <Font Include="OpenSans-Bold.ttf" />
+    <Font Include="OpenSans-BoldItalic.ttf" />
+    <Font Include="OpenSans-ExtraBold.ttf" />
+    <Font Include="OpenSans-ExtraBoldItalic.ttf" />
+    <Font Include="OpenSans-Italic.ttf" />
+    <Font Include="OpenSans-Light.ttf" />
+    <Font Include="OpenSans-LightItalic.ttf" />
+    <Font Include="OpenSans-Regular.ttf" />
+    <Font Include="OpenSans-Semibold.ttf" />
+    <Font Include="OpenSans-SemiboldItalic.ttf" />
     <Font Include="Zodchiy-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="SDLProcessing.h" />
     <ClInclude Include="SpleetProcessing.h" />
     <ClInclude Include="texturesimport.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Infobackgr.jpg" />
     <Image Include="proba.png" />
     <Image Include="soul_knight_animation_cuted_run_back.png" />
     <Image Include="soul_knight_animation_cuted_run_front_right.png" />

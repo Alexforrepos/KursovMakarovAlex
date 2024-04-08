@@ -6,29 +6,29 @@
 
 extern SDL_Window* win;
 extern SDL_Renderer* ren;
-extern int WIDTH;
-extern int HEIGHT;
+int WIDTH = 1920;
+int HEIGHT = 1080;;
 
-void Deinit(int error)
+int Deinit(int error)
 {
-	if (win != NULL)
+	if (win)
 	{
 		SDL_DestroyWindow(win);
 	}
-	if (ren != NULL)
+	if (ren)
 	{
 		SDL_DestroyRenderer(ren);
 	}
 	IMG_Quit();
 	TTF_Quit();
 	SDL_Quit();
-	exit(error);
+	return error;
 }
 
 void Init()
 {
 	int r;
-	win = SDL_CreateWindow("proverka", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_FOREIGN | SDL_WINDOW_FULLSCREEN);
+	win = SDL_CreateWindow("proverka", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_FOREIGN);
 	ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 	if (SDL_Init(SDL_INIT_EVERYTHING))
 	{

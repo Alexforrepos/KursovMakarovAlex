@@ -81,27 +81,26 @@ void HeroInit(SDL_Renderer* ren,double scale)
 	HeroAnimatic[Right] = HeroFrontRunRight(ren, scale);
 }
 
-void SpleetAnimatic(SDL_Renderer* ren, SpleetÑharacteristic& spleet)
+void SpleetAnimatic(SDL_Renderer* ren, SpleetÑharacteristic& spleet,int FPS)
 {
 	static int  dt, lasttime;
 	int currentime = SDL_GetTicks();
 	dt += currentime - lasttime;
 	lasttime = currentime;
-	SDL_RenderCopy(ren, spleet.texture, &spleet.crect[spleet.currenfaze], &spleet.drect);
-	if (dt >= 1000 * 10 / 24);
+	if (dt > 1000/FPS);
 	{
 		spleet.currenfaze++;
-		SDL_Delay(50);
-		dt %= 1000 * 4 / 24;
+		dt = 0;
+		spleet.currenfaze %= spleet.maxfaze;
+		SDL_RenderCopy(ren, spleet.texture, &spleet.crect[spleet.currenfaze], &spleet.drect);
 	}
-	spleet.currenfaze %= spleet.maxfaze;
 }
 
 void FreeAllHeroTextures(SpleetÑharacteristic* Herot)
 {
 	for (int i = 0; Herot->texture != NULL; i++)
 	{
-		SDL_DestroyTexture(Herot->texture);
+		SDL_DestroyTexture(Herot[i].texture);
 	}
 	free(Herot);
 }

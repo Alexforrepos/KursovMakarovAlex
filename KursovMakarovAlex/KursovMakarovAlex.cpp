@@ -3,13 +3,14 @@
 #include "SDLProcessing.h"
 #include "SpleetProcessing.h"
 #include "Menu.h"
+#include "Mouse.h"
 
 #pragma region WINDOW_CHARACTERISTIC
 
 SDL_Window* win = NULL;
 SDL_Renderer* ren = NULL;
-int WIDTH = 1920;
-int HEIGHT = 1080;
+extern int WIDTH;
+extern int HEIGHT;
 
 #pragma endregion
 
@@ -22,9 +23,11 @@ int main(int argc, char* argv[])
 #pragma region glavperemen
 	SDL_Event ev;
 	bool isrunning = true;
+	Mouse mos;
+#pragma endregion
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
 	MenuTextureInit(ren);
-#pragma endregion
+	HeroInit(ren, 0.4);
 	while (isrunning)
 	{
 #pragma region event
@@ -35,34 +38,43 @@ int main(int argc, char* argv[])
 			case SDL_QUIT:
 				isrunning = false;
 				break;
-			case SDL_KEYDOWN:
-				switch (ev.key.keysym.scancode)
-				{
-				case SDL_SCANCODE_ESCAPE:
-					isrunning = false;
-					break;
-				default:
-					break;
-				}
-				break;
 			case SDL_WINDOWEVENT:
 				if (ev.window.event == SDL_WINDOWEVENT_RESIZED)
 				{
 					WIDTH = ev.window.data1;
 					HEIGHT = ev.window.data2;
 				}
+			case SDL_MOUSEBUTTONDOWN:
+				switch (ev.button.button)
+				{
+				case SDL_BUTTON_LEFT:
+					mos.isLKM = true;
+				default:
+					break;
+				}
 			default:
 				break;
 			}
 		}
 #pragma endregion
-		SDL_RenderClear(ren);
 
-		MenuDrow(ren);
-		SDL_RenderPresent(ren);
+		if (!isrunning)
+		{
+			break;
+		}
+			SDL_RenderClear(ren);
+
+			MenuDrow(ren,mos,isrunning);
+			SpleetAnimatic(ren, HeroAnimatic[Nondirect],1);
+			if (!isrunning)
+			{
+				break;
+			}
+			SDL_RenderPresent(ren);
+			mos.isLKM = false;
 	}
-	FreeTextures();
-	FreeAllHeroTextures(HeroAnimatic);
-	Deinit(1);
-	return 0;
+	//FreeTextures();
+	//FreeAllHeroTextures(HeroAnimatic);
+	Deinit(0);
+	return 1;
 }

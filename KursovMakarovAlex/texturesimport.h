@@ -11,7 +11,8 @@ enum TypeOfTexture
 enum Range_of_Textures
 {
 	TextMenuStart = 0, TextMenuEnd = 6,
-	BackGroundMenu = 0
+
+	BackGroundMenu = 0,InfoMenu = 1
 };
 
 #pragma endregion

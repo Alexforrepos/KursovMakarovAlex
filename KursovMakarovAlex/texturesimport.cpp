@@ -9,8 +9,9 @@ int TextureQuant = 10,TextTexturesQuant = 10;
 
 #pragma region DdynamicMassesInit
 
-TextureÑharacteristic* BackgrTextures = (TextureÑharacteristic*)malloc(sizeof(TextureÑharacteristic) * TextureQuant);
+TextureÑharacteristic* BackgrTextures = (TextureÑharacteristic*)calloc(sizeof(TextureÑharacteristic) * TextureQuant, NULL);
 TextureÑharacteristic* TextTextures = (TextureÑharacteristic*)calloc(sizeof(TextureÑharacteristic) * TextTexturesQuant,NULL);
+
 #pragma endregion
 
 
@@ -77,6 +78,11 @@ TextureÑharacteristic NewTextureInit(SDL_Renderer* ren, const char filename[], i
 
 void FreeTextures()
 {
+
+	for (int i = 0; BackgrTextures[i].texture != NULL; i++)
+		SDL_DestroyTexture(BackgrTextures[i].texture);
+	for (int i = 0; TextTextures[i].texture != NULL; i++)
+		SDL_DestroyTexture(BackgrTextures[i].texture);
 	free(BackgrTextures);
 	free(TextTextures);
 }
@@ -85,29 +91,30 @@ void FreeTextures()
 void MenuTextureInit(SDL_Renderer* ren)
 {
 #pragma region text
-	TextTextures[0].texture = CreateTextTexture("Íîâàÿ Èãğà", "BrownieStencil-8O8MJ.ttf", { 255,255,255,255 }, 32, ren);
-	TextTextures[1].texture = CreateTextTexture("Íîâàÿ Èãğà", "BrownieStencil-8O8MJ.ttf", { 255,0,0,255 }, 32, ren);
+	TextTextures[0].texture = CreateTextTexture("New Game", "OpenSans-Bold.ttf", { 255,255,255,255 }, 32, ren);
+	TextTextures[1].texture = CreateTextTexture("New Game", "OpenSans-Bold.ttf", { 255,0,0,255 }, 32, ren);
 	TextTextures[0].drect = RectOfTexture(TextTextures[0].texture,100,100);
-	TextTextures[1].drect = RectOfTexture(TextTextures[0].texture,100,100);
+	TextTextures[1].drect = RectOfTexture(TextTextures[1].texture,100,100);
 
-	TextTextures[2].texture = CreateTextTexture("Çàãğóçèòü Èãğó", "BrownieStencil-8O8MJ.ttf", { 255,255,255,255 }, 32, ren);
-	TextTextures[3].texture = CreateTextTexture("Çàãğóçèòü Èãğó", "BrownieStencil-8O8MJ.ttf", { 255,0,0,255 }, 32, ren);
-	TextTextures[2].drect = RectOfTexture(TextTextures[0].texture,100,200);
-	TextTextures[3].drect = RectOfTexture(TextTextures[0].texture,100,200);
+	TextTextures[2].texture = CreateTextTexture("Load Game", "OpenSans-Bold.ttf", { 255,255,255,255 }, 32, ren);
+	TextTextures[3].texture = CreateTextTexture("Load Game", "OpenSans-Bold.ttf", { 255,0,0,255 }, 32, ren);
+	TextTextures[2].drect = RectOfTexture(TextTextures[2].texture,100,200);
+	TextTextures[3].drect = RectOfTexture(TextTextures[3].texture,100,200);
 
-	TextTextures[4].texture = CreateTextTexture("Èíôîğìàöèÿ", "BrownieStencil-8O8MJ.ttf", { 255,255,255,255 }, 32, ren);
-	TextTextures[5].texture = CreateTextTexture("Èíôîğìàöèÿ", "BrownieStencil-8O8MJ.ttf", { 255,0,0,255 }, 32, ren);
-	TextTextures[4].drect = RectOfTexture(TextTextures[0].texture,100,300);
-	TextTextures[5].drect = RectOfTexture(TextTextures[0].texture,100,300);
+	TextTextures[4].texture = CreateTextTexture("Info", "OpenSans-Bold.ttf", { 255,255,255,255 }, 32, ren);
+	TextTextures[5].texture = CreateTextTexture("Info", "OpenSans-Bold.ttf", { 255,0,0,255 }, 32, ren);
+	TextTextures[4].drect = RectOfTexture(TextTextures[4].texture,100,300);
+	TextTextures[5].drect = RectOfTexture(TextTextures[5].texture,100,300);
 
-	TextTextures[4].texture = CreateTextTexture("Âûõîä", "BrownieStencil-8O8MJ.ttf", { 255,255,255,255 }, 32, ren);
-	TextTextures[5].texture = CreateTextTexture("Âûõîä", "BrownieStencil-8O8MJ.ttf", { 255,0,0,255 }, 32, ren);
-	TextTextures[4].drect = RectOfTexture(TextTextures[0].texture,100,400);
-	TextTextures[5].drect = RectOfTexture(TextTextures[0].texture,100,400);
+	TextTextures[6].texture = CreateTextTexture("Exit", "OpenSans-Bold.ttf", { 255,255,255,255 }, 32, ren);
+	TextTextures[7].texture = CreateTextTexture("Exit", "OpenSans-Bold.ttf", { 255,0,0,255 }, 32, ren);
+	TextTextures[6].drect = RectOfTexture(TextTextures[6].texture,100,400);
+	TextTextures[7].drect = RectOfTexture(TextTextures[7].texture,100,400);
 #pragma endregion
 #pragma region MenuBackground
 	BackgrTextures[0] = NewTextureInit(ren, "proba.png", NULL, NULL);
+	BackgrTextures[1] = NewTextureInit(ren, "Infobackgr.jpg", NULL, NULL);
 #pragma endregion
-
+	printf("1");
 }
 #pragma endregion

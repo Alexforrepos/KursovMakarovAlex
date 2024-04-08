@@ -1,4 +1,4 @@
 #pragma once
-void Deinit(int error);
+int Deinit(int error);
 
 void Init();

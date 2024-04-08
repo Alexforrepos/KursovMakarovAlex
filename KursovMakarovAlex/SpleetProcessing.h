@@ -18,10 +18,10 @@ struct Spleet—haracteristic
 	int maxfaze;
 };
 
-extern Spleet—haracteristic* HeroAnimatic;
+extern Spleet—haracteristic* HeroAnimatic; 
 
 void FreeAllHeroTextures(Spleet—haracteristic* Herot);
 
-void SpleetAnimatic(SDL_Renderer* ren, Spleet—haracteristic& spleet);
+void SpleetAnimatic(SDL_Renderer* ren, Spleet—haracteristic& spleet,int FPS);
 
 void HeroInit(SDL_Renderer* ren, double scale);

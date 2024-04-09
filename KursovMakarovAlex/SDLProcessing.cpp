@@ -4,8 +4,8 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-extern SDL_Window* win;
-extern SDL_Renderer* ren;
+SDL_Window* win;
+SDL_Renderer* ren;
 int WIDTH = 1920;
 int HEIGHT = 1080;;
 

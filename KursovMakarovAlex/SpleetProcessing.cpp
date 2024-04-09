@@ -12,7 +12,7 @@ SpleetÑharacteristic HeroRunBack(SDL_Renderer* ren, double scale)
 {
 	SpleetÑharacteristic spleet;
 	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_back.png", ren);
-	spleet.drect = RectOfTexture(spleet.texture,400,400); //pos 
+	spleet.drect = RectOfTexture(spleet.texture, 400, 400); //pos 
 	spleet.currenfaze = 0;
 	spleet.maxfaze = 4;
 	spleet.drect.h = 24 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze;
@@ -28,10 +28,10 @@ SpleetÑharacteristic HeroRunStay(SDL_Renderer* ren, double scale)
 {
 	SpleetÑharacteristic spleet;
 	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_front_stay.png", ren);
-	spleet.drect = RectOfTexture(spleet.texture,500,400);
+	spleet.drect = RectOfTexture(spleet.texture, 500, 400);
 	spleet.currenfaze = 0;
 	spleet.maxfaze = 2;
-	spleet.drect.h = 24 * scale * spleet.maxfaze* Maxfaze / spleet.maxfaze;
+	spleet.drect.h = 24 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze;
 	spleet.drect.w = 20 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze;
 	spleet.crect[0] = { 0,0,20,24 };
 	spleet.crect[1] = { 20,0,20,24 };
@@ -42,10 +42,10 @@ SpleetÑharacteristic HeroFrontRun(SDL_Renderer* ren, double scale)
 {
 	SpleetÑharacteristic spleet;
 	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_front_right.png", ren);
-	spleet.drect = RectOfTexture(spleet.texture,600,400);
+	spleet.drect = RectOfTexture(spleet.texture, 600, 400);
 	spleet.currenfaze = 0;
 	spleet.maxfaze = 4;
-	spleet.drect.h =(int)(24 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze);
+	spleet.drect.h = (int)(24 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze);
 	spleet.drect.w = (int)(20 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze);
 	spleet.crect[0] = { 0,0,20,24 };
 	spleet.crect[2] = { 20,0,20,24 };
@@ -58,7 +58,7 @@ SpleetÑharacteristic HeroFrontRunRight(SDL_Renderer* ren, double scale)
 {
 	SpleetÑharacteristic spleet;
 	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_right.png", ren);
-	spleet.drect = RectOfTexture(spleet.texture,700,400);
+	spleet.drect = RectOfTexture(spleet.texture, 700, 400);
 
 	spleet.currenfaze = 0;
 	spleet.maxfaze = 4;
@@ -73,7 +73,7 @@ SpleetÑharacteristic HeroFrontRunRight(SDL_Renderer* ren, double scale)
 	return spleet;
 }
 
-void HeroInit(SDL_Renderer* ren,double scale)
+void HeroInit(SDL_Renderer* ren, double scale)
 {
 	HeroAnimatic[Nondirect] = HeroRunStay(ren, scale);
 	HeroAnimatic[Back] = HeroRunBack(ren, scale);
@@ -81,13 +81,13 @@ void HeroInit(SDL_Renderer* ren,double scale)
 	HeroAnimatic[Right] = HeroFrontRunRight(ren, scale);
 }
 
-void SpleetAnimatic(SDL_Renderer* ren, SpleetÑharacteristic& spleet,int FPS)
+void SpleetAnimatic(SDL_Renderer* ren, SpleetÑharacteristic& spleet, int FPS)
 {
 	static int  dt, lasttime;
 	int currentime = SDL_GetTicks();
 	dt += currentime - lasttime;
 	lasttime = currentime;
-	if (dt > 1000/FPS);
+	if (dt > 1000 / FPS)
 	{
 		spleet.currenfaze++;
 		dt = 0;

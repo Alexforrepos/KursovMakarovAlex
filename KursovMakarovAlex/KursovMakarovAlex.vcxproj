@@ -163,6 +163,7 @@
   <ItemGroup>
     <Image Include="Infobackgr.jpg" />
     <Image Include="proba.png" />
+    <Image Include="SaveImage.jpg" />
     <Image Include="soul_knight_animation_cuted_run_back.png" />
     <Image Include="soul_knight_animation_cuted_run_front_right.png" />
     <Image Include="soul_knight_animation_cuted_run_front_stay.png" />

@@ -5,32 +5,29 @@
 #include "Menu.h"
 #include "Mouse.h"
 
-#pragma region WINDOW_CHARACTERISTIC
-
-SDL_Window* win = NULL;
-SDL_Renderer* ren = NULL;
-extern int WIDTH;
-extern int HEIGHT;
-
-#pragma endregion
-
-extern TextureСharacteristic* Textures;
+enum mode
+{
+	menumode = 0,
+	gamemode,
+};
 
 int main(int argc, char* argv[])
 {
 	system("chcp 1251 > NULL");
 	Init();
 #pragma region glavperemen
+	int mode = 0;
 	SDL_Event ev;
 	bool isrunning = true;
 	Mouse mos;
-#pragma endregion
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
-	MenuTextureInit(ren);
+#pragma endregion
+	MenuTextureInit();
 	HeroInit(ren, 0.4);
 	while (isrunning)
 	{
 #pragma region event
+		mos.isLKM = false;
 		while (SDL_PollEvent(&ev))
 		{
 			switch (ev.type)
@@ -58,20 +55,22 @@ int main(int argc, char* argv[])
 		}
 #pragma endregion
 
+		SDL_RenderClear(ren);
 		if (!isrunning)
 		{
 			break;
 		}
-			SDL_RenderClear(ren);
+		switch (mode)
+		{
+		case menumode:
+			MenuDrow(mos, isrunning,mode);
+			break;
+		case gamemode:
 
-			MenuDrow(ren,mos,isrunning);
-			SpleetAnimatic(ren, HeroAnimatic[Nondirect],1);
-			if (!isrunning)
-			{
-				break;
-			}
-			SDL_RenderPresent(ren);
-			mos.isLKM = false;
+		default:
+			break;
+		}
+		SDL_RenderPresent(ren);
 	}
 	//FreeTextures();
 	//FreeAllHeroTextures(HeroAnimatic);

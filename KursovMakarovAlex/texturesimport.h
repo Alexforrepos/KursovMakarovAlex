@@ -10,9 +10,9 @@ enum TypeOfTexture
 
 enum Range_of_Textures
 {
-	TextMenuStart = 0, TextMenuEnd = 6,
+	TextMenuStart = 0, TextMenuEnd = 5,
 
-	BackGroundMenu = 0,InfoMenu = 1
+	BackGroundMenu = 0, InfoMenu = 1, SaveMenu = 2
 };
 
 #pragma endregion
@@ -21,11 +21,13 @@ struct Texture—haracteristic
 {
 	SDL_Texture* texture;
 	SDL_Rect drect;
+	bool isaktive = false;
 };
 
 #pragma region externs
 
 extern Texture—haracteristic* BackgrTextures;
+
 extern Texture—haracteristic* TextTextures;
 
 #pragma endregion
@@ -40,6 +42,8 @@ Texture—haracteristic NewTextureInit(const char filename[], SDL_Renderer* ren);
 
 SDL_Texture* CreateUTexture(const char filename[], SDL_Renderer* ren);
 
-void MenuTextureInit(SDL_Renderer* ren);
+void MenuTextureInit();
 
 void FreeTextures();
+
+SDL_Texture* GetTextureFromWindow();

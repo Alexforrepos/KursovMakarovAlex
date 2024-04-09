@@ -141,5 +141,8 @@
     <Image Include="Infobackgr.jpg">
       <Filter>Файлы ресурсов\textures\backgrounds</Filter>
     </Image>
+    <Image Include="SaveImage.jpg">
+      <Filter>Файлы ресурсов\textures\backgrounds</Filter>
+    </Image>
   </ItemGroup>
 </Project>

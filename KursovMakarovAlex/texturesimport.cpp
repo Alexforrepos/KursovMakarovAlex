@@ -103,7 +103,8 @@ void FreeTextures()
 	}
 	for (int i = 0; i < TextTexturesQuant; i++)
 	{
-		SDL_DestroyTexture(BackgrTextures[i].texture);
+		if (TextTextures[i].isaktive)
+			SDL_DestroyTexture(TextTextures[i].texture);
 	}
 	if (BackgrTextures)
 		free(BackgrTextures);

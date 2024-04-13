@@ -4,6 +4,7 @@
 #include "SpleetProcessing.h"
 #include "Menu.h"
 #include "Mouse.h"
+#include "gamemode.h"
 
 enum mode
 {
@@ -19,15 +20,12 @@ int main(int argc, char* argv[])
 	int mode = 0;
 	SDL_Event ev;
 	bool isrunning = true;
-	Mouse mos;
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
 #pragma endregion
 	MenuTextureInit();
-	HeroInit(ren, 0.4);
 	while (isrunning)
 	{
 #pragma region event
-		mos.isLKM = false;
 		while (SDL_PollEvent(&ev))
 		{
 			switch (ev.type)
@@ -40,14 +38,6 @@ int main(int argc, char* argv[])
 				{
 					WIDTH = ev.window.data1;
 					HEIGHT = ev.window.data2;
-				}
-			case SDL_MOUSEBUTTONDOWN:
-				switch (ev.button.button)
-				{
-				case SDL_BUTTON_LEFT:
-					mos.isLKM = true;
-				default:
-					break;
 				}
 			default:
 				break;
@@ -63,17 +53,17 @@ int main(int argc, char* argv[])
 		switch (mode)
 		{
 		case menumode:
-			MenuDrow(mos, isrunning,mode);
+			MenuDrow(isrunning, mode);
 			break;
 		case gamemode:
-
+			//Gamemode(mode);
 		default:
 			break;
 		}
 		SDL_RenderPresent(ren);
 	}
-	//FreeTextures();
-	//FreeAllHeroTextures(HeroAnimatic);
+	free(HeroAnimatic);
+	FreeTextures();
 	Deinit(0);
 	return 1;
 }

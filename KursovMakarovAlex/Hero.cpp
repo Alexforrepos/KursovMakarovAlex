@@ -8,58 +8,31 @@ double Maxfaze = 10;
 
 player Hero;
 
-Spleet—haracteristic* HeroAnimatic = (Spleet—haracteristic*)malloc(sizeof(Spleet—haracteristic) * 10);
-
-void DHero()
+void HeroDv()
 {
-	
-}
-
-Spleet—haracteristic HeroRunBack(double scale)
-{
-	Spleet—haracteristic spleet;
-	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_back.png", ren);
-	spleet.drect = RectOfTexture(spleet.texture, 400, 400); //pos 
-	spleet.currenfaze = 0;
-	spleet.maxfaze = 4;
-	spleet.drect.h = 24 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze;
-	spleet.drect.w = 20 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze;
-	spleet.crect[0] = { 0 ,0 ,20,24 };
-	spleet.crect[2] = { 20,0 ,20,24 };
-	spleet.crect[1] = { 0 ,24,20,24 };
-	spleet.crect[3] = { 20,24,20,24 };
-	return spleet;
-}
-
-Spleet—haracteristic HeroRunStay(double scale)
-{
-	Spleet—haracteristic spleet;
-	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_front_stay.png", ren);
-	spleet.drect = RectOfTexture(spleet.texture, 500, 400);
-	spleet.currenfaze = 0;
-	spleet.maxfaze = 2;
-	spleet.drect.h = 24 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze;
-	spleet.drect.w = 20 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze;
-	spleet.crect[0] = { 0,0,20,24 };
-	spleet.crect[1] = { 20,0,20,24 };
-	return spleet;
-}
-
-Spleet—haracteristic HeroFrontRun(double scale)
-{
-	Spleet—haracteristic spleet;
-	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_front_right.png", ren);
-	spleet.drect = RectOfTexture(spleet.texture, 600, 400);
-	spleet.currenfaze = 0;
-	spleet.maxfaze = 4;
-	spleet.drect.h = (int)(24 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze);
-	spleet.drect.w = (int)(20 * scale * spleet.maxfaze * Maxfaze / spleet.maxfaze);
-	spleet.crect[0] = { 0,0,20,24 };
-	spleet.crect[2] = { 20,0,20,24 };
-	spleet.crect[1] = { 0,24,20,24 };
-	spleet.crect[3] = { 20,24,20,24 };
-	return spleet;
-}
+	switch (Hero.dir)
+	{
+	case BackRun:
+		SpleetAnimaticHero(Hero.T, Hero.cr, Hero.dr, 4, 2, BackRun);
+		break;
+	case FrontRun:
+		SpleetAnimaticHero(Hero.T, Hero.cr, Hero.dr, 4, 2, FrontRun);
+		break;
+	case RightNondir:
+		SpleetAnimaticHero(Hero.T, Hero.cr, Hero.dr, 4, 2, RightNondir);
+		break;
+	case LeftNondir:
+		SpleetAnimaticHero(Hero.T, Hero.cr, Hero.dr, 4, 2, LeftNondir);
+		break;
+	case Rightrun:
+		SpleetAnimaticHero(Hero.T, Hero.cr, Hero.dr, 4, 2, Rightrun);
+		break;
+	case LeftRun:
+		SpleetAnimaticHero(Hero.T, Hero.cr, Hero.dr, 4, 2, LeftRun);
+		break;
+	default:
+		break;
+	}
 
 Spleet—haracteristic HeroFrontRunRight(double scale)
 {
@@ -80,10 +53,33 @@ Spleet—haracteristic HeroFrontRunRight(double scale)
 	return spleet;
 }
 
-void HeroInit(int scale)
+void HeroInit()
 {
-	HeroAnimatic[Nondirect] = HeroRunStay(scale);
-	HeroAnimatic[Back] = HeroRunBack(scale);
-	HeroAnimatic[Right] = HeroFrontRunRight(scale);
-	HeroAnimatic[FrontRun] = HeroFrontRun(scale);
+	Hero.T = CreateUTexture("soul_knight_animation_final.png");
+	SDL_QueryTexture(Hero.T, NULL,NULL, &Hero.dr.w,&Hero.dr.h);
+	Hero.dr = { 100,100,Hero.dr.w/2,Hero.dr.h/2 };
+	Hero.cr[16] = { 0 ,0 ,22,23 };
+	Hero.cr[17] = { 23,0 ,23,23 };
+	Hero.cr[18] = { 46,0 ,23,24 };
+	Hero.cr[19] = { 69,0 ,23,24 };
+	Hero.cr[20] = { 0 ,25,23,24 };
+	Hero.cr[21] = { 23,25,23,24 };
+	Hero.cr[22] = { 46,25,23,24 };
+	Hero.cr[23] = { 69,25,23,24 };
+	Hero.cr[8] = { 0 ,49,19,24 };
+	Hero.cr[9] = { 19,49,19,24 };
+	Hero.cr[10] = { 0 ,49,19,24 };
+	Hero.cr[11] = { 19,49,20,24 };
+	Hero.cr[12] = { 64,49,20,24 };
+	Hero.cr[13] = { 44,49,19,24 };
+	Hero.cr[14] = { 64,49,20,24 };
+	Hero.cr[15] = { 44,49,19,24 };
+	Hero.cr[4] = { 0 ,81,19,24 };
+	Hero.cr[5] = { 19,81,19,24 };
+	Hero.cr[6] = { 0,105,19,24 };
+	Hero.cr[7] = { 19,105,19,24 };
+	Hero.cr[0] = { 0 ,130,19,24 }; 
+	Hero.cr[1] = { 19,130,19,24 };
+	Hero.cr[2] = { 0 ,156,19,24 };
+	Hero.cr[3] = { 19,156,19,24 };
 }

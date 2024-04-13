@@ -5,6 +5,7 @@
 #include "Menu.h"
 #include "Mouse.h"
 #include "gamemode.h"
+#include "Hero.h"
 
 enum mode
 {
@@ -18,11 +19,12 @@ int main(int argc, char* argv[])
 	Init();
 #pragma region glavperemen
 	int mode = 0;
-	SDL_Event ev;
+	SDL_Event ev ;
 	bool isrunning = true;
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
 #pragma endregion
 	MenuTextureInit();
+	HeroInit();
 	while (isrunning)
 	{
 #pragma region event
@@ -39,6 +41,14 @@ int main(int argc, char* argv[])
 					WIDTH = ev.window.data1;
 					HEIGHT = ev.window.data2;
 				}
+			case SDL_KEYDOWN:
+				break;
+			case SDL_KEYUP:
+				break;
+					mos.isLKM = true;
+				default:
+					break;
+				}
 			default:
 				break;
 			}
@@ -52,18 +62,17 @@ int main(int argc, char* argv[])
 		}
 		switch (mode)
 		{
-		case menumode:
+			Gamemode(mode);
 			MenuDrow(isrunning, mode);
 			break;
 		case gamemode:
-			//Gamemode(mode);
+
 		default:
-			break;
-		}
+	FreeTextures();
 		SDL_RenderPresent(ren);
 	}
-	free(HeroAnimatic);
-	FreeTextures();
+	//FreeTextures();
+	//FreeAllHeroTextures(HeroAnimatic);
 	Deinit(0);
 	return 1;
 }

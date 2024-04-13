@@ -16,6 +16,11 @@ enum dirrectionsofhero
 
 void Gamemode(int& mode)
 {
+
+	static int dt = 0, lt = 0;
+	int ct = SDL_GetTicks(),FPS = 24;
+	dt += ct - lt;
+	int V = 1;
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
 	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 	SDL_RenderClear(ren);
@@ -48,4 +53,6 @@ void Gamemode(int& mode)
 		if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && !Hero.dirleft)
 			Hero.dir = RightNondir;
 	}
+	HeroDv();
+	lt = ct;
 }

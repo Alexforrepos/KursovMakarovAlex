@@ -70,7 +70,7 @@ SDL_Rect RectOfTexture(SDL_Texture* t, int x, int y)
 	return r;
 }
 
-SDL_Texture* CreateUTexture(const char filename[], SDL_Renderer* ren)
+SDL_Texture* CreateUTexture(const char filename[])
 {
 	SDL_Surface* surface = IMG_Load(filename);
 	if (surface == NULL)
@@ -87,7 +87,7 @@ SDL_Texture* CreateUTexture(const char filename[], SDL_Renderer* ren)
 Texture—haracteristic NewTextureInit(SDL_Renderer* ren, const char filename[], int x, int y)
 {
 	Texture—haracteristic texture;
-	texture.texture = CreateUTexture(filename, ren);
+	texture.texture = CreateUTexture(filename);
 	texture.drect = RectOfTexture(texture.texture, x, y);
 	texture.isaktive = true;
 	return texture;

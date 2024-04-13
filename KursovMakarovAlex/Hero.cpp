@@ -33,26 +33,7 @@ void HeroDv()
 	default:
 		break;
 	}
-
-Spleet—haracteristic HeroFrontRunRight(double scale)
-{
-	Spleet—haracteristic spleet;
-	spleet.texture = CreateUTexture("soul_knight_animation_cuted_run_right.png", ren);
-	spleet.drect = RectOfTexture(spleet.texture, 700, 400);
-
-	spleet.currenfaze = 0;
-	spleet.maxfaze = 4;
-
-	spleet.drect.h = 24 * scale * spleet.maxfaze * (Maxfaze / spleet.maxfaze);
-	spleet.drect.w = 20 * scale * spleet.maxfaze * (Maxfaze / spleet.maxfaze);
-	spleet.crect[0] = { 0,0,23,24 };
-	spleet.crect[1] = { 23,0,23,24 };
-	spleet.crect[2] = { 46,0,23,24 };
-	spleet.crect[3] = { 69,0,23,24 };
-
-	return spleet;
 }
-
 void HeroInit()
 {
 	Hero.T = CreateUTexture("soul_knight_animation_final.png");

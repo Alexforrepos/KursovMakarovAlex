@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	Init();
 #pragma region glavperemen
 	int mode = 0;
-	SDL_Event ev ;
+	SDL_Event ev;
 	bool isrunning = true;
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
 #pragma endregion
@@ -40,14 +40,7 @@ int main(int argc, char* argv[])
 				{
 					WIDTH = ev.window.data1;
 					HEIGHT = ev.window.data2;
-				}
-			case SDL_KEYDOWN:
-				break;
-			case SDL_KEYUP:
-				break;
-					mos.isLKM = true;
-				default:
-					break;
+
 				}
 			default:
 				break;
@@ -62,17 +55,18 @@ int main(int argc, char* argv[])
 		}
 		switch (mode)
 		{
-			Gamemode(mode);
+		case menumode:
 			MenuDrow(isrunning, mode);
 			break;
 		case gamemode:
-
-		default:
-	FreeTextures();
+			Gamemode(mode);
+			break;
+		}
 		SDL_RenderPresent(ren);
 	}
-	//FreeTextures();
-	//FreeAllHeroTextures(HeroAnimatic);
-	Deinit(0);
-	return 1;
+
+		//FreeTextures();
+		//FreeAllHeroTextures(HeroAnimatic);
+		Deinit(0);
+		return 1;
 }

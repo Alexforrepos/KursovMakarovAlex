@@ -1,31 +1,34 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+#include "Hero.h"
 #include "SpleetProcessing.h"
 #include "texturesimport.h"
+#include "SDLProcessing.h"
 
 
-void SpleetAnimatic(SDL_Renderer* ren, Spleet—haracteristic& spleet, int FPS)
+void SpleetAnimaticHero(SDL_Texture* Texture, SDL_Rect R[], SDL_Rect Dr, int mkolvo, int FPS, int CRs)
 {
-	static int  dt, lasttime;
-	int currentime = SDL_GetTicks();
-	dt += currentime - lasttime;
-	lasttime = currentime;
+	static int dt = 0;
+	static int lt = 0;
+	int crt = SDL_GetTicks();
+	dt += crt - lt;
+	static int CurrentSpleetCR = 0;
+	static int lastCr = NULL;
+	if (lastCr != CRs)
+	{
+		CurrentSpleetCR = 0;
+		lastCr = CRs;
+		dt = 0;
+		lt = 0;
+	}
+	if (CurrentSpleetCR == mkolvo)
+		CurrentSpleetCR = 0;
 	if (dt > 1000 / FPS)
 	{
-		spleet.currenfaze++;
-		dt = 0;
-		spleet.currenfaze %= spleet.maxfaze;
-		SDL_RenderCopy(ren, spleet.texture, &spleet.crect[spleet.currenfaze], &spleet.drect);
+		dt %= 1000 / FPS;
+		CurrentSpleetCR++;
 	}
-}
-
-void SpleetInterruption(Spleet—haracteristic*& Herot, int currentspleet)
-{
-	static int lastspleet,currentspleet;
-	if (lastspleet != currentspleet)
-	{
-		Herot[lastspleet].currenfaze = 0;
-		lastspleet = currentspleet;
-	}
+	SDL_RenderCopy(ren, Texture, &R[CRs * 4 + CurrentSpleetCR], &Dr);
+	lt = crt;
 }

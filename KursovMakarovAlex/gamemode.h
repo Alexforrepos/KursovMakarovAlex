@@ -1,4 +1,4 @@
 #pragma once
 #include <SDL.h>
 
-//void Gamemode(int& mode);
+void Gamemode(int& mode);

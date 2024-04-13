@@ -16,40 +16,43 @@ enum dirrectionsofhero
 
 void Gamemode(int& mode)
 {
+
+	static int dt = 0, lt = 0;
+	int ct = SDL_GetTicks(),FPS = 24;
+	dt += ct - lt;
+	int V = 1;
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
-	int currentDirrection;
 	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 	SDL_RenderClear(ren);
-	if (kstate[SDL_SCANCODE_D] && !(kstate[SDL_SCANCODE_A]))
-		currentDirrection = RightHero;
-	if (kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]))
-		currentDirrection = LeftHero;
-	if (kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]))
-		currentDirrection = UpHero;
-	if (kstate[SDL_SCANCODE_S] && !(kstate[SDL_SCANCODE_D]))
-		currentDirrection = DownHero;
-	if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]))
-		currentDirrection = StayHero;
-	switch (currentDirrection)
+	if (dt > 1000 / FPS)
 	{
-	case RightHero:
-
-		break;
-	case LeftHero:
-
-
-		break;
-	case DownHero:
-
-
-		break;
-	case UpHero:
-
-
-		break;
-	case StayHero:
-
-
-		break;
+		if (kstate[SDL_SCANCODE_D] && !(kstate[SDL_SCANCODE_A]) && isin({ Hero.dr.x+V,Hero.dr.y }, {0,0,WIDTH,HEIGHT-100}))
+		{
+			Hero.dirleft = 0;
+			Hero.dir = Rightrun;
+			Hero.dr.x += V;
+		}
+		if (kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && isin({ Hero.dr.x-V,Hero.dr.y }, { 0,0,WIDTH,HEIGHT -100}))
+		{
+			Hero.dirleft = 1;
+			Hero.dir = LeftRun;
+			Hero.dr.x -= V;
+		}
+		if (kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && isin({ Hero.dr.x,Hero.dr.y-V }, { 0,0,WIDTH,HEIGHT-100 }))
+		{
+			Hero.dir = BackRun;
+			Hero.dr.y -= V;
+		}
+		if (kstate[SDL_SCANCODE_S] && !(kstate[SDL_SCANCODE_W]) && isin({ Hero.dr.x,Hero.dr.y+V }, { 0,0,WIDTH,HEIGHT -100}))
+		{
+			Hero.dir = FrontRun;
+			Hero.dr.y += V;
+		}
+		if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && Hero.dirleft)
+			Hero.dir = LeftNondir;
+		if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && !Hero.dirleft)
+			Hero.dir = RightNondir;
 	}
+	HeroDv();
+	lt = ct;
 }

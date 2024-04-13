@@ -40,7 +40,7 @@ SDL_Rect RectOfTexture(SDL_Texture* t, int x, int y);
 
 Texture—haracteristic NewTextureInit(const char filename[], SDL_Renderer* ren);
 
-SDL_Texture* CreateUTexture(const char filename[], SDL_Renderer* ren);
+SDL_Texture* CreateUTexture(const char filename[]);
 
 void MenuTextureInit();
 

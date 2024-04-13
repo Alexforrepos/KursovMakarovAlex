@@ -15,7 +15,7 @@ void NewGame()
 
 void MenuDrow(bool& isrun, int &mod)
 {
-	SDL_Point mp;
+	SDL_Point mp = {0,0};
 	static int mods = StandartMode;
 	Uint8 mstate = SDL_GetMouseState(&mp.x, &mp.y);
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
@@ -32,7 +32,7 @@ void MenuDrow(bool& isrun, int &mod)
 					switch (i)
 					{
 					case 0:
-						mods = NewGameMode;
+						mod = 1;
 						break;
 					case 2:
 						mods = InfoMode;

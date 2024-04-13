@@ -1,22 +1,23 @@
 #pragma once
 
-enum HeroDirection
+
+typedef	enum BordersOfAnimatic 
 {
-	Nondirect = 0,
-	Back = 1,
-	Right = 2,
-	FrontRun = 3
+	BackRun,FrontRun,RightNondir,LeftNondir,Rightrun,LeftRun,
 };
 
 
 struct player
 {
-	int x, y, dir;
+	int HP, Money;
+	int dir,dirleft=0,cstage;
 	bool weap1, weap2, weap3, weap4;
+	SDL_Texture* T;
+	SDL_Rect cr[24],dr;
 };
 
 extern player Hero;
 
-void HeroInit();
+void HeroDv();
 
-void FreeAllHeroTextures(Spleet—haracteristic* Herot);
+void HeroInit();

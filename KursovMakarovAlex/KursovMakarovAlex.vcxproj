@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExternalIncludePath>C:\Users\tvink\Documents\libs_for_C\SDL2_ttf-2.22.0\include;C:\Users\tvink\Documents\libs_for_C\SDL2_image-2.8.2\include;C:\Users\tvink\Documents\libs_for_C\SDL2-2.30.0\include;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>C:\Users\tvink\Documents\libs_for_C\SDL2_image-2.8.2\lib\x64;C:\Users\tvink\Documents\libs_for_C\SDL2_ttf-2.22.0\lib\x64;C:\Users\tvink\Documents\libs_for_C\SDL2-2.30.0\lib\x64;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>C:\Users\tvink\Documents\libs_for_C\SDL2_ttf-2.22.0\include;C:\Users\tvink\Documents\libs_for_C\SDL2_image-2.8.2\include;C:\Users\tvink\Documents\libs_for_C\SDL2-2.30.2\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>C:\Users\tvink\Documents\libs_for_C\SDL2_image-2.8.2\lib\x64;C:\Users\tvink\Documents\libs_for_C\SDL2_ttf-2.22.0\lib\x64;C:\Users\tvink\Documents\libs_for_C\SDL2-2.30.2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -123,6 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -172,6 +173,7 @@
     <Image Include="soul_knight_animation_cuted_run_front_right.png" />
     <Image Include="soul_knight_animation_cuted_run_front_stay.png" />
     <Image Include="soul_knight_animation_cuted_run_right.png" />
+    <Image Include="soul_knight_animation_final.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,16 +8,16 @@
 #include "SDLProcessing.h"
 
 
-void NewGame(Mouse mos)
+void NewGame()
 {
 	SDL_RenderCopy(ren, BackgrTextures[SaveMenu].texture, NULL, NULL);
 }
 
-void MenuDrow(Mouse mos, bool& isrun, int &mod)
+void MenuDrow(bool& isrun, int &mod)
 {
 	SDL_Point mp;
 	static int mods = StandartMode;
-	Uint8 state = SDL_GetMouseState(&mp.x, &mp.y);
+	Uint8 mstate = SDL_GetMouseState(&mp.x, &mp.y);
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
 	switch (mods)
 	{
@@ -28,7 +28,7 @@ void MenuDrow(Mouse mos, bool& isrun, int &mod)
 			if (isin(mp, TextTextures[i].drect))
 			{
 				SDL_RenderCopy(ren, TextTextures[i + 1].texture, NULL, &TextTextures[i].drect);
-				if (mos.isLKM)
+				if (mstate & SDL_BUTTON(SDL_BUTTON_LEFT))
 					switch (i)
 					{
 					case 0:
@@ -56,11 +56,10 @@ void MenuDrow(Mouse mos, bool& isrun, int &mod)
 			mods = StandartMode;
 		break;
 	case NewGameMode:
-		NewGame(mos);
 		if (kstate[SDL_SCANCODE_ESCAPE])
 			mods = StandartMode;
 		if (kstate[SDL_SCANCODE_TAB])
-			mod = 1;
+			mod = 0;
 		break;
 	default:
 		break;

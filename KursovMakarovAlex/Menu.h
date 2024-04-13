@@ -11,4 +11,4 @@ enum mods
 };
 
 
-void MenuDrow(Mouse mos, bool& isrun,int mod);
+void MenuDrow(bool& isrun, int& mod);

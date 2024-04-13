@@ -34,9 +34,6 @@
     <Filter Include="Исходные файлы\Utility\SDL_free_init">
       <UniqueIdentifier>{b473ae29-b28b-4178-967b-c4958f4acc4a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы заголовков\Utility">
-      <UniqueIdentifier>{96cf279b-3037-439e-bc0b-9b79e07dc5f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Файлы ресурсов\textures\splites\knight">
       <UniqueIdentifier>{7b369ac6-cfac-48e2-8193-722411440afa}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,12 @@
     </Filter>
     <Filter Include="Исходные файлы\Utility\Mouse">
       <UniqueIdentifier>{570a6fae-6f3d-48f5-99f2-a4e7726a3472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\gamemode">
+      <UniqueIdentifier>{70da77c9-385b-46de-a498-d50cb317651f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Hero">
+      <UniqueIdentifier>{e7bac72f-6fac-49b5-88d4-8f6d91b12202}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +68,12 @@
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
       <Filter>Исходные файлы\Utility\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="gamemode.cpp">
+      <Filter>Исходные файлы\gamemode</Filter>
+    </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>Исходные файлы\Hero</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -120,6 +129,12 @@
     </ClInclude>
     <ClInclude Include="Mouse.h">
       <Filter>Исходные файлы\Utility\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="gamemode.h">
+      <Filter>Исходные файлы\gamemode</Filter>
+    </ClInclude>
+    <ClInclude Include="Hero.h">
+      <Filter>Исходные файлы\Hero</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

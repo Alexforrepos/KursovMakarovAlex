@@ -7,13 +7,23 @@ typedef	enum BordersOfAnimatic
 };
 
 
+typedef struct
+{
+	int damage;
+	int cd;
+	SDL_Texture* T;
+	double Alpha;
+	bool isanable;
+}weapon;
+
 struct player
 {
 	int HP, Money;
 	int dir,dirleft=0,cstage;
-	bool weap1, weap2, weap3, weap4;
+	weapon shotgun, lazgan, machine;
 	SDL_Texture* T;
 	SDL_Rect cr[24],dr;
+	int currentWeapon;
 };
 
 extern player Hero;

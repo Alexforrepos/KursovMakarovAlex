@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	SDL_Event ev;
 	bool isrunning = true;
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
-#pragma endregion
+#pragma endregiond
 	MenuTextureInit();
 	HeroInit();
 	while (isrunning)
@@ -41,6 +41,16 @@ int main(int argc, char* argv[])
 					WIDTH = ev.window.data1;
 					HEIGHT = ev.window.data2;
 
+				}
+				break;
+			case SDL_MOUSEWHEEL:
+				if (ev.wheel.preciseX > 0)
+					Hero->currentWeapon = (Hero->currentWeapon + 1) % 3;
+				if (ev.wheel.preciseX < 0)
+				{
+					if (Hero->currentWeapon - 1 < 0)
+						Hero->currentWeapon = 2;
+					Hero->currentWeapon = (Hero->currentWeapon - 1);
 				}
 			default:
 				break;
@@ -65,8 +75,7 @@ int main(int argc, char* argv[])
 		SDL_RenderPresent(ren);
 	}
 
-		//FreeTextures();
-		//FreeAllHeroTextures(HeroAnimatic);
+		FreeTextures();
 		Deinit(0);
 		return 1;
 }

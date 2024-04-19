@@ -139,8 +139,10 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="SDLProcessing.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="projectile.cpp" />
     <ClCompile Include="SpleetProcessing.cpp" />
     <ClCompile Include="texturesimport.cpp" />
+    <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="BrownieStencil-8O8MJ.ttf" />
@@ -158,12 +160,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gamemode.h" />
+    <ClInclude Include="projectile.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="SDLProcessing.h" />
     <ClInclude Include="SpleetProcessing.h" />
     <ClInclude Include="texturesimport.h" />
+    <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Infobackgr.jpg" />

@@ -49,6 +49,12 @@
     <Filter Include="Исходные файлы\Hero">
       <UniqueIdentifier>{e7bac72f-6fac-49b5-88d4-8f6d91b12202}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Time">
+      <UniqueIdentifier>{32a57882-2f0e-4304-a19c-9a884bbb3503}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\gamemode\projectile">
+      <UniqueIdentifier>{6722cb90-a6de-483b-8d52-fead066394dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KursovMakarovAlex.cpp">
@@ -74,6 +80,12 @@
     </ClCompile>
     <ClCompile Include="Hero.cpp">
       <Filter>Исходные файлы\Hero</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Исходные файлы\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="projectile.cpp">
+      <Filter>Исходные файлы\gamemode\projectile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +148,12 @@
     <ClInclude Include="Hero.h">
       <Filter>Исходные файлы\Hero</Filter>
     </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Исходные файлы\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="projectile.h">
+      <Filter>Исходные файлы\gamemode\projectile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="soul_knight_animation_cuted_run_back.png">
@@ -158,6 +176,9 @@
     </Image>
     <Image Include="SaveImage.jpg">
       <Filter>Файлы ресурсов\textures\backgrounds</Filter>
+    </Image>
+    <Image Include="soul_knight_animation_final.png">
+      <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>
 </Project>

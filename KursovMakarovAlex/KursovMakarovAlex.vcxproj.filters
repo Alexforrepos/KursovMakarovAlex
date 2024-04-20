@@ -25,9 +25,6 @@
     <Filter Include="Файлы ресурсов\textures\backgrounds">
       <UniqueIdentifier>{b9ebebeb-024e-4577-a75d-b1fec690e0da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\TextureProcessing">
-      <UniqueIdentifier>{7c742967-ca70-4d0f-b0ab-27f6cf1d9d0d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Исходные файлы\Utility">
       <UniqueIdentifier>{471140c4-011a-42da-91c9-5a44c27268bb}</UniqueIdentifier>
     </Filter>
@@ -40,20 +37,26 @@
     <Filter Include="Исходные файлы\menu">
       <UniqueIdentifier>{774169be-2425-4daf-a073-1649d0f65884}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\Utility\Mouse">
-      <UniqueIdentifier>{570a6fae-6f3d-48f5-99f2-a4e7726a3472}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Исходные файлы\gamemode">
       <UniqueIdentifier>{70da77c9-385b-46de-a498-d50cb317651f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\Hero">
-      <UniqueIdentifier>{e7bac72f-6fac-49b5-88d4-8f6d91b12202}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Исходные файлы\Time">
+    <Filter Include="Исходные файлы\Utility\Time">
       <UniqueIdentifier>{32a57882-2f0e-4304-a19c-9a884bbb3503}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\gamemode\projectile">
+    <Filter Include="Исходные файлы\Utility\Geometry">
+      <UniqueIdentifier>{570a6fae-6f3d-48f5-99f2-a4e7726a3472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Utility\TextureProcessing">
+      <UniqueIdentifier>{7c742967-ca70-4d0f-b0ab-27f6cf1d9d0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Utility\Hero">
+      <UniqueIdentifier>{e7bac72f-6fac-49b5-88d4-8f6d91b12202}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Utility\projectile">
       <UniqueIdentifier>{6722cb90-a6de-483b-8d52-fead066394dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Utility\TextProcessing">
+      <UniqueIdentifier>{deb3a895-7754-4d77-9fc5-aeb28a375a46}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -61,31 +64,34 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="texturesimport.cpp">
-      <Filter>Исходные файлы\TextureProcessing</Filter>
+      <Filter>Исходные файлы\Utility\TextureProcessing</Filter>
     </ClCompile>
     <ClCompile Include="SDLProcessing.cpp">
       <Filter>Исходные файлы\Utility\SDL_free_init</Filter>
     </ClCompile>
     <ClCompile Include="SpleetProcessing.cpp">
-      <Filter>Исходные файлы\TextureProcessing</Filter>
+      <Filter>Исходные файлы\Utility\TextureProcessing</Filter>
     </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Исходные файлы\menu</Filter>
     </ClCompile>
-    <ClCompile Include="Mouse.cpp">
-      <Filter>Исходные файлы\Utility\Mouse</Filter>
+    <ClCompile Include="Geomery.cpp">
+      <Filter>Исходные файлы\Utility\Geometry</Filter>
     </ClCompile>
     <ClCompile Include="gamemode.cpp">
       <Filter>Исходные файлы\gamemode</Filter>
     </ClCompile>
     <ClCompile Include="Hero.cpp">
-      <Filter>Исходные файлы\Hero</Filter>
+      <Filter>Исходные файлы\Utility\Hero</Filter>
     </ClCompile>
     <ClCompile Include="Time.cpp">
-      <Filter>Исходные файлы\Time</Filter>
+      <Filter>Исходные файлы\Utility\Time</Filter>
     </ClCompile>
     <ClCompile Include="projectile.cpp">
-      <Filter>Исходные файлы\gamemode\projectile</Filter>
+      <Filter>Исходные файлы\Utility\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="TextProcessing.cpp">
+      <Filter>Исходные файлы\Utility\TextProcessing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,10 +134,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="texturesimport.h">
-      <Filter>Исходные файлы\TextureProcessing</Filter>
+      <Filter>Исходные файлы\Utility\TextureProcessing</Filter>
     </ClInclude>
     <ClInclude Include="SpleetProcessing.h">
-      <Filter>Исходные файлы\TextureProcessing</Filter>
+      <Filter>Исходные файлы\Utility\TextureProcessing</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
       <Filter>Исходные файлы\menu</Filter>
@@ -139,35 +145,26 @@
     <ClInclude Include="SDLProcessing.h">
       <Filter>Исходные файлы\Utility\SDL_free_init</Filter>
     </ClInclude>
-    <ClInclude Include="Mouse.h">
-      <Filter>Исходные файлы\Utility\Mouse</Filter>
+    <ClInclude Include="Geometry.h">
+      <Filter>Исходные файлы\Utility\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="gamemode.h">
       <Filter>Исходные файлы\gamemode</Filter>
     </ClInclude>
     <ClInclude Include="Hero.h">
-      <Filter>Исходные файлы\Hero</Filter>
+      <Filter>Исходные файлы\Utility\Hero</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
-      <Filter>Исходные файлы\Time</Filter>
+      <Filter>Исходные файлы\Utility\Time</Filter>
     </ClInclude>
     <ClInclude Include="projectile.h">
-      <Filter>Исходные файлы\gamemode\projectile</Filter>
+      <Filter>Исходные файлы\Utility\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="TextProcessing.h">
+      <Filter>Исходные файлы\Utility\TextProcessing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="soul_knight_animation_cuted_run_back.png">
-      <Filter>Файлы ресурсов\textures\splites\knight</Filter>
-    </Image>
-    <Image Include="soul_knight_animation_cuted_run_right.png">
-      <Filter>Файлы ресурсов\textures\splites\knight</Filter>
-    </Image>
-    <Image Include="soul_knight_animation_cuted_run_front_right.png">
-      <Filter>Файлы ресурсов\textures\splites\knight</Filter>
-    </Image>
-    <Image Include="soul_knight_animation_cuted_run_front_stay.png">
-      <Filter>Файлы ресурсов\textures\splites\knight</Filter>
-    </Image>
     <Image Include="proba.png">
       <Filter>Файлы ресурсов\textures\backgrounds</Filter>
     </Image>
@@ -178,7 +175,7 @@
       <Filter>Файлы ресурсов\textures\backgrounds</Filter>
     </Image>
     <Image Include="soul_knight_animation_final.png">
-      <Filter>Файлы ресурсов</Filter>
+      <Filter>Файлы ресурсов\textures\splites\knight</Filter>
     </Image>
   </ItemGroup>
 </Project>

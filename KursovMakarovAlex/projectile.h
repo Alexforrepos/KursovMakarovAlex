@@ -9,6 +9,7 @@ struct projectiledata
 	SDL_Rect drect;
 };
 
+
 struct projectile
 {
 	projectiledata data;

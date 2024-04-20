@@ -8,13 +8,13 @@ enum BordersOfAnimatic
 
 typedef enum
 {
-	machine, shotgun, lazgan
+	machine, shotgun, lazgan, lazgun
 }currentweapon;
 
 struct weapon
 {
 
-	int damage,bulletspeed = 1000;
+	int damage,bulletspeed = 10;
 	int cd,reloadtime;
 	SDL_Texture* T;
 	double Alpha;

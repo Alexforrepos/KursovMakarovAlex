@@ -1,9 +1,9 @@
 ﻿#include <iostream>
 #include "texturesimport.h"
+#include "TextProcessing.h"
 #include "SDLProcessing.h"
 #include "SpleetProcessing.h"
 #include "Menu.h"
-#include "Mouse.h"
 #include "gamemode.h"
 #include "Hero.h"
 
@@ -17,13 +17,14 @@ int main(int argc, char* argv[])
 {
 	system("chcp 1251 > NULL");
 	Init();
+	SDL_Event ev;
 #pragma region glavperemen
 	int mode = 0;
-	SDL_Event ev;
 	bool isrunning = true;
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
-#pragma endregiond
-	MenuTextureInit();
+#pragma endregion
+	LoadFonts();
+	MenuInit();
 	HeroInit();
 	while (isrunning)
 	{
@@ -66,7 +67,7 @@ int main(int argc, char* argv[])
 		switch (mode)
 		{
 		case menumode:
-			MenuDrow(isrunning, mode);
+			DrowMenu();
 			break;
 		case gamemode:
 			Gamemode(mode);
@@ -74,8 +75,7 @@ int main(int argc, char* argv[])
 		}
 		SDL_RenderPresent(ren);
 	}
-
-		FreeTextures();
-		Deinit(0);
-		return 1;
+	CloseFonts();
+	Deinit(0);
+	return 1;
 }

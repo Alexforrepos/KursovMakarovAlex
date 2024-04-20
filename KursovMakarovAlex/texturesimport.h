@@ -24,26 +24,8 @@ struct Texture—haracteristic
 	bool isaktive = false;
 };
 
-#pragma region externs
-
 extern Texture—haracteristic* BackgrTextures;
 
-extern Texture—haracteristic* TextTextures;
-
-#pragma endregion
-
-SDL_Texture* CreateTextTexture(const char massage[], const char filename[], SDL_Color color, int size_of_font, SDL_Renderer* ren);
-
-void TextureInfo(SDL_Texture* t, int* w, int* h);
-
-SDL_Rect RectOfTexture(SDL_Texture* t, int x, int y);
-
-Texture—haracteristic NewTextureInit(const char filename[], SDL_Renderer* ren);
+void GetTextureDimensions(SDL_Texture* texture, int* width, int* height);
 
 SDL_Texture* CreateUTexture(const char filename[]);
-
-void MenuTextureInit();
-
-void FreeTextures();
-
-SDL_Texture* GetTextureFromWindow();

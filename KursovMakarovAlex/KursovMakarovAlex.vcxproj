@@ -138,9 +138,10 @@
     <ClCompile Include="KursovMakarovAlex.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="SDLProcessing.cpp" />
-    <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="Geomery.cpp" />
     <ClCompile Include="projectile.cpp" />
     <ClCompile Include="SpleetProcessing.cpp" />
+    <ClCompile Include="TextProcessing.cpp" />
     <ClCompile Include="texturesimport.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
@@ -162,10 +163,11 @@
     <ClInclude Include="gamemode.h" />
     <ClInclude Include="projectile.h" />
     <ClInclude Include="Hero.h" />
-    <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="SDLProcessing.h" />
     <ClInclude Include="SpleetProcessing.h" />
+    <ClInclude Include="TextProcessing.h" />
     <ClInclude Include="texturesimport.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>
@@ -173,10 +175,6 @@
     <Image Include="Infobackgr.jpg" />
     <Image Include="proba.png" />
     <Image Include="SaveImage.jpg" />
-    <Image Include="soul_knight_animation_cuted_run_back.png" />
-    <Image Include="soul_knight_animation_cuted_run_front_right.png" />
-    <Image Include="soul_knight_animation_cuted_run_front_stay.png" />
-    <Image Include="soul_knight_animation_cuted_run_right.png" />
     <Image Include="soul_knight_animation_final.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

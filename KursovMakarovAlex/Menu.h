@@ -1,6 +1,5 @@
 #pragma once
 #include <SDL.h>
-#include "Mouse.h"
 
 enum mods
 {
@@ -10,5 +9,6 @@ enum mods
 	NewGameMode = 3
 };
 
+void MenuInit();
 
-void MenuDrow(bool& isrun, int& mod);
+void DrowMenu();

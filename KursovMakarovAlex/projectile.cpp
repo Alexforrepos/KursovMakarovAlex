@@ -41,4 +41,3 @@ projectiledata PullProjectileData(ProjectileQueue& queue)
 
 	return data;
 }
-

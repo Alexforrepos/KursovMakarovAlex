@@ -7,7 +7,6 @@
 #include "texturesimport.h"
 #include "SpleetProcessing.h"
 #include "SDLProcessing.h"
-#include "Mouse.h"
 #include "gamemode.h"
 #include "Hero.h"
 #include "projectile.h"
@@ -28,8 +27,8 @@ void CreateProjectile()
 	tmpprojectile.livetime = 3000;
 	tmpprojectile.speed = Hero->W[Hero->currentWeapon].bulletspeed;
 	tmpprojectile.drect = { Hero->dr.x,Hero->dr.y,20,20 };
-	tmpprojectile.angle = atan2(mp.x - Hero->dr.x,mp.y - Hero->dr.y);
-
+	tmpprojectile.angle = atan2(Hero->dr.x - mp.x, Hero->dr.y - mp.y);
+	printf("angle %lf\n", tmpprojectile.angle);
 	PushProjectile(Projectiles, tmpprojectile);
 }
 
@@ -37,15 +36,17 @@ void HeroShot()
 {
 	SDL_Point mp;
 	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
-
-	static int dt = 0,lt = 0;
+#pragma region timeofHeroshot
+	static int dt = 0, lt = 0;
 	int ct = SDL_GetTicks();
 	dt += ct - lt;
+#pragma endregion
+
 #pragma region createProjectile
-	if (mstate & SDL_BUTTON(SDL_BUTTON_LEFT) )
+	if (mstate & SDL_BUTTON(SDL_BUTTON_LEFT) && Hero->W[Hero->currentWeapon].cd < 0)
 	{
 		CreateProjectile();
-
+		Hero->W[Hero->currentWeapon].cd = Hero->W[Hero->currentWeapon].reloadtime;
 	}
 #pragma endregion
 
@@ -53,16 +54,15 @@ void HeroShot()
 
 	for (projectile* cur = Projectiles.head; cur != NULL; cur = cur->next)
 	{
-		if (cur->data.livetime < 0)
-		{
-			PullProjectileData(Projectiles);
-			continue;
-		}
 		SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
 		cur->data.livetime -= ct - lt;
-		cur->data.drect.x += cos(cur->data.angle) * cur->data.speed;
-		cur->data.drect.y += sin(cur->data.angle) * cur->data.speed;
-		SDL_RenderFillRect(ren,&cur->data.drect);
+		cur->data.drect.x += cos(cur->data.angle + M_PI / 2) * cur->data.speed;
+		cur->data.drect.y += sin(cur->data.angle + M_PI / 2) * cur->data.speed;
+		SDL_RenderFillRect(ren, &cur->data.drect);
+	}
+	if (Projectiles.head->data.livetime < 0)
+	{
+		PullProjectileData(Projectiles);
 	}
 	Hero->W[Hero->currentWeapon].cd -= ct - lt;
 	lt = ct;
@@ -73,24 +73,24 @@ void HeroMove()
 {
 	int V = 1;
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
-	if (kstate[SDL_SCANCODE_D] && !(kstate[SDL_SCANCODE_A]) && isin({ Hero->dr.x + V,Hero->dr.y }, { 0,0,WIDTH * 2,HEIGHT - 100 }))
+	if (kstate[SDL_SCANCODE_D] && !(kstate[SDL_SCANCODE_A]))
 	{
 		Hero->dirleft = 0;
 		Hero->dir = Rightrun;
 		Hero->dr.x += V;
 	}
-	if (kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && isin({ Hero->dr.x - V,Hero->dr.y }, { 0,0,WIDTH * 2,HEIGHT - 100 }))
+	if (kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]))
 	{
 		Hero->dirleft = 1;
 		Hero->dir = LeftRun;
 		Hero->dr.x -= V;
 	}
-	if (kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && isin({ Hero->dr.x,Hero->dr.y - V }, { 0,0,WIDTH * 2,HEIGHT - 100 }))
+	if (kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]))
 	{
 		Hero->dir = BackRun;
 		Hero->dr.y -= V;
 	}
-	if (kstate[SDL_SCANCODE_S] && !(kstate[SDL_SCANCODE_W]) && isin({ Hero->dr.x,Hero->dr.y + V }, { 0,0,WIDTH * 2 ,HEIGHT - 100 }))
+	if (kstate[SDL_SCANCODE_S] && !(kstate[SDL_SCANCODE_W]))
 	{
 		Hero->dir = FrontRun;
 		Hero->dr.y += V;
@@ -103,14 +103,17 @@ void HeroMove()
 
 void Gamemode(int& mode)
 {
-
+#pragma region timeofgamemod
 	static int dt = 0, lt = 0;
 	int ct = SDL_GetTicks(), FPS = 24;
 	dt += ct - lt;
+#pragma endregion
 
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
 	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 	SDL_RenderClear(ren);
+
+
 	if (dt > 1000 / FPS)
 	{
 		HeroMove();

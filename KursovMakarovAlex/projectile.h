@@ -6,13 +6,14 @@ struct projectiledata
 {
 	double angle;
 	int speed, livetime = 2500,damage;
-	SDL_Rect drect;
+	SDL_FRect drect;
 };
 
 
 struct projectile
 {
-	projectiledata data;
+	projectile* prev = NULL;
+	projectiledata data = {0};
 	projectile* next =NULL;
 };
 
@@ -25,6 +26,6 @@ struct ProjectileQueue
 
 extern ProjectileQueue Projectiles;
 
-void PushProjectile(ProjectileQueue& Queue, projectiledata elementdata);
+void PushProjectile(ProjectileQueue& queue, projectiledata data);
 
-projectiledata PullProjectileData(ProjectileQueue& queue);
+void PullProjectile(ProjectileQueue& queue, projectile* projectileToRemove);

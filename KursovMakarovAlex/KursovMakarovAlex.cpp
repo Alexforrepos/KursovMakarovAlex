@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 		switch (mode)
 		{
 		case menumode:
-			DrowMenu();
+			DrowMenu(isrunning,mode);
 			break;
 		case gamemode:
 			Gamemode(mode);

@@ -27,7 +27,8 @@ struct player
 	int dir,dirleft=0,cstage;
 	weapon W[4];
 	SDL_Texture* T;
-	SDL_Rect cr[24],dr;
+	SDL_Rect cr[24];
+	SDL_FRect dr;
 	int currentWeapon;
 };
 

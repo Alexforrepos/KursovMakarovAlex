@@ -59,7 +59,10 @@ void HeroInit()
 {
 	Hero->currentWeapon = 0;
 	Hero->T = CreateUTexture("soul_knight_animation_final.png");
-	SDL_QueryTexture(Hero->T, NULL, NULL, &Hero->dr.w, &Hero->dr.h);
+	int textureWidth, textureHeight;
+	SDL_QueryTexture(Hero->T, NULL, NULL, &textureWidth, &textureHeight);
+	Hero->dr.w = textureWidth;
+	Hero->dr.h = textureHeight;
 	HeroWeaponInit();
 	Hero->dr = { 100,100,Hero->dr.w / 2,Hero->dr.h / 2 };
 	Hero->cr[16] = { 0 ,0 ,23,23 };

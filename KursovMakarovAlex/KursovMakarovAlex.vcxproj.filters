@@ -58,6 +58,9 @@
     <Filter Include="Исходные файлы\Utility\TextProcessing">
       <UniqueIdentifier>{deb3a895-7754-4d77-9fc5-aeb28a375a46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\gamemode\enemys">
+      <UniqueIdentifier>{bd8a6c36-80b1-4220-b52b-08a9ad1b75c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KursovMakarovAlex.cpp">
@@ -92,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="TextProcessing.cpp">
       <Filter>Исходные файлы\Utility\TextProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>Исходные файлы\gamemode\enemys</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="TextProcessing.h">
       <Filter>Исходные файлы\Utility\TextProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>Исходные файлы\gamemode\enemys</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

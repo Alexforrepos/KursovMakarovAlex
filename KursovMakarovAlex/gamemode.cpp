@@ -11,7 +11,6 @@
 #include "Hero.h"
 #include "projectile.h"
 
-
 enum dirrectionsofhero
 {
 	LeftHero, RightHero, DownHero, UpHero, StayHero
@@ -26,8 +25,8 @@ void CreateProjectile()
 	tmpprojectile.damage = Hero->W[Hero->currentWeapon].damage;
 	tmpprojectile.livetime = 3000;
 	tmpprojectile.speed = Hero->W[Hero->currentWeapon].bulletspeed;
-	tmpprojectile.drect = { Hero->dr.x,Hero->dr.y,20,20 };
-	tmpprojectile.angle = atan2(Hero->dr.x - mp.x, Hero->dr.y - mp.y);
+	tmpprojectile.drect = { Hero->dr.x + Hero->dr.w/2,Hero->dr.y + Hero->dr.h / 2,20,20 };
+	tmpprojectile.angle = SDL_atan2(mp.y - Hero->dr.y, mp.x - Hero->dr.x);
 	printf("angle %lf\n", tmpprojectile.angle);
 	PushProjectile(Projectiles, tmpprojectile);
 }
@@ -50,23 +49,29 @@ void HeroShot()
 	}
 #pragma endregion
 
-#pragma region drowprojectile
-
-	for (projectile* cur = Projectiles.head; cur != NULL; cur = cur->next)
+	for (projectile* cur = Projectiles.head; cur != nullptr;cur = cur->next)
 	{
+		if (cur->data.livetime < 0)
+		{
+			PullProjectile(Projectiles, cur);
+			break;
+		}
+		if (cur == nullptr)
+		{
+			continue;
+		}
 		SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
 		cur->data.livetime -= ct - lt;
-		cur->data.drect.x += cos(cur->data.angle + M_PI / 2) * cur->data.speed;
-		cur->data.drect.y += sin(cur->data.angle + M_PI / 2) * cur->data.speed;
-		SDL_RenderFillRect(ren, &cur->data.drect);
+		cur->data.drect.x += cos(cur->data.angle ) * (double)cur->data.speed;
+		cur->data.drect.y += sin(cur->data.angle ) * (double)cur->data.speed;
+		SDL_RenderFillRectF(ren, &cur->data.drect);
+	
 	}
-	if (Projectiles.head->data.livetime < 0)
+	if (Hero && Hero->W) 
 	{
-		PullProjectileData(Projectiles);
+		Hero->W[Hero->currentWeapon].cd -= ct - lt;
 	}
-	Hero->W[Hero->currentWeapon].cd -= ct - lt;
 	lt = ct;
-#pragma endregion
 }
 
 void HeroMove()

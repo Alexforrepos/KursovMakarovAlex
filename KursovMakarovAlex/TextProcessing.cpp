@@ -22,9 +22,9 @@ TTF_Font* Fonts[qFont];
 
 bool LoadFonts()
 {
-    for (int i = 0; i < qFont; ++i)
+    for (int i = 0; i < qFont; i++)
     {
-        Fonts[i] = TTF_OpenFont(fontNames[i], 24);
+        Fonts[i] = TTF_OpenFont(fontNames[i], 40);
         if (!Fonts[i])
         {
             SDL_Log("Failed to load font %s! SDL_ttf Error: %s\n", fontNames[i], TTF_GetError());

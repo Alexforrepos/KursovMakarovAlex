@@ -11,4 +11,4 @@ enum mods
 
 void MenuInit();
 
-void DrowMenu();
+void DrowMenu(bool& isrun, int& mod);

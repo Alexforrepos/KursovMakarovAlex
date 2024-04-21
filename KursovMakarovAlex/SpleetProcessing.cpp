@@ -7,7 +7,7 @@
 #include "SDLProcessing.h"
 
 
-void SpleetAnimaticHero(SDL_Texture* Texture, SDL_Rect R[], SDL_Rect Dr, int mkolvo, int FPS, int CRs)
+void SpleetAnimaticHero(SDL_Texture* Texture, SDL_Rect R[], SDL_FRect Dr, int mkolvo, int FPS, int CRs)
 {
 	static int dt = 0;
 	static int lt = 0;
@@ -29,6 +29,6 @@ void SpleetAnimaticHero(SDL_Texture* Texture, SDL_Rect R[], SDL_Rect Dr, int mko
 		dt %= 1000 / FPS;
 		CurrentSpleetCR++;
 	}
-	SDL_RenderCopy(ren, Texture, &R[CRs * 4 + CurrentSpleetCR], &Dr);
+	SDL_RenderCopyF(ren, Texture, &R[CRs * 4 + CurrentSpleetCR], &Dr);
 	lt = crt;
 }

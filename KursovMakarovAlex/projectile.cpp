@@ -3,41 +3,50 @@
 
 ProjectileQueue Projectiles;
 
-void PushProjectile(ProjectileQueue& Queue, projectiledata elementdata)
+void PushProjectile(ProjectileQueue& queue, projectiledata data)
 {
-	projectile* element = (projectile*)malloc(sizeof(projectile));
-	element->data = elementdata;
-	element->next = NULL;
+    projectile* newProjectile = new projectile;
+    newProjectile->data = data;
+    newProjectile->next = nullptr;
+    newProjectile->prev = nullptr;
 
-	if (Queue.head == NULL)
-	{
-		Queue.tail = element;
-		Queue.head = element;
-	}
-	else
-	{
-		Queue.tail->next = element;
-		Queue.tail = element;
-	}
+    if (queue.tail == nullptr)
+    {
+        queue.head = newProjectile;
+        queue.tail = newProjectile;
+    }
+    else
+    {
+        queue.tail->next = newProjectile;
+        newProjectile->prev = queue.tail;
+        queue.tail = newProjectile;
+    }
 }
 
-
-projectiledata PullProjectileData(ProjectileQueue& queue)
+void PullProjectile(ProjectileQueue& queue, projectile* projectileToRemove)
 {
-	projectiledata data = queue.head->data;
+    if (projectileToRemove == nullptr)
+    {
+        return;
+    }
 
-	if (queue.head == queue.tail)
-	{
-		queue.tail = NULL;
-	}
+    if (projectileToRemove->prev != nullptr)
+    {
+        projectileToRemove->prev->next = projectileToRemove->next;
+    }
+    else
+    {
+        queue.head = projectileToRemove->next;
+    }
 
-	if (queue.head == queue.tail == NULL)
-	{
-		return { 0 };
-	}
+    if (projectileToRemove->next != nullptr)
+    {
+        projectileToRemove->next->prev = projectileToRemove->prev;
+    }
+    else
+    {
+        queue.tail = projectileToRemove->prev;
+    }
 
-	projectile* TmpElement = queue.head;
-	free(TmpElement);
-
-	return data;
+    delete projectileToRemove;
 }

@@ -4,10 +4,11 @@
 struct enemydata
 {
 	int HP, CD;
+	SDL_FRect dr;
 	SDL_Texture* T;
 	int model;
+	bool ishit;
 };
-
 
 struct enemy
 {
@@ -16,8 +17,14 @@ struct enemy
 	enemy* next = NULL;
 };
 
-struct enemyQueue
+struct EnemyQueue
 {
 	enemy* head;
 	enemy* tail;
 };
+
+extern EnemyQueue Equeue;
+
+void enemyprocessing(enemy* en);
+
+void CreateNewEnemy(EnemyQueue& Queue, int model);

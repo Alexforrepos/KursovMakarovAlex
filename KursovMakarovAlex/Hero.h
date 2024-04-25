@@ -29,6 +29,7 @@ struct player
 	SDL_Texture* T;
 	SDL_Rect cr[24];
 	SDL_FRect dr;
+	double Alpha;
 	int currentWeapon;
 };
 

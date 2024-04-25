@@ -6,6 +6,7 @@
 #include "Menu.h"
 #include "gamemode.h"
 #include "Hero.h"
+#include "enemy.h"
 
 enum mode
 {
@@ -26,6 +27,9 @@ int main(int argc, char* argv[])
 	LoadFonts();
 	MenuInit();
 	HeroInit();
+	CreateNewEnemy(Equeue,0);
+	CreateNewEnemy(Equeue,1);
+	CreateNewEnemy(Equeue,2);
 	while (isrunning)
 	{
 #pragma region event

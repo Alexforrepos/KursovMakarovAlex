@@ -2,7 +2,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-#include <cmath>
 
 #include "texturesimport.h"
 #include "SpleetProcessing.h"
@@ -10,6 +9,8 @@
 #include "gamemode.h"
 #include "Hero.h"
 #include "projectile.h"
+#include "enemy.h"
+#include "Geometry.h"
 
 enum dirrectionsofhero
 {
@@ -25,7 +26,7 @@ void CreateProjectile()
 	tmpprojectile.damage = Hero->W[Hero->currentWeapon].damage;
 	tmpprojectile.livetime = 3000;
 	tmpprojectile.speed = Hero->W[Hero->currentWeapon].bulletspeed;
-	tmpprojectile.drect = { Hero->dr.x + Hero->dr.w/2,Hero->dr.y + Hero->dr.h / 2,20,20 };
+	tmpprojectile.drect = { Hero->dr.x + Hero->dr.w / 2,Hero->dr.y + Hero->dr.h / 2,20,20 };
 	tmpprojectile.angle = SDL_atan2(mp.y - Hero->dr.y, mp.x - Hero->dr.x);
 	printf("angle %lf\n", tmpprojectile.angle);
 	PushProjectile(Projectiles, tmpprojectile);
@@ -33,6 +34,7 @@ void CreateProjectile()
 
 void HeroShot()
 {
+	bool ispooled = false;
 	SDL_Point mp;
 	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
 #pragma region timeofHeroshot
@@ -48,26 +50,36 @@ void HeroShot()
 		Hero->W[Hero->currentWeapon].cd = Hero->W[Hero->currentWeapon].reloadtime;
 	}
 #pragma endregion
-
-	for (projectile* cur = Projectiles.head; cur != nullptr;cur = cur->next)
-	{
-		if (cur->data.livetime < 0)
+	projectile* cur = Projectiles.head;
+	while(cur != nullptr)
+	{	
+		projectile* nextProjectile = cur->next;
+		if (cur->data.livetime < 0 )
 		{
 			PullProjectile(Projectiles, cur);
 			break;
 		}
-		if (cur == nullptr)
-		{
-			continue;
-		}
 		SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
 		cur->data.livetime -= ct - lt;
-		cur->data.drect.x += cos(cur->data.angle ) * (double)cur->data.speed;
-		cur->data.drect.y += sin(cur->data.angle ) * (double)cur->data.speed;
+		cur->data.drect.x += cos(cur->data.angle) * (double)cur->data.speed;
+		cur->data.drect.y += sin(cur->data.angle) * (double)cur->data.speed;
+		for (enemy* curenemy = Equeue.head; curenemy != nullptr; curenemy = curenemy->next)
+		{
+			if (isinRect(cur->data.drect, curenemy->data.dr))
+			{
+				curenemy->data.ishit = true;
+				curenemy->data.HP -= cur->data.damage;
+				if (curenemy->data.HP < 0)
+					
+				PullProjectile(Projectiles, cur);
+				ispooled = true;
+				break;
+			}
+		}
 		SDL_RenderFillRectF(ren, &cur->data.drect);
-	
+		cur = nextProjectile;
 	}
-	if (Hero && Hero->W) 
+	if (Hero && Hero->W)
 	{
 		Hero->W[Hero->currentWeapon].cd -= ct - lt;
 	}
@@ -106,6 +118,14 @@ void HeroMove()
 		Hero->dir = RightNondir;
 }
 
+void enemyprocess()
+{
+	for (enemy *curenemy = Equeue.head; curenemy != nullptr; curenemy = curenemy->next)
+	{
+		enemyprocessing(curenemy);
+	}
+}
+
 void Gamemode(int& mode)
 {
 #pragma region timeofgamemod
@@ -123,6 +143,7 @@ void Gamemode(int& mode)
 	{
 		HeroMove();
 		HeroShot();
+		enemyprocess();
 	}
 	if (kstate[SDL_SCANCODE_ESCAPE])
 	{

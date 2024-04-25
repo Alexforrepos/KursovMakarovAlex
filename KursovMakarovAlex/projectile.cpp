@@ -5,7 +5,7 @@ ProjectileQueue Projectiles;
 
 void PushProjectile(ProjectileQueue& queue, projectiledata data)
 {
-    projectile* newProjectile = new projectile;
+    projectile* newProjectile = (projectile*)malloc(sizeof(projectile));
     newProjectile->data = data;
     newProjectile->next = nullptr;
     newProjectile->prev = nullptr;
@@ -32,11 +32,19 @@ void PullProjectile(ProjectileQueue& queue, projectile* projectileToRemove)
 
     if (projectileToRemove->prev != nullptr)
     {
-        projectileToRemove->prev->next = projectileToRemove->next;
+        if (projectileToRemove->next != nullptr)
+        {
+            projectileToRemove->prev->next = projectileToRemove->next;
+        }
+        else
+        {
+            projectileToRemove->prev->next = nullptr;
+        }
     }
     else
     {
         queue.head = projectileToRemove->next;
+        
     }
 
     if (projectileToRemove->next != nullptr)
@@ -46,7 +54,8 @@ void PullProjectile(ProjectileQueue& queue, projectile* projectileToRemove)
     else
     {
         queue.tail = projectileToRemove->prev;
+        
     }
 
-    delete projectileToRemove;
+    free(projectileToRemove);
 }

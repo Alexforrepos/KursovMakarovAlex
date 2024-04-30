@@ -58,7 +58,7 @@ void HeroWeaponInit()
 void HeroInit()
 {
 	Hero->currentWeapon = 0;
-	Hero->T = CreateUTexture("soul_knight_animation_final.png");
+	Hero->T = CreateUTexture("textures/soul_knight_animation_final.png");
 	int textureWidth, textureHeight;
 	SDL_QueryTexture(Hero->T, NULL, NULL, &textureWidth, &textureHeight);
 	Hero->dr.w = textureWidth;

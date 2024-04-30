@@ -2,6 +2,8 @@
 #include "SDL.h"
 
 ProjectileQueue Projectiles;
+ProjectileQueue EnemyProjectiles;
+
 
 void PushProjectile(ProjectileQueue& queue, projectiledata data)
 {

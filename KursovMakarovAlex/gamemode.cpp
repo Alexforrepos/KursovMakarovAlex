@@ -69,8 +69,8 @@ void HeroShot()
 			{
 				curenemy->data.ishit = true;
 				curenemy->data.HP -= cur->data.damage;
-				if (curenemy->data.HP < 0)
-					
+				if (curenemy->data.HP <= 0)
+					removeEnemy(Equeue, curenemy);
 				PullProjectile(Projectiles, cur);
 				ispooled = true;
 				break;
@@ -90,31 +90,42 @@ void HeroMove()
 {
 	int V = 1;
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
-	if (kstate[SDL_SCANCODE_D] && !(kstate[SDL_SCANCODE_A]))
+	static float lastx=0, lasty=0;
+	if (!isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
 	{
+		Hero->dr = { lastx,lasty,Hero->dr.w,Hero->dr.h };
+	}
+	if (kstate[SDL_SCANCODE_D] && !(kstate[SDL_SCANCODE_A]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
+	{
+		lastx = Hero->dr.x;
+		lasty = Hero->dr.y;
 		Hero->dirleft = 0;
 		Hero->dir = Rightrun;
 		Hero->dr.x += V;
 	}
-	if (kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]))
+	if (kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
 	{
+		lastx = Hero->dr.x;
+		lasty = Hero->dr.y;
 		Hero->dirleft = 1;
 		Hero->dir = LeftRun;
 		Hero->dr.x -= V;
 	}
-	if (kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]))
+	if (kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
 	{
 		Hero->dir = BackRun;
 		Hero->dr.y -= V;
 	}
-	if (kstate[SDL_SCANCODE_S] && !(kstate[SDL_SCANCODE_W]))
+	if (kstate[SDL_SCANCODE_S] && !(kstate[SDL_SCANCODE_W]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
 	{
+		lastx = Hero->dr.x;
+		lasty = Hero->dr.y;
 		Hero->dir = FrontRun;
 		Hero->dr.y += V;
 	}
-	if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && Hero->dirleft)
+	if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && Hero->dirleft && isinRect(Hero->dr,{0,0,(float)WIDTH,(float)HEIGHT}))
 		Hero->dir = LeftNondir;
-	if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && !Hero->dirleft)
+	if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && !Hero->dirleft && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
 		Hero->dir = RightNondir;
 }
 

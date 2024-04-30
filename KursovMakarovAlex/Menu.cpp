@@ -102,7 +102,7 @@ void DeleteMenuQuery(MenuQuery* query)
 void MainMenuInit()
 {
 #pragma region MainMenu
-	MenuBackground[0] = CreateUTexture("SaveImage.jpg");
+	MenuBackground[0] = CreateUTexture("textures/SaveImage.jpg");
 
 
 	MenuItemElementData PlayGame;
@@ -166,6 +166,7 @@ void DrowMenu(bool &isrun,int &mod)
 						break;
 					case exitsitem:
 						isrun = false;
+						break;
 					default:
 						break;
 					}
@@ -177,7 +178,7 @@ void DrowMenu(bool &isrun,int &mod)
 			}
 		}
 	case 1:
-
+		//SDL_RenderCopy();
 		break;
 	default:
 		break;

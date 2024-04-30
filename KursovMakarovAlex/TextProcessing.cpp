@@ -5,17 +5,18 @@
 #include "TextProcessing.h"
 
 
-const char* fontNames[12] = {
-    "OpenSans-Bold.ttf",
-    "OpenSans-BoldItalic.ttf",
-    "OpenSans-ExtraBold.ttf",
-    "OpenSans-ExtraBoldItalic.ttf",
-    "OpenSans-Italic.ttf",
-    "OpenSans-Light.ttf",
-    "OpenSans-LightItalic.ttf",
-    "OpenSans-Regular.ttf",
-    "OpenSans-Semibold.ttf",
-    "OpenSans-SemiboldItalic.ttf"
+const char* fontNames[12] = 
+{
+    "fonts/OpenSans-Bold.ttf",
+    "fonts/OpenSans-BoldItalic.ttf",
+    "fonts/OpenSans-ExtraBold.ttf",
+    "fonts/OpenSans-ExtraBoldItalic.ttf",
+    "fonts/OpenSans-Italic.ttf",
+    "fonts/OpenSans-Light.ttf",
+    "fonts/OpenSans-LightItalic.ttf",
+    "fonts/OpenSans-Regular.ttf",
+    "fonts/OpenSans-Semibold.ttf",
+    "fonts/OpenSans-SemiboldItalic.ttf"
 };
 
 TTF_Font* Fonts[qFont];

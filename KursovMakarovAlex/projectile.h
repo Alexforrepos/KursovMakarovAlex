@@ -25,6 +25,7 @@ struct ProjectileQueue
 };
 
 extern ProjectileQueue Projectiles;
+extern ProjectileQueue EnemyProjectiles;
 
 void PushProjectile(ProjectileQueue& queue, projectiledata data);
 

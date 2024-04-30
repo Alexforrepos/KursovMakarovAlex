@@ -1,9 +1,16 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+
+#include "Geometry.h"
+#include "Hero.h"
+#include "projectile.h"
 #include "enemy.h"
 #include  "texturesimport.h"
 #include "SDLProcessing.h"
+
+
+#define STOPPING_RADIUS 500
 
 SDL_Texture* TextureEnemy[4];
 
@@ -94,18 +101,21 @@ void CreateNewEnemy(EnemyQueue& Queue, int model)
 	switch (model)
 	{
 	case 0:
-		TempData.CD = 0;
-		TempData.HP = 100;
+		TempData.speed = 4;
+		TempData.CD = 1000;
+		TempData.HP = 50;
 		TempData.dr = { 200,800,100,100 };
 		TempData.model = model;
 		break;
 	case 1:
+		TempData.speed = 4;
 		TempData.CD = 0;
-		TempData.HP = 200;
+		TempData.HP = 100;
 		TempData.dr = { 300,800,100,100 };
 		TempData.model = model;
 		break;
 	case 2:
+		TempData.speed = 4;
 		TempData.CD = 0;
 		TempData.HP = 300;
 		TempData.dr = { 400,800,100,100 };
@@ -117,23 +127,95 @@ void CreateNewEnemy(EnemyQueue& Queue, int model)
 	addEnemy(Queue, TempData);
 }
 
+void enemyMoveTowardsPlayer(enemy* en)
+{
+	if (en == NULL)
+	{
+		return;
+	}
+
+	int distance = sqrt(((Hero->dr.x - en->data.dr.x) * (Hero->dr.x - en->data.dr.x)) + (Hero->dr.y - en->data.dr.y) * (Hero->dr.y - en->data.dr.y));
+
+	if (distance > STOPPING_RADIUS)
+	{
+
+		float angle = SDL_atan2(Hero->dr.y - en->data.dr.y, Hero->dr.x - en->data.dr.x);
+
+		float newX = en->data.dr.x + en->data.speed * cos(angle);
+		float newY = en->data.dr.y + en->data.speed * sin(angle);
+
+		en->data.dr.x = newX;
+		en->data.dr.y = newY;
+	}
+}
+
 void enemyprocessing(enemy* en)
 {
-	switch (en->data.model)
+	static int lt = 0;
+	int ct = SDL_GetTicks();
+	if (en == NULL) 
 	{
-	case 0:
+		return;
+	}
+#pragma region createnemyprojectile
+
+
+	if (en->data.CD < 0)
+	{
+		projectiledata tempdata;
+		tempdata.angle = SDL_atan2(Hero->dr.y - en->data.dr.y, Hero->dr.x - en->data.dr.x);
+		tempdata.drect = { en->data.dr.x, en->data.dr.y, 20, 20 };
+		tempdata.livetime = 3000;
+		tempdata.speed = 5;
+		tempdata.damage = 10;
+		PushProjectile(EnemyProjectiles, tempdata);
+		en->data.CD = 1000;
+	}
+	else
+	{
+		en->data.CD -= ct - lt;
+	}
+#pragma endregion
+
+
+#pragma region enemymove
+	if (en->data.model == 0)
+	{
+		enemyMoveTowardsPlayer(en);
 		SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
 		SDL_RenderFillRectF(ren, &en->data.dr);
-		break;
-	case 1:
+	}
+	else if (en->data.model == 1)
+	{
 		SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
 		SDL_RenderFillRectF(ren, &en->data.dr);
-		break;
-	case 2:
+	}
+	else if (en->data.model == 2)
+	{
 		SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
 		SDL_RenderFillRectF(ren, &en->data.dr);
-		break;
-	default:
-		break;
 	}
+#pragma endregion
+
+#pragma region enemyprojectileprocessing
+	for (projectile* cur = EnemyProjectiles.head; cur != nullptr; cur = cur->next)
+	{
+		SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
+		SDL_RenderFillRectF(ren, &cur->data.drect);
+		if (cur->data.livetime <= 0)
+		{
+			PullProjectile(EnemyProjectiles,cur);
+			break;
+		}
+		if (isinRect(cur->data.drect, Hero->dr))
+		{
+			Hero->HP -= cur->data.damage;
+			PullProjectile(EnemyProjectiles, cur);
+			break;
+		}
+		cur->data.drect = { cur->data.drect.x + (float)cos(cur->data.angle),cur->data.drect.y + (float)sin(cur->data.angle),cur->data.drect.w,cur->data.drect.h };
+		cur->data.livetime -= ct - lt;
+	}
+	lt = ct;
+#pragma endregion
 }

@@ -3,7 +3,8 @@
 
 struct enemydata
 {
-	int HP, CD;
+
+	int HP, CD,speed;
 	SDL_FRect dr;
 	SDL_Texture* T;
 	int model;
@@ -26,5 +27,7 @@ struct EnemyQueue
 extern EnemyQueue Equeue;
 
 void enemyprocessing(enemy* en);
+
+void removeEnemy(EnemyQueue& queue, enemy* removeEnemy);
 
 void CreateNewEnemy(EnemyQueue& Queue, int model);

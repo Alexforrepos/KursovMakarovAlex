@@ -17,6 +17,7 @@ enum mode
 int main(int argc, char* argv[])
 {
 	system("chcp 1251 > NULL");
+	srand(time(NULL));
 	Init();
 	SDL_Event ev;
 #pragma region glavperemen
@@ -27,9 +28,9 @@ int main(int argc, char* argv[])
 	LoadFonts();
 	MenuInit();
 	HeroInit();
-	CreateNewEnemy(Equeue,0);
-	CreateNewEnemy(Equeue,1);
-	CreateNewEnemy(Equeue,2);
+	CreateNewEnemy(Equeue, 0, { 100,300 } );
+	CreateNewEnemy(Equeue, 1, { 300, 300 } );
+	CreateNewEnemy(Equeue, 2, { 500, 300 } );
 	while (isrunning)
 	{
 #pragma region event
@@ -48,15 +49,6 @@ int main(int argc, char* argv[])
 
 				}
 				break;
-			case SDL_MOUSEWHEEL:
-				if (ev.wheel.preciseX > 0)
-					Hero->currentWeapon = (Hero->currentWeapon + 1) % 3;
-				if (ev.wheel.preciseX < 0)
-				{
-					if (Hero->currentWeapon - 1 < 0)
-						Hero->currentWeapon = 2;
-					Hero->currentWeapon = (Hero->currentWeapon - 1);
-				}
 			default:
 				break;
 			}
@@ -71,7 +63,7 @@ int main(int argc, char* argv[])
 		switch (mode)
 		{
 		case menumode:
-			DrowMenu(isrunning,mode);
+			DrowMenu(isrunning, mode);
 			break;
 		case gamemode:
 			Gamemode(mode);

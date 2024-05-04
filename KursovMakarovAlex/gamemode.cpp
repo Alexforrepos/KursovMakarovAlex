@@ -27,7 +27,7 @@ void CreateProjectile()
 	tmpprojectile.livetime = 3000;
 	tmpprojectile.speed = Hero->W[Hero->currentWeapon].bulletspeed;
 	tmpprojectile.drect = { Hero->dr.x + Hero->dr.w / 2,Hero->dr.y + Hero->dr.h / 2,20,20 };
-	tmpprojectile.angle = SDL_atan2(mp.y - Hero->dr.y, mp.x - Hero->dr.x);
+	tmpprojectile.angle = SDL_atan2(mp.y - GetCenterPointOfRect(Hero->dr).y, mp.x - GetCenterPointOfRect(Hero->dr).x);
 	printf("angle %lf\n", tmpprojectile.angle);
 	PushProjectile(Projectiles, tmpprojectile);
 }
@@ -116,7 +116,7 @@ void HeroMove()
 		Hero->dir = BackRun;
 		Hero->dr.y -= V;
 	}
-	if (kstate[SDL_SCANCODE_S] && !(kstate[SDL_SCANCODE_W]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
+	if (kstate[SDL_SCANCODE_S] && !(kstate[SDL_SCANCODE_W]) && isinRect(Hero->dr,{ 0,0,(float)WIDTH,(float)HEIGHT }))
 	{
 		lastx = Hero->dr.x;
 		lasty = Hero->dr.y;
@@ -131,9 +131,11 @@ void HeroMove()
 
 void enemyprocess()
 {
-	for (enemy *curenemy = Equeue.head; curenemy != nullptr; curenemy = curenemy->next)
+	enemy* cur = Equeue.head;
+	while(cur!=nullptr)
 	{
-		enemyprocessing(curenemy);
+		enemyprocessing(cur);
+		cur = cur->next;
 	}
 }
 
@@ -149,6 +151,23 @@ void Gamemode(int& mode)
 	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 	SDL_RenderClear(ren);
 
+
+	if (kstate[SDL_SCANCODE_1])
+	{
+		Hero->currentWeapon = 1;
+	}
+	if (kstate[SDL_SCANCODE_2])
+	{
+		Hero->currentWeapon = 2;
+	}
+	if (kstate[SDL_SCANCODE_3])
+	{
+		Hero->currentWeapon = 3;
+	}
+	if (kstate[SDL_SCANCODE_4])
+	{
+		Hero->currentWeapon = 4;
+	}
 
 	if (dt > 1000 / FPS)
 	{

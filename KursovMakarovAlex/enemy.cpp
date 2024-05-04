@@ -12,7 +12,56 @@
 
 #define STOPPING_RADIUS 500
 
-SDL_Texture* TextureEnemy[4];
+SDL_Texture* TextureEnemy[5];
+
+void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep)
+{
+	enemydata TempData = { 0 };
+	switch (model)
+	{
+	case 0:
+		TempData.speed = 0.4;
+		TempData.CD = 1000;
+		TempData.HP = 50;
+		TempData.dr = { ep.x , ep.y, 50,50 };
+		TempData.model = model;
+		break;
+	case 1:
+		TempData.speed = 0.7;
+		TempData.CD = 0;
+		TempData.HP = 100;
+		TempData.dr = { ep.x , ep.y,50,50 };
+		TempData.model = model;
+		break;
+	case 2:
+		TempData.speed = 0.1;
+		TempData.CD = 0;
+		TempData.HP = 300;
+		TempData.dr = { ep.x , ep.y, 50,50 };
+		TempData.model = model;
+		break;
+	case 3:
+		TempData.speed = 3;
+		TempData.CD = 0;
+		TempData.HP = 100;
+		TempData.dr = { ep.x , ep.y, 50,50 };
+		TempData.model = model;
+		TempData.angle = rand();
+		break;
+	case 4:
+		TempData.speed = 0.2;
+		TempData.CD = 0;
+		TempData.HP = 200;
+		TempData.dr = { ep.x , ep.y, 50,50 };
+		TempData.model = model;
+		break;
+	default:
+		break;
+	}
+	addEnemy(Queue, TempData);
+}
+
+#pragma region list
 
 EnemyQueue Equeue;
 
@@ -71,7 +120,8 @@ void clearEnemies(EnemyQueue& queue)
 	queue.head = nullptr;
 	queue.tail = nullptr;
 }
-
+#pragma endregion
+#pragma region Texture
 const char* EnemyTextures[4]
 {
 	"",
@@ -93,40 +143,8 @@ void DeinitEnemyTexture()
 		SDL_DestroyTexture(TextureEnemy[i]);
 	}
 }
-
-
-void CreateNewEnemy(EnemyQueue& Queue, int model)
-{
-	enemydata TempData = { 0 };
-	switch (model)
-	{
-	case 0:
-		TempData.speed = 4;
-		TempData.CD = 1000;
-		TempData.HP = 50;
-		TempData.dr = { 200,800,100,100 };
-		TempData.model = model;
-		break;
-	case 1:
-		TempData.speed = 4;
-		TempData.CD = 0;
-		TempData.HP = 100;
-		TempData.dr = { 300,800,100,100 };
-		TempData.model = model;
-		break;
-	case 2:
-		TempData.speed = 4;
-		TempData.CD = 0;
-		TempData.HP = 300;
-		TempData.dr = { 400,800,100,100 };
-		TempData.model = model;
-		break;
-	default:
-		break;
-	}
-	addEnemy(Queue, TempData);
-}
-
+#pragma endregion
+#pragma region beh
 void enemyMoveTowardsPlayer(enemy* en)
 {
 	if (en == NULL)
@@ -148,19 +166,78 @@ void enemyMoveTowardsPlayer(enemy* en)
 		en->data.dr.y = newY;
 	}
 }
+void Mele_Beh(enemy* en)
+{
+	int ct = SDL_GetTicks();
+	float ang = GetAlpha(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr));
+	if (en->data.CD <= 0)
+	{
+		en->data.dr = { en->data.dr.x + en->data.speed * cos(ang) , en->data.dr.y + en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h };
+		if (GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr)) < 50)
+			en->data.CD = 3000;
+	}
+	else
+	{
+		if(isinRect({ en->data.dr.x - en->data.speed * cos(ang) , en->data.dr.y - en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h }, {0,0,(float)WIDTH,(float)HEIGHT}))
+			en->data.dr = { en->data.dr.x - en->data.speed * cos(ang) , en->data.dr.y - en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h };
+	}
+	en->data.CD -= ct - en->data.lt;
+	en->data.lt = ct;
+}
+void Sum_Beh(enemy* en)
+{
+	int ct = SDL_GetTicks();
+	float ang = -GetAlpha(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr));
+	if (GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr)) < 50)
+	{
+		en->data.CD = 3000;
+		if(isinRect({ en->data.dr.x - en->data.speed * cos(ang) , en->data.dr.y - en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h }, {0,0,(float)WIDTH,(float)HEIGHT}))
+			en->data.dr = { en->data.dr.x + en->data.speed * cos(ang) , en->data.dr.y + en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h };
+	}
+	if (en->data.CD <= 0)
+	{
+		CreateNewEnemy(Equeue, rand() % 2 + 3, { en->data.dr.x + rand() % 50 - 25,en->data.dr.y + rand() % 50 - 25 });
+		en->data.CD = 5000;
+	}
+	en->data.CD -= ct - en->data.lt;
+	en->data.lt = ct;
+}
+void Saw_Beh(enemy* en)
+{
+	if (en->data.dr.x + en->data.speed * cos(en->data.angle) > WIDTH - 10 || en->data.dr.x + en->data.speed * cos(en->data.angle) < 10)
+		en->data.angle *= -1;
+	if (en->data.dr.y + en->data.speed * sin(en->data.angle) > HEIGHT - 10 || en->data.dr.x - en->data.speed * sin(en->data.angle) < 10)
+		en->data.angle *= -1;
+	if (isinRect({ en->data.dr.x - en->data.speed * cos(en->data.angle) , en->data.dr.y - en->data.speed * sin(en->data.angle),en->data.dr.w,en->data.dr.h }
+	,{0,0,(float)WIDTH,(float)HEIGHT}))
+	en->data.dr = { en->data.dr.x - en->data.speed * cos(en->data.angle) , en->data.dr.y - en->data.speed * sin(en->data.angle),en->data.dr.w,en->data.dr.h };
+	if (GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr)) < 50)
+		en->data.angle *= -1;
+}
+void Boom_Beh(enemy* en)
+{
+	int ct = SDL_GetTicks();
+	float ang = GetAlpha(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr));
+	en->data.dr = { en->data.dr.x + en->data.speed * cos(ang) , en->data.dr.y + en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h };
+	if(GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr)) < 40)
+	{
+		en->data.HP = 0;
+	}
+}
+#pragma endregion
 
 void enemyprocessing(enemy* en)
 {
 	static int lt = 0;
 	int ct = SDL_GetTicks();
-	if (en == NULL) 
+	if (en == NULL)
 	{
 		return;
 	}
 #pragma region createnemyprojectile
 
 
-	if (en->data.CD < 0)
+	if (en->data.CD < 0 && en->data.model == 0)
 	{
 		projectiledata tempdata;
 		tempdata.angle = SDL_atan2(Hero->dr.y - en->data.dr.y, Hero->dr.x - en->data.dr.x);
@@ -187,12 +264,26 @@ void enemyprocessing(enemy* en)
 	}
 	else if (en->data.model == 1)
 	{
+		Mele_Beh(en);
 		SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
 		SDL_RenderFillRectF(ren, &en->data.dr);
 	}
 	else if (en->data.model == 2)
 	{
+		Sum_Beh(en);
 		SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
+		SDL_RenderFillRectF(ren, &en->data.dr);
+	}
+	else if(en->data.model == 3)
+	{
+		Saw_Beh(en);
+		SDL_SetRenderDrawColor(ren, 0, 255, 255, 255);
+		SDL_RenderFillRectF(ren, &en->data.dr);
+	}
+	else
+	{
+		Boom_Beh(en);
+		SDL_SetRenderDrawColor(ren, 255, 0, 255, 255);
 		SDL_RenderFillRectF(ren, &en->data.dr);
 	}
 #pragma endregion
@@ -204,7 +295,7 @@ void enemyprocessing(enemy* en)
 		SDL_RenderFillRectF(ren, &cur->data.drect);
 		if (cur->data.livetime <= 0)
 		{
-			PullProjectile(EnemyProjectiles,cur);
+			PullProjectile(EnemyProjectiles, cur);
 			break;
 		}
 		if (isinRect(cur->data.drect, Hero->dr))

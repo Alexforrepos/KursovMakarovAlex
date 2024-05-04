@@ -145,9 +145,6 @@
     <ClInclude Include="SpleetProcessing.h">
       <Filter>Исходные файлы\Utility\TextureProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Исходные файлы\menu</Filter>
-    </ClInclude>
     <ClInclude Include="SDLProcessing.h">
       <Filter>Исходные файлы\Utility\SDL_free_init</Filter>
     </ClInclude>
@@ -171,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>Исходные файлы\gamemode\enemys</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Исходные файлы\menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

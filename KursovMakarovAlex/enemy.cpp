@@ -35,7 +35,7 @@ void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep)
 		break;
 	case 2:
 		TempData.speed = 0.1;
-		TempData.CD = 0;
+		TempData.CD = 0.1;
 		TempData.HP = 300;
 		TempData.dr = { ep.x , ep.y, 50,50 };
 		TempData.model = model;
@@ -67,11 +67,11 @@ EnemyQueue Equeue;
 
 void addEnemy(EnemyQueue& queue, enemydata data)
 {
-	enemy* newEnemy = new enemy;
+	enemy* newEnemy = (enemy*)malloc(sizeof(enemy));
 	newEnemy->data = data;
 	newEnemy->next = nullptr;
 
-	if (queue.tail == nullptr)
+	if (queue.head == nullptr)
 	{
 		queue.head = newEnemy;
 	}
@@ -86,7 +86,8 @@ void addEnemy(EnemyQueue& queue, enemydata data)
 
 void removeEnemy(EnemyQueue& queue, enemy* removeEnemy)
 {
-	if (removeEnemy->prev != nullptr)
+	printf("%i \n", removeEnemy->data.model);
+	if (removeEnemy->prev != nullptr && removeEnemy->prev != (enemy*)0xcdcdcdcdcdcdcdcd) // что за хрень?
 	{
 		removeEnemy->prev->next = removeEnemy->next;
 	}
@@ -104,7 +105,7 @@ void removeEnemy(EnemyQueue& queue, enemy* removeEnemy)
 		queue.tail = removeEnemy->prev;
 	}
 
-	delete removeEnemy;
+	free(removeEnemy);
 }
 
 void clearEnemies(EnemyQueue& queue)
@@ -120,6 +121,7 @@ void clearEnemies(EnemyQueue& queue)
 	queue.head = nullptr;
 	queue.tail = nullptr;
 }
+
 #pragma endregion
 #pragma region Texture
 const char* EnemyTextures[4]
@@ -253,7 +255,6 @@ void enemyprocessing(enemy* en)
 		en->data.CD -= ct - lt;
 	}
 #pragma endregion
-
 
 #pragma region enemymove
 	if (en->data.model == 0)

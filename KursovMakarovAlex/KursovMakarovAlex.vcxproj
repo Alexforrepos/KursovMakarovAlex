@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="FileM.cpp" />
     <ClCompile Include="gamemode.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="KursovMakarovAlex.cpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="enemy.h" />
     <ClInclude Include="gamemode.h" />
+    <ClInclude Include="FileM.h" />
     <ClInclude Include="projectile.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Geometry.h" />
@@ -178,6 +180,9 @@
     <Image Include="proba.png" />
     <Image Include="SaveImage.jpg" />
     <Image Include="soul_knight_animation_final.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="EnemyQueue.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

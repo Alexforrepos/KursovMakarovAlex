@@ -61,6 +61,9 @@
     <Filter Include="Исходные файлы\gamemode\enemys">
       <UniqueIdentifier>{bd8a6c36-80b1-4220-b52b-08a9ad1b75c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Utility\FileM">
+      <UniqueIdentifier>{8bc74f34-720a-40ce-baf4-088f29834e05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KursovMakarovAlex.cpp">
@@ -98,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>Исходные файлы\gamemode\enemys</Filter>
+    </ClCompile>
+    <ClCompile Include="FileM.cpp">
+      <Filter>Исходные файлы\Utility\FileM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +178,9 @@
     <ClInclude Include="Menu.h">
       <Filter>Исходные файлы\menu</Filter>
     </ClInclude>
+    <ClInclude Include="FileM.h">
+      <Filter>Исходные файлы\Utility\FileM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="proba.png">
@@ -186,5 +195,10 @@
     <Image Include="soul_knight_animation_final.png">
       <Filter>Файлы ресурсов\textures\splites\knight</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="EnemyQueue.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>

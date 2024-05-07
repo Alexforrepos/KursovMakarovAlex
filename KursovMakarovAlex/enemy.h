@@ -16,15 +16,15 @@ struct enemydata
 
 struct enemy
 {
-	enemy* prev = NULL;
+	enemy* prev = nullptr;
 	enemydata data;
-	enemy* next = NULL;
+	enemy* next = nullptr;
 };
 
 struct EnemyQueue
 {
-	enemy* head;
-	enemy* tail;
+	enemy* head = nullptr;
+	enemy* tail = nullptr;
 };
 
 extern EnemyQueue Equeue;

@@ -28,7 +28,6 @@ void CreateProjectile()
 	tmpprojectile.speed = Hero->W[Hero->currentWeapon].bulletspeed;
 	tmpprojectile.drect = { Hero->dr.x + Hero->dr.w / 2,Hero->dr.y + Hero->dr.h / 2,20,20 };
 	tmpprojectile.angle = SDL_atan2(mp.y - GetCenterPointOfRect(Hero->dr).y, mp.x - GetCenterPointOfRect(Hero->dr).x);
-	printf("angle %lf\n", tmpprojectile.angle);
 	PushProjectile(Projectiles, tmpprojectile);
 }
 
@@ -69,8 +68,6 @@ void HeroShot()
 			{
 				curenemy->data.ishit = true;
 				curenemy->data.HP -= cur->data.damage;
-				if (curenemy->data.HP <= 0)
-					removeEnemy(Equeue, curenemy);
 				PullProjectile(Projectiles, cur);
 				ispooled = true;
 				break;
@@ -135,7 +132,21 @@ void enemyprocess()
 	while(cur!=nullptr)
 	{
 		enemyprocessing(cur);
+		if (cur->data.HP <= 0)
+		{
+			enemy* N = cur->next;
+			if (N == nullptr)
+			{
+				removeEnemy(Equeue, cur);
+				break;
+			}
+			removeEnemy(Equeue, cur);
+			cur = N;
+		}
+		else
+		{ 
 		cur = cur->next;
+		}
 	}
 }
 

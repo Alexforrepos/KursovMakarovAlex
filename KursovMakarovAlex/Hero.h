@@ -24,13 +24,14 @@ struct weapon
 struct player
 {
 	int HP, Money;
-	int dir,dirleft=0,cstage;
-	weapon W[4];
-	SDL_Texture* T;
-	SDL_Rect cr[24];
-	SDL_FRect dr;
-	double Alpha;
-	int currentWeapon;
+	int dir,dirleft=0,cstage; // для анимации
+	weapon W[4]; // оружие
+	SDL_Texture* T; // текстура
+	SDL_Rect cr[24]; // все анимации
+	SDL_FRect dr; 
+	double Alpha; // уголповорота
+	int currentWeapon; // отображает текущее оружие
+	int ItemsInventory[4] = {0}; // все предметы 
 };
 
 extern player* Hero;

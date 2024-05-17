@@ -55,6 +55,14 @@ void HeroWeaponInit()
 	Hero->W[3].reloadtime = 2000;
 }
 
+void HeroIteminit()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		Hero->ItemsInventory[i] = 0;
+	}
+}
+
 void HeroInit()
 {
 	Hero->currentWeapon = 0;
@@ -64,6 +72,7 @@ void HeroInit()
 	Hero->dr.w = textureWidth;
 	Hero->dr.h = textureHeight;
 	HeroWeaponInit();
+	HeroIteminit();
 	Hero->dr = { 100,100,Hero->dr.w / 2,Hero->dr.h / 2 };
 	Hero->cr[16] = { 0 ,0 ,23,23 };
 	Hero->cr[17] = { 23,0 ,23,23 };

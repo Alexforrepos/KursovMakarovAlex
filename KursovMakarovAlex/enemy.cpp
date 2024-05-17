@@ -17,6 +17,9 @@ SDL_Texture* TextureEnemy[5];
 void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep)
 {
 	enemydata TempData = { 0 };
+	TempData.lt = 0;
+	TempData.angle = NULL;
+	TempData.T = nullptr;
 	switch (model)
 	{
 	case 0:
@@ -83,11 +86,11 @@ void addEnemy(EnemyQueue& queue, enemydata data)
 
 	queue.tail = newEnemy;
 }
-
-void removeEnemy(EnemyQueue& queue, enemy* removeEnemy)
+	
+void RemoveEnemyQ(EnemyQueue& queue, enemy* removeEnemy)
 {
 	printf("%i \n", removeEnemy->data.model);
-	if (removeEnemy->prev != nullptr && removeEnemy->prev != (enemy*)0xcdcdcdcdcdcdcdcd) // что за хрень?
+	if (removeEnemy->prev != nullptr && removeEnemy->prev != (enemy*)0xcdcdcdcdcdcdcdcd) // почаму?
 	{
 		removeEnemy->prev->next = removeEnemy->next;
 	}
@@ -106,6 +109,11 @@ void removeEnemy(EnemyQueue& queue, enemy* removeEnemy)
 	}
 
 	free(removeEnemy);
+}
+
+bool isQueueEmpty(const EnemyQueue& queue)
+{
+	return queue.head == nullptr && queue.tail == nullptr;
 }
 
 void clearEnemies(EnemyQueue& queue)
@@ -204,17 +212,37 @@ void Sum_Beh(enemy* en)
 	en->data.CD -= ct - en->data.lt;
 	en->data.lt = ct;
 }
-void Saw_Beh(enemy* en)
+
+
+
+void Saw_Beh(enemy*& en)
 {
-	if (en->data.dr.x + en->data.speed * cos(en->data.angle) > WIDTH - 10 || en->data.dr.x + en->data.speed * cos(en->data.angle) < 10)
-		en->data.angle *= -1;
-	if (en->data.dr.y + en->data.speed * sin(en->data.angle) > HEIGHT - 10 || en->data.dr.x - en->data.speed * sin(en->data.angle) < 10)
-		en->data.angle *= -1;
-	if (isinRect({ en->data.dr.x - en->data.speed * cos(en->data.angle) , en->data.dr.y - en->data.speed * sin(en->data.angle),en->data.dr.w,en->data.dr.h }
-	,{0,0,(float)WIDTH,(float)HEIGHT}))
-	en->data.dr = { en->data.dr.x - en->data.speed * cos(en->data.angle) , en->data.dr.y - en->data.speed * sin(en->data.angle),en->data.dr.w,en->data.dr.h };
-	if (GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr)) < 50)
-		en->data.angle *= -1;
+	int ct = SDL_GetTicks();
+	float nextX = en->data.dr.x + en->data.speed * cos(en->data.angle);
+	float nextY = en->data.dr.y + en->data.speed * sin(en->data.angle);
+
+		
+		if (nextX <= 10 || nextX + en->data.dr.w - 10 >= WIDTH)
+		{
+			nextX <= 10 ?
+				en->data.dr.x = 10 :
+				en->data.dr.x = WIDTH - 10-en->data.dr.w;
+			en->data.angle = GetAlpha(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr));
+		}
+		if (nextY <= 10 || nextY + en->data.dr.h + 10 >= HEIGHT)
+		{
+			en->data.angle = GetAlpha(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr));
+			nextY <= 10 ?
+				en->data.dr.y = 10 :
+				en->data.dr.y = HEIGHT - 10 - en->data.dr.h;
+		}
+
+		en->data.dr.x = nextX;
+		en->data.dr.y = nextY;
+		if (GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr)) < 50)
+		{
+			en->data.HP = 0;
+		}
 }
 void Boom_Beh(enemy* en)
 {

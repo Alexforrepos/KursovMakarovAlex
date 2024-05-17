@@ -137,6 +137,7 @@
     <ClCompile Include="FileM.cpp" />
     <ClCompile Include="gamemode.cpp" />
     <ClCompile Include="Hero.cpp" />
+    <ClCompile Include="Items.cpp" />
     <ClCompile Include="KursovMakarovAlex.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="SDLProcessing.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="gamemode.h" />
     <ClInclude Include="FileM.h" />
+    <ClInclude Include="Items.h" />
     <ClInclude Include="projectile.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Geometry.h" />

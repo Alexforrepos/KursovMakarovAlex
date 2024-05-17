@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
+#include "Items.h"
 #include "texturesimport.h"
 #include "SpleetProcessing.h"
 #include "SDLProcessing.h"
@@ -11,49 +12,36 @@
 #include "projectile.h"
 #include "enemy.h"
 #include "Geometry.h"
+#include "FileM.h"
 
 enum dirrectionsofhero
 {
 	LeftHero, RightHero, DownHero, UpHero, StayHero
 };
 
-void CreateProjectile()
+void CreateProjectile(float alpha)
 {
 	SDL_Point mp;
 	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
-
 	projectiledata tmpprojectile;
-	tmpprojectile.damage = Hero->W[Hero->currentWeapon].damage;
+	tmpprojectile.damage = Hero->W[Hero->currentWeapon].damage + Hero->ItemsInventory[damageboost]*10;
 	tmpprojectile.livetime = 3000;
 	tmpprojectile.speed = Hero->W[Hero->currentWeapon].bulletspeed;
 	tmpprojectile.drect = { Hero->dr.x + Hero->dr.w / 2,Hero->dr.y + Hero->dr.h / 2,20,20 };
-	tmpprojectile.angle = SDL_atan2(mp.y - GetCenterPointOfRect(Hero->dr).y, mp.x - GetCenterPointOfRect(Hero->dr).x);
+	tmpprojectile.angle = alpha;
 	PushProjectile(Projectiles, tmpprojectile);
 }
 
-void HeroShot()
+void BulletsProc()
 {
 	bool ispooled = false;
-	SDL_Point mp;
-	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
-#pragma region timeofHeroshot
 	static int dt = 0, lt = 0;
 	int ct = SDL_GetTicks();
-	dt += ct - lt;
-#pragma endregion
-
-#pragma region createProjectile
-	if (mstate & SDL_BUTTON(SDL_BUTTON_LEFT) && Hero->W[Hero->currentWeapon].cd < 0)
-	{
-		CreateProjectile();
-		Hero->W[Hero->currentWeapon].cd = Hero->W[Hero->currentWeapon].reloadtime;
-	}
-#pragma endregion
 	projectile* cur = Projectiles.head;
-	while(cur != nullptr)
-	{	
+	while (cur != nullptr)
+	{
 		projectile* nextProjectile = cur->next;
-		if (cur->data.livetime < 0 )
+		if (cur->data.livetime < 0)
 		{
 			PullProjectile(Projectiles, cur);
 			break;
@@ -76,11 +64,69 @@ void HeroShot()
 		SDL_RenderFillRectF(ren, &cur->data.drect);
 		cur = nextProjectile;
 	}
+	lt = ct;
+}
+
+void ShotgunShoot()
+{
+	SDL_Point mp;
+	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
+	SDL_FPoint p = { mp.x,mp.y };
+	CreateProjectile(GetAlpha(GetCenterPointOfRect(Hero->dr), p));
+	CreateProjectile(GetAlpha(GetCenterPointOfRect(Hero->dr), p) + M_PI / 6);
+	CreateProjectile(GetAlpha(GetCenterPointOfRect(Hero->dr), p) - M_PI / 6);
+}
+
+void HeroShot()
+{
+
+	SDL_Point mp;
+	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
+	SDL_FPoint p = { mp.x,mp.y };
+#pragma region timeofHeroshot
+	static int dt = 0, lt = 0;
+	int ct = SDL_GetTicks();
+	dt += ct - lt;
+#pragma endregion
+
+#pragma region createProjectile
+	if (mstate & SDL_BUTTON(SDL_BUTTON_LEFT) && Hero->W[Hero->currentWeapon].cd - Hero->ItemsInventory[firerate] < 0)
+	{
+		switch (Hero->currentWeapon)
+		{
+		case 0:
+			CreateProjectile(GetAlpha(GetCenterPointOfRect(Hero->dr), p));
+			break;
+		case 1:
+			ShotgunShoot();
+			break;
+		default:
+			break;
+		}
+		Hero->W[Hero->currentWeapon].cd = Hero->W[Hero->currentWeapon].reloadtime;
+	}
+#pragma endregion
+	BulletsProc();
+
 	if (Hero && Hero->W)
 	{
 		Hero->W[Hero->currentWeapon].cd -= ct - lt;
 	}
 	lt = ct;
+}
+
+void ItemProcess()
+{
+	
+	ItemRender(IDeq);
+	for (Item* cur = IDeq->Head; cur != nullptr; cur = cur->Next)
+	{
+		if (GetDistance(GetCenterPointOfRect(Hero->dr), GetCenterPointOfRect(cur->Data.Dr)) < 40)
+		{
+			ItemGet(cur);
+			break;
+		}
+	}
 }
 
 void HeroMove()
@@ -91,6 +137,7 @@ void HeroMove()
 	if (!isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
 	{
 		Hero->dr = { lastx,lasty,Hero->dr.w,Hero->dr.h };
+		return;
 	}
 	if (kstate[SDL_SCANCODE_D] && !(kstate[SDL_SCANCODE_A]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
 	{
@@ -98,7 +145,7 @@ void HeroMove()
 		lasty = Hero->dr.y;
 		Hero->dirleft = 0;
 		Hero->dir = Rightrun;
-		Hero->dr.x += V;
+		Hero->dr.x += V*(1+Hero->ItemsInventory[speedboost]/10);
 	}
 	if (kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
 	{
@@ -106,19 +153,19 @@ void HeroMove()
 		lasty = Hero->dr.y;
 		Hero->dirleft = 1;
 		Hero->dir = LeftRun;
-		Hero->dr.x -= V;
+		Hero->dr.x -= V * (1 + Hero->ItemsInventory[speedboost] / 10);
 	}
 	if (kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
 	{
 		Hero->dir = BackRun;
-		Hero->dr.y -= V;
+		Hero->dr.y -= V * (1 + Hero->ItemsInventory[speedboost] / 10);
 	}
 	if (kstate[SDL_SCANCODE_S] && !(kstate[SDL_SCANCODE_W]) && isinRect(Hero->dr,{ 0,0,(float)WIDTH,(float)HEIGHT }))
 	{
 		lastx = Hero->dr.x;
 		lasty = Hero->dr.y;
 		Hero->dir = FrontRun;
-		Hero->dr.y += V;
+		Hero->dr.y += V*(1+Hero->ItemsInventory[speedboost]/10);
 	}
 	if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && Hero->dirleft && isinRect(Hero->dr,{0,0,(float)WIDTH,(float)HEIGHT}))
 		Hero->dir = LeftNondir;
@@ -137,10 +184,12 @@ void enemyprocess()
 			enemy* N = cur->next;
 			if (N == nullptr)
 			{
-				removeEnemy(Equeue, cur);
+				RemoveEnemyQ(Equeue, cur);
+				Hero->Money += 10;
 				break;
 			}
-			removeEnemy(Equeue, cur);
+			ItemsFall(GetCenterPointOfRect(cur->data.dr));
+			RemoveEnemyQ(Equeue, cur);
 			cur = N;
 		}
 		else
@@ -165,19 +214,19 @@ void Gamemode(int& mode)
 
 	if (kstate[SDL_SCANCODE_1])
 	{
-		Hero->currentWeapon = 1;
+		Hero->currentWeapon = 0;
 	}
 	if (kstate[SDL_SCANCODE_2])
 	{
-		Hero->currentWeapon = 2;
+		Hero->currentWeapon = 1;
 	}
 	if (kstate[SDL_SCANCODE_3])
 	{
-		Hero->currentWeapon = 3;
+		Hero->currentWeapon = 2;
 	}
 	if (kstate[SDL_SCANCODE_4])
 	{
-		Hero->currentWeapon = 4;
+		Hero->currentWeapon = 3;
 	}
 
 	if (dt > 1000 / FPS)
@@ -185,6 +234,7 @@ void Gamemode(int& mode)
 		HeroMove();
 		HeroShot();
 		enemyprocess();
+		ItemProcess();
 	}
 	if (kstate[SDL_SCANCODE_ESCAPE])
 	{
@@ -193,4 +243,6 @@ void Gamemode(int& mode)
 	}
 	HeroDv();
 	lt = ct;
+	if (Equeue.head == nullptr)
+		FileEnemyQGet(mode);
 }

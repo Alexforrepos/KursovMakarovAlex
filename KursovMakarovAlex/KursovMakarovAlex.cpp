@@ -7,6 +7,8 @@
 #include "gamemode.h"
 #include "Hero.h"
 #include "enemy.h"
+#include "FileM.h"
+#include "Items.h"
 
 enum mode
 {
@@ -28,9 +30,7 @@ int main(int argc, char* argv[])
 	LoadFonts();
 	MenuInit();
 	HeroInit();
-	CreateNewEnemy(Equeue, 0, { 100,300 } );
-	CreateNewEnemy(Equeue, 1, { 300, 300 } );
-	CreateNewEnemy(Equeue, 2, { 500, 300 } );
+	IdeqInit();
 	while (isrunning)
 	{
 #pragma region event
@@ -71,6 +71,7 @@ int main(int argc, char* argv[])
 		}
 		SDL_RenderPresent(ren);
 	}
+	DeinitIDeq();
 	CloseFonts();
 	Deinit(0);
 	return 1;

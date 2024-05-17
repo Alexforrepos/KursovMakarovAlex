@@ -64,6 +64,9 @@
     <Filter Include="Исходные файлы\Utility\FileM">
       <UniqueIdentifier>{8bc74f34-720a-40ce-baf4-088f29834e05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\gamemode\Items">
+      <UniqueIdentifier>{51eeec8a-8085-464b-af7b-821137d85c6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KursovMakarovAlex.cpp">
@@ -104,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="FileM.cpp">
       <Filter>Исходные файлы\Utility\FileM</Filter>
+    </ClCompile>
+    <ClCompile Include="Items.cpp">
+      <Filter>Исходные файлы\gamemode\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +186,9 @@
     </ClInclude>
     <ClInclude Include="FileM.h">
       <Filter>Исходные файлы\Utility\FileM</Filter>
+    </ClInclude>
+    <ClInclude Include="Items.h">
+      <Filter>Исходные файлы\gamemode\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

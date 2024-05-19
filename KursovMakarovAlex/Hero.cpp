@@ -65,6 +65,8 @@ void HeroIteminit()
 
 void HeroInit()
 {
+	Hero->HP = 100;
+	Hero->Money = 100;
 	Hero->currentWeapon = 0;
 	Hero->T = CreateUTexture("textures/soul_knight_animation_final.png");
 	int textureWidth, textureHeight;

@@ -4,9 +4,8 @@
 #include "Hero.h"
 #include "SDLProcessing.h"
 
-
+#define BULL {}
 #define FALLCHANCE 100
-
 
 
 ItemDeq* IDeq = nullptr;
@@ -35,33 +34,37 @@ void DeinitIDeq()
 	}
 }
 
-errt addItem(ItemDeq*&Deq,ItemData Data)
+errt addItem(ItemDeq*& Deq, ItemData Data)
 {
+	Item* newItem = (Item*)malloc(sizeof(Item));
+	if (newItem == nullptr) {
+		printf("CdntCreateNewItem\n");
+		return false;
+	}
+	newItem->Data = Data;
+	newItem->Next = nullptr;
+	newItem->Prev = nullptr;
 
-		Item* newItem = (Item*)malloc(sizeof(Item));
-		if (newItem == nullptr) { printf("CdntCreateNewItem\n"); return false; }
-		newItem->Data = Data;
-		newItem->Next = nullptr;
+	if (Deq->Head == nullptr)
+	{
+		Deq->Head = newItem;
+	}
+	else
+	{
+		Deq->Tail->Next = newItem;
+		newItem->Prev = Deq->Tail;
+	}
 
-		if (Deq->Head == nullptr)
-		{
-			Deq->Head = newItem;
-		}
-		else
-		{
-			Deq->Tail->Next = newItem;
-			newItem->Prev = Deq->Tail;
-		}
-
-		Deq->Tail = newItem;
-		Deq->len++;
-		return true;
+	Deq->Tail = newItem;
+	Deq->len++;
+	return true;
 }
 
-void RemoveItem(ItemDeq*& Deq, Item *item)
+void RemoveItem(ItemDeq*& Deq, Item* item)
 {
 	printf("%i \n", item->Data.Type);
-	if (item->Prev != nullptr && item->Prev != (Item*)0xcdcdcdcdcdcdcdcd) // почаму?
+
+	if (item->Prev != nullptr)
 	{
 		item->Prev->Next = item->Next;
 	}
@@ -78,6 +81,7 @@ void RemoveItem(ItemDeq*& Deq, Item *item)
 	{
 		Deq->Tail = item->Prev;
 	}
+
 	Deq->len--;
 	free(item);
 }
@@ -124,6 +128,7 @@ void ItemRender(ItemDeq* Deq)
 			break;
 		}
 		SDL_RenderDrawRectF(ren,&cur->Data.Dr);
+		cur = cur->Next;
 	}
 }
 
@@ -134,8 +139,8 @@ void CreateItem(typeofitem model,SDL_FPoint p)
 
 void ItemsFall(SDL_FPoint p)
 {
-	if (rand() % 100 > 100-FALLCHANCE) 
-	{
+	if (rand() % 100 >= 100-FALLCHANCE && IDeq->len<20) 
+	{	
 		CreateItem(typeofitem(rand() % 4), p);
 	}
 }

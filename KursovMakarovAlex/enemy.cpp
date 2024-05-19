@@ -73,6 +73,7 @@ void addEnemy(EnemyQueue& queue, enemydata data)
 	enemy* newEnemy = (enemy*)malloc(sizeof(enemy));
 	newEnemy->data = data;
 	newEnemy->next = nullptr;
+	newEnemy->prev = nullptr; 
 
 	if (queue.head == nullptr)
 	{
@@ -90,7 +91,7 @@ void addEnemy(EnemyQueue& queue, enemydata data)
 void RemoveEnemyQ(EnemyQueue& queue, enemy* removeEnemy)
 {
 	printf("%i \n", removeEnemy->data.model);
-	if (removeEnemy->prev != nullptr && removeEnemy->prev != (enemy*)0xcdcdcdcdcdcdcdcd) // почаму?
+	if (removeEnemy->prev != nullptr)
 	{
 		removeEnemy->prev->next = removeEnemy->next;
 	}

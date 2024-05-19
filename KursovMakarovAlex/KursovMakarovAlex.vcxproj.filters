@@ -67,6 +67,9 @@
     <Filter Include="Исходные файлы\gamemode\Items">
       <UniqueIdentifier>{51eeec8a-8085-464b-af7b-821137d85c6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы ресурсов\txtinfo">
+      <UniqueIdentifier>{cc1257a4-5c42-4f0a-a85d-dfb6370a8fdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KursovMakarovAlex.cpp">
@@ -208,6 +211,15 @@
   <ItemGroup>
     <Text Include="EnemyQueue.txt">
       <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="TextInformation\Save1.txt">
+      <Filter>Файлы ресурсов\txtinfo</Filter>
+    </Text>
+    <Text Include="TextInformation\Save2.txt">
+      <Filter>Файлы ресурсов\txtinfo</Filter>
+    </Text>
+    <Text Include="TextInformation\Save3.txt">
+      <Filter>Файлы ресурсов\txtinfo</Filter>
     </Text>
   </ItemGroup>
 </Project>

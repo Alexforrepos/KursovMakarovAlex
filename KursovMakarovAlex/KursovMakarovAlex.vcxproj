@@ -185,6 +185,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="EnemyQueue.txt" />
+    <Text Include="TextInformation\Save1.txt" />
+    <Text Include="TextInformation\Save2.txt" />
+    <Text Include="TextInformation\Save3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -23,7 +23,7 @@ struct weapon
 
 struct player
 {
-	int HP, Money;
+	int HP=0, Money=0;
 	int dir,dirleft=0,cstage; // для анимации
 	weapon W[4]; // оружие
 	SDL_Texture* T; // текстура

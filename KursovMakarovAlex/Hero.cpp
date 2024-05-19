@@ -100,4 +100,9 @@ void HeroInit()
 	Hero->cr[1] =  { 19,130,19,24};
 	Hero->cr[2] =  { 0 ,156,19,24};
 	Hero->cr[3] =  { 19,156,19,24};
+	for (int i = 0; i < 4; i++)
+	{
+		Hero->ItemsInventory[i] = 200;
+		Hero->W[i].enabled = 0;
+	}
 }

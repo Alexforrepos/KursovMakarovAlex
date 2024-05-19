@@ -13,7 +13,7 @@ typedef enum
 
 struct weapon
 {
-
+	bool enabled;
 	int damage,bulletspeed = 10;
 	int cd,reloadtime;
 	SDL_Texture* T;

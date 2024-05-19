@@ -31,9 +31,6 @@ int main(int argc, char* argv[])
 	MenuInit();
 	HeroInit();
 	IdeqInit();
-	/*FileHeroStatsSave("TextInformation/Save1.txt");
-	FileHeroStatsSave("TextInformation/Save2.txt");
-	FileHeroStatsSave("TextInformation/Save3.txt");*/
 	while (isrunning)
 	{
 #pragma region event

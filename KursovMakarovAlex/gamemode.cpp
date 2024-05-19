@@ -212,19 +212,19 @@ void Gamemode(int& mode)
 	SDL_RenderClear(ren);
 
 
-	if (kstate[SDL_SCANCODE_1])
+	if (kstate[SDL_SCANCODE_1]&& Hero->W[0].enabled)
 	{
 		Hero->currentWeapon = 0;
 	}
-	if (kstate[SDL_SCANCODE_2])
+	if (kstate[SDL_SCANCODE_2] && Hero->W[1].enabled)
 	{
 		Hero->currentWeapon = 1;
 	}
-	if (kstate[SDL_SCANCODE_3])
+	if (kstate[SDL_SCANCODE_3] && Hero->W[2].enabled)
 	{
 		Hero->currentWeapon = 2;
 	}
-	if (kstate[SDL_SCANCODE_4])
+	if (kstate[SDL_SCANCODE_4] && Hero->W[3].enabled)
 	{
 		Hero->currentWeapon = 3;
 	}

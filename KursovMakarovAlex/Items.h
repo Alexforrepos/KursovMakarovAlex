@@ -31,6 +31,10 @@ extern ItemDeq* IDeq;
 
 #pragma region Interfac
 
+void RemoveItem(ItemDeq*& Deq, Item* item);
+
+bool addItem(ItemDeq*& Deq, ItemData Data);
+
 bool IdeqInit();
 
 void DeinitIDeq();
@@ -44,4 +48,6 @@ void ItemGet(Item* i);
 void CreateItem(typeofitem model, SDL_FPoint p);
 
 void ItemRender(ItemDeq* Deq);
+
+int ItemSumm();
 #pragma endregion

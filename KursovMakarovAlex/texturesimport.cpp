@@ -55,3 +55,19 @@ SDL_Texture* CreateUTexture(const char filename[])
 	SDL_FreeSurface(surface);
 	return  texture;
 }
+
+
+SDL_Texture* CaptureScreenTexture(SDL_Renderer* renderer)
+{
+	// Получение содержимого окна в виде SDL_Surface
+	SDL_Surface* screenSurface = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, 32, 0, 0, 0, 0);
+	SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ARGB8888, screenSurface->pixels, screenSurface->pitch);
+
+	// Создание текстуры из SDL_Surface
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, screenSurface);
+
+	// Освобождение ресурсов, необходимых для SDL_Surface
+	SDL_FreeSurface(screenSurface);
+
+	return texture;
+}

@@ -29,3 +29,5 @@ extern Texture—haracteristic* BackgrTextures;
 void GetTextureDimensions(SDL_Texture* texture, int* width, int* height);
 
 SDL_Texture* CreateUTexture(const char filename[]);
+
+SDL_Texture* CaptureScreenTexture(SDL_Renderer* renderer);

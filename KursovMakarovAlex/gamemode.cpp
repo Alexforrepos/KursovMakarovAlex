@@ -117,7 +117,6 @@ void HeroShot()
 
 void ItemProcess()
 {
-	
 	ItemRender(IDeq);
 	for (Item* cur = IDeq->Head; cur != nullptr; cur = cur->Next)
 	{
@@ -185,7 +184,7 @@ void enemyprocess()
 			if (N == nullptr)
 			{
 				RemoveEnemyQ(Equeue, cur);
-				Hero->Money += 10;
+				Hero->Money += 999;
 				break;
 			}
 			ItemsFall(GetCenterPointOfRect(cur->data.dr));
@@ -199,20 +198,67 @@ void enemyprocess()
 	}
 }
 
+void ShopMode(SDL_Texture* bacgr,int &gamemode, int& mode)
+{
+	SDL_Point mp;
+	const Uint8* kstate = SDL_GetKeyboardState(NULL);
+	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
+	SDL_FPoint p = { mp.x,mp.y };
+
+
+	SDL_SetRenderDrawColor(ren, 120, 0, 255, 255);
+	SDL_RenderClear(ren);
+
+	SDL_Rect LeftRect = {0,0,WIDTH/2,HEIGHT};
+	SDL_Rect RightRect = { WIDTH / 2,0,WIDTH/2,HEIGHT};
+
+	SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
+	SDL_RenderFillRect(ren, &LeftRect);
+	SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
+	SDL_RenderFillRect(ren, &RightRect);
+	
+
+	if (isinPoint(mp, LeftRect))
+	{
+		if (mstate && SDL_BUTTON(SDL_BUTTON_LEFT))
+		{
+			Hero->Money -= 200 * (1 + ItemSumm() / 10);
+			Hero->HP += 200;
+			gamemode = 0;
+			FileEnemyQGet(mode);
+		}
+	}
+	else
+	{
+		if (mstate && SDL_BUTTON(SDL_BUTTON_LEFT))
+		{
+			Hero->Money -= 200 * (1 + ItemSumm() / 10);
+			for (int i = 0; i < 4; i++)
+			{
+				if (!Hero->W[i].enabled)
+				{
+					Hero->W[i].enabled = !Hero->W[i].enabled;
+					return;
+				}
+			}
+			gamemode = 0;
+			FileEnemyQGet(mode);
+		}
+	}
+}
+
 void Gamemode(int& mode)
 {
 #pragma region timeofgamemod
+	const Uint8* kstate = SDL_GetKeyboardState(NULL);
 	static int dt = 0, lt = 0;
 	int ct = SDL_GetTicks(), FPS = 24;
+	static SDL_Texture* tmp_backgr = nullptr;
 	dt += ct - lt;
+	static int gamemode = 0;
 #pragma endregion
 
-	const Uint8* kstate = SDL_GetKeyboardState(NULL);
-	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
-	SDL_RenderClear(ren);
-
-
-	if (kstate[SDL_SCANCODE_1]&& Hero->W[0].enabled)
+	if (kstate[SDL_SCANCODE_1] && Hero->W[0].enabled)
 	{
 		Hero->currentWeapon = 0;
 	}
@@ -229,20 +275,38 @@ void Gamemode(int& mode)
 		Hero->currentWeapon = 3;
 	}
 
-	if (dt > 1000 / FPS)
+	switch (gamemode)
 	{
-		HeroMove();
-		HeroShot();
-		enemyprocess();
-		ItemProcess();
+	case 0:
+		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+		SDL_RenderClear(ren);
+		if (dt > 1000 / FPS)
+		{
+			HeroMove();
+			HeroShot();
+			enemyprocess();
+			ItemProcess();
+		}
+		if (kstate[SDL_SCANCODE_ESCAPE])
+		{
+			mode = 0;
+			Hero->dr = { 0,0,Hero->dr.w,Hero->dr.h };
+			FileHeroStatsSave(currentsave);
+		}
+		HeroDv();
+		lt = ct;
+		if (Equeue.head == nullptr)
+		{
+			ClearItem(IDeq);
+			tmp_backgr = CaptureScreenTexture(ren);
+			gamemode = 1;
+		}
+		break;
+	case 1:
+		ShopMode(tmp_backgr, gamemode, mode);
+		break;
+	default:
+		break;
 	}
-	if (kstate[SDL_SCANCODE_ESCAPE])
-	{
-		mode = 0;
-		Hero->dr = { 0,0,Hero->dr.w,Hero->dr.h };
-	}
-	HeroDv();
-	lt = ct;
-	if (Equeue.head == nullptr)
-		FileEnemyQGet(mode);
+
 }

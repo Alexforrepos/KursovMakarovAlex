@@ -9,6 +9,7 @@
 #include "Geometry.h"
 #include "SDLProcessing.h"
 #include "FileM.h"
+#include <string.h>
 
 enum linkenum
 {
@@ -217,6 +218,7 @@ void DrowMenu(bool &isrun,int &mod)
 					default:
 						break;
 					}
+
 				}
 			}
 			else
@@ -243,12 +245,15 @@ void DrowMenu(bool &isrun,int &mod)
 					{
 					case 0:
 						FileHeroGet("TextInformation/Save1.txt");
+						strcpy_s(currentsave, "TextInformation/Save1.txt");
 						break;
 					case 1:
 						FileHeroGet("TextInformation/Save2.txt");
+						strcpy_s(currentsave, "TextInformation/Save2.txt");
 						break;
 					case 2:
 						FileHeroGet("TextInformation/Save3.txt");
+						strcpy_s(currentsave, "TextInformation/Save3.txt");
 						break;
 					default:
 						break;

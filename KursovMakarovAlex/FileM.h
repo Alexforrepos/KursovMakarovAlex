@@ -1,6 +1,8 @@
 #pragma once
 #include <SDL.h>
 
+extern char currentsave[26];
+
 void FileEnemyQGet(int &mode);
 
 

@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
 	MenuInit();
 	HeroInit();
 	IdeqInit();
+	FileEnemyQGet(mode);
 	while (isrunning)
 	{
 #pragma region event

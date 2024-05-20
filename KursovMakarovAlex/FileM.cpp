@@ -4,6 +4,7 @@
 #include "Hero.h"
 
 int lc = 0;
+char currentsave[] = "TextInformation/Save1.txt";
 
 void FileEnemyQGet(int& mode)
 {
@@ -55,7 +56,7 @@ void FileHeroStatsSave(const char filename[50])
 	for (int i = 0; i < 4; i++)
 	{
 		fprintf_s(F, "%i ", Hero->ItemsInventory[i]);
-		fprintf_s(F, "%b", Hero->W[i].enabled);
+		fprintf_s(F, "%i ", Hero->W[i].enabled);
 	}
 
 	fclose(F);

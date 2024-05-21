@@ -1,20 +1,22 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "FileM.h"
 #include <iostream>
 #include "enemy.h"
 #include "Hero.h"
 
 int lc = 0;
-char currentsave[] = "TextInformation/Save1.txt";
+char currentsave[100] = "TextInformation/Save1.txt";
+char lastfileusedname[100];
 
 void FileEnemyQGet(int& mode)
 {
     FILE* F;
-    if (fopen_s(&F, "TextInformation/EnemyQueue.txt", "r"))
+    strcpy(lastfileusedname, "TextInformation/EnemyQueue.txt"); // Сохранение названия файла в глобальной переменной
+    if (fopen_s(&F, lastfileusedname, "r"))
     {
         printf("Couldn't open Eq-file\n");
         exit(-4);
     }
-
     fseek(F, lc, SEEK_SET);
     int kolvo, model = 0;
     SDL_FPoint ep;
@@ -47,9 +49,13 @@ void FileEnemyQGet(int& mode)
 
 void FileHeroStatsSave(const char filename[50])
 {
-	FILE* F;
-	if (fopen_s(&F, filename, "wt")) { printf("couldn open save-file\n"); exit(-5); };
-
+    FILE* F;
+    if (fopen_s(&F, filename, "wt"))
+    {
+        printf("couldn open save-file\n");
+        exit(-6);
+    };
+    strcpy(currentsave, filename); // Сохранение названия файла в глобальной переменной
 	fprintf_s(F, "%i\n" ,Hero->HP);
 	fprintf_s(F, "%i\n" ,Hero->Money);
 	fprintf_s(F, "%i\n" ,Hero->currentWeapon);
@@ -64,8 +70,13 @@ void FileHeroStatsSave(const char filename[50])
 
 void FileHeroGet(const char filename[50])
 {
-	FILE* F;
-	if (fopen_s(&F, filename, "rt")) { printf("couldn open save-file\n"); exit(-6); };
+    FILE* F;
+    if (fopen_s(&F, filename, "rt"))
+    {
+        printf("couldn open save-file\n");
+        exit(-6);
+    };
+    strcpy(currentsave, filename); // Сохранение названия файла в глобальной переменной
 
 	fscanf_s(F, "%i ", &Hero->HP);
 	fscanf_s(F, "%i ", &Hero->Money);

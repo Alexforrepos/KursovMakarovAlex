@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="All_TextureInit.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="FileM.cpp" />
     <ClCompile Include="gamemode.cpp" />
@@ -163,6 +164,7 @@
     <Font Include="Zodchiy-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="All_TextureInit.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="gamemode.h" />
     <ClInclude Include="FileM.h" />

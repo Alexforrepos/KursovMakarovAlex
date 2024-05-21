@@ -70,6 +70,9 @@
     <Filter Include="Файлы ресурсов\txtinfo">
       <UniqueIdentifier>{cc1257a4-5c42-4f0a-a85d-dfb6370a8fdd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Utility\TextureProcessing\AllGameTextureInit">
+      <UniqueIdentifier>{b7ec8b7a-976a-49cd-b0f9-cd0a0dd81036}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KursovMakarovAlex.cpp">
@@ -113,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="Items.cpp">
       <Filter>Исходные файлы\gamemode\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="All_TextureInit.cpp">
+      <Filter>Исходные файлы\Utility\TextureProcessing\AllGameTextureInit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +198,9 @@
     </ClInclude>
     <ClInclude Include="Items.h">
       <Filter>Исходные файлы\gamemode\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="All_TextureInit.h">
+      <Filter>Исходные файлы\Utility\TextureProcessing\AllGameTextureInit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

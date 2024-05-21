@@ -209,7 +209,6 @@ void DrowMenu(bool &isrun,int &mod)
 						menumod = 2;
 						break;
 					case information:
-						SDL_WarpMouseInWindow(win, 100, 100);
 						menumod = 1;
 						break;
 					case exitsitem:
@@ -245,15 +244,12 @@ void DrowMenu(bool &isrun,int &mod)
 					{
 					case 0:
 						FileHeroGet("TextInformation/Save1.txt");
-						strcpy_s(currentsave, "TextInformation/Save1.txt");
 						break;
 					case 1:
 						FileHeroGet("TextInformation/Save2.txt");
-						strcpy_s(currentsave, "TextInformation/Save2.txt");
 						break;
 					case 2:
 						FileHeroGet("TextInformation/Save3.txt");
-						strcpy_s(currentsave, "TextInformation/Save3.txt");
 						break;
 					default:
 						break;

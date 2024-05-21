@@ -56,7 +56,6 @@ SDL_Texture* CreateUTexture(const char filename[])
 	return  texture;
 }
 
-
 SDL_Texture* CaptureScreenTexture(SDL_Renderer* renderer)
 {
 	// Получение содержимого окна в виде SDL_Surface

@@ -289,9 +289,9 @@ void Gamemode(int& mode)
 		}
 		if (kstate[SDL_SCANCODE_ESCAPE])
 		{
-			mode = 0;
 			Hero->dr = { 0,0,Hero->dr.w,Hero->dr.h };
 			FileHeroStatsSave(currentsave);
+			mode = 0;
 		}
 		HeroDv();
 		lt = ct;

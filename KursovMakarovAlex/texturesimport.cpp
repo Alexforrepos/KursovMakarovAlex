@@ -5,7 +5,6 @@
 #include "SDLProcessing.h"
 #include "texturesimport.h"
 
-
 SDL_Texture* GetTextureFromWindow()
 {
 	SDL_Surface* s = SDL_GetWindowSurface(win);
@@ -48,16 +47,22 @@ SDL_Texture* CreateUTexture(const char filename[])
 	if (surface == NULL)
 	{
 		printf("err_img_open %s\n,err %s\n", filename, IMG_GetError);
-		system("pause");
-		Deinit(-3);
+		exit(-1);
 	}
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(ren, surface);
+	if (texture == nullptr) 
+	{ 
+		printf("err texture");
+		exit(-1); 
+	}
 	SDL_FreeSurface(surface);
 	return  texture;
 }
 
 SDL_Texture* CaptureScreenTexture(SDL_Renderer* renderer)
 {
+
+
 	// Получение содержимого окна в виде SDL_Surface
 	SDL_Surface* screenSurface = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, 32, 0, 0, 0, 0);
 	SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ARGB8888, screenSurface->pixels, screenSurface->pitch);
@@ -69,4 +74,11 @@ SDL_Texture* CaptureScreenTexture(SDL_Renderer* renderer)
 	SDL_FreeSurface(screenSurface);
 
 	return texture;
+}
+
+SDL_Rect GetTextureAllRect(SDL_Texture* texture,int scale)
+{
+	int width=-1,height=-1;
+	GetTextureDimensions(texture, &width, &height);
+	return { 0,0,width * scale ,height * scale };
 }

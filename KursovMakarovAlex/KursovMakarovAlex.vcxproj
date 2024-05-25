@@ -144,6 +144,7 @@
     <ClCompile Include="SDLProcessing.cpp" />
     <ClCompile Include="Geomery.cpp" />
     <ClCompile Include="projectile.cpp" />
+    <ClCompile Include="Effects.cpp" />
     <ClCompile Include="SpleetProcessing.cpp" />
     <ClCompile Include="TextProcessing.cpp" />
     <ClCompile Include="texturesimport.cpp" />
@@ -165,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="All_TextureInit.h" />
+    <ClInclude Include="Effects.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="gamemode.h" />
     <ClInclude Include="FileM.h" />
@@ -186,7 +188,7 @@
     <Image Include="soul_knight_animation_final.png" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="EnemyQueue.txt" />
+    <Text Include="TextInformation\EnemyQueue.txt" />
     <Text Include="TextInformation\Save1.txt" />
     <Text Include="TextInformation\Save2.txt" />
     <Text Include="TextInformation\Save3.txt" />

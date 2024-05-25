@@ -7,16 +7,7 @@
 
 const char* fontNames[12] = 
 {
-    "fonts/OpenSans-Bold.ttf",
-    "fonts/OpenSans-BoldItalic.ttf",
-    "fonts/OpenSans-ExtraBold.ttf",
-    "fonts/OpenSans-ExtraBoldItalic.ttf",
-    "fonts/OpenSans-Italic.ttf",
-    "fonts/OpenSans-Light.ttf",
-    "fonts/OpenSans-LightItalic.ttf",
-    "fonts/OpenSans-Regular.ttf",
-    "fonts/OpenSans-Semibold.ttf",
-    "fonts/OpenSans-SemiboldItalic.ttf"
+    "fonts/zpix #779.ttf",
 };
 
 TTF_Font* Fonts[qFont];

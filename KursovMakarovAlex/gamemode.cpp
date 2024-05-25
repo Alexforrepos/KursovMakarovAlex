@@ -13,6 +13,7 @@
 #include "enemy.h"
 #include "Geometry.h"
 #include "FileM.h"
+#include "Effects.h"
 
 enum dirrectionsofhero
 {
@@ -24,7 +25,7 @@ void CreateProjectile(float alpha)
 	SDL_Point mp;
 	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
 	projectiledata tmpprojectile;
-	tmpprojectile.damage = Hero->W[Hero->currentWeapon].damage + Hero->ItemsInventory[damageboost]*10;
+	tmpprojectile.damage = Hero->W[Hero->currentWeapon].damage + Hero->ItemsInventory[damageboost] * 10;
 	tmpprojectile.livetime = 3000;
 	tmpprojectile.speed = Hero->W[Hero->currentWeapon].bulletspeed;
 	tmpprojectile.drect = { Hero->dr.x + Hero->dr.w / 2,Hero->dr.y + Hero->dr.h / 2,20,20 };
@@ -41,6 +42,7 @@ void BulletsProc()
 	while (cur != nullptr)
 	{
 		projectile* nextProjectile = cur->next;
+		bool ispooled = false;
 		if (cur->data.livetime < 0)
 		{
 			PullProjectile(Projectiles, cur);
@@ -61,7 +63,10 @@ void BulletsProc()
 				break;
 			}
 		}
-		SDL_RenderFillRectF(ren, &cur->data.drect);
+		if (!ispooled)
+		{
+			SDL_RenderCopyExF(ren, cur->data.Textures->PrivateTexture[0], NULL, &cur->data.drect, cur->data.angle*180/M_PI, NULL, SDL_FLIP_NONE);
+		}
 		cur = nextProjectile;
 	}
 	lt = ct;
@@ -115,6 +120,23 @@ void HeroShot()
 	lt = ct;
 }
 
+void EffectsProc()
+{
+	EFFECT_ELEMENT* cur = EffQuue->Head, * tmpcur = nullptr;
+	while (cur != nullptr) {
+		if (cur->Data.mustbepooled)
+		{
+			tmpcur = cur->Next;
+			PULLEFFECT(EffQuue);
+			cur = tmpcur;
+		}
+		else {
+			EffectRender(cur);
+			cur = cur->Next;
+		}
+	}
+}
+
 void ItemProcess()
 {
 	ItemRender(IDeq);
@@ -128,54 +150,10 @@ void ItemProcess()
 	}
 }
 
-void HeroMove()
-{
-	int V = 1;
-	const Uint8* kstate = SDL_GetKeyboardState(NULL);
-	static float lastx=0, lasty=0;
-	if (!isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
-	{
-		Hero->dr = { lastx,lasty,Hero->dr.w,Hero->dr.h };
-		return;
-	}
-	if (kstate[SDL_SCANCODE_D] && !(kstate[SDL_SCANCODE_A]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
-	{
-		lastx = Hero->dr.x;
-		lasty = Hero->dr.y;
-		Hero->dirleft = 0;
-		Hero->dir = Rightrun;
-		Hero->dr.x += V*(1+Hero->ItemsInventory[speedboost]/10);
-	}
-	if (kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
-	{
-		lastx = Hero->dr.x;
-		lasty = Hero->dr.y;
-		Hero->dirleft = 1;
-		Hero->dir = LeftRun;
-		Hero->dr.x -= V * (1 + Hero->ItemsInventory[speedboost] / 10);
-	}
-	if (kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
-	{
-		Hero->dir = BackRun;
-		Hero->dr.y -= V * (1 + Hero->ItemsInventory[speedboost] / 10);
-	}
-	if (kstate[SDL_SCANCODE_S] && !(kstate[SDL_SCANCODE_W]) && isinRect(Hero->dr,{ 0,0,(float)WIDTH,(float)HEIGHT }))
-	{
-		lastx = Hero->dr.x;
-		lasty = Hero->dr.y;
-		Hero->dir = FrontRun;
-		Hero->dr.y += V*(1+Hero->ItemsInventory[speedboost]/10);
-	}
-	if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && Hero->dirleft && isinRect(Hero->dr,{0,0,(float)WIDTH,(float)HEIGHT}))
-		Hero->dir = LeftNondir;
-	if (!kstate[SDL_SCANCODE_W] && !(kstate[SDL_SCANCODE_S]) && !kstate[SDL_SCANCODE_A] && !(kstate[SDL_SCANCODE_D]) && !Hero->dirleft && isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT }))
-		Hero->dir = RightNondir;
-}
-
 void enemyprocess()
 {
 	enemy* cur = Equeue.head;
-	while(cur!=nullptr)
+	while (cur != nullptr)
 	{
 		enemyprocessing(cur);
 		if (cur->data.HP <= 0)
@@ -192,13 +170,13 @@ void enemyprocess()
 			cur = N;
 		}
 		else
-		{ 
-		cur = cur->next;
+		{
+			cur = cur->next;
 		}
 	}
 }
 
-void ShopMode(SDL_Texture* bacgr,int &gamemode, int& mode)
+void ShopMode(SDL_Texture* bacgr, int& gamemode, int& mode)
 {
 	SDL_Point mp;
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
@@ -209,14 +187,14 @@ void ShopMode(SDL_Texture* bacgr,int &gamemode, int& mode)
 	SDL_SetRenderDrawColor(ren, 120, 0, 255, 255);
 	SDL_RenderClear(ren);
 
-	SDL_Rect LeftRect = {0,0,WIDTH/2,HEIGHT};
-	SDL_Rect RightRect = { WIDTH / 2,0,WIDTH/2,HEIGHT};
+	SDL_Rect LeftRect = { 0,0,WIDTH / 2,HEIGHT };
+	SDL_Rect RightRect = { WIDTH / 2,0,WIDTH / 2,HEIGHT };
 
 	SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
 	SDL_RenderFillRect(ren, &LeftRect);
 	SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
 	SDL_RenderFillRect(ren, &RightRect);
-	
+
 
 	if (isinPoint(mp, LeftRect))
 	{
@@ -247,16 +225,79 @@ void ShopMode(SDL_Texture* bacgr,int &gamemode, int& mode)
 	}
 }
 
+void HeroMove()
+{
+
+	SDL_Point mp;
+	const Uint8* kstate = SDL_GetKeyboardState(NULL);
+	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
+	bool ismirored = false;
+	bool ismove = false;
+	static int lastx = 0, lasty = 0;
+	int speed = 10;
+
+	int ct = SDL_GetTicks();
+	static int lt = ct;
+
+	if (mp.x < Hero->dr.x)
+		ismirored = true;
+
+	if (!isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT })) {
+		Hero->dr = { (float)lastx,(float)lasty,Hero->dr.w,Hero->dr.h };
+		if (Hero->dr.x < 0)
+			Hero->dr.x = 0;
+		if (Hero->dr.y < 0)
+			Hero->dr.y = 0;
+		if (Hero->dr.x + Hero->dr.w > WIDTH)
+			Hero->dr.x = WIDTH - Hero->dr.w;
+		if (Hero->dr.y + Hero->dr.h > HEIGHT)
+			Hero->dr.y = HEIGHT - Hero->dr.h;
+	}
+
+	if (ct - lt > 1000 / 24)
+	{
+
+		if (kstate[SDL_SCANCODE_W] && !kstate[SDL_SCANCODE_S])
+		{
+			Hero->dr.y -= speed * (1 + Hero->ItemsInventory[speedboost] / 10.0);
+			ismove = true;
+		}
+
+		if (kstate[SDL_SCANCODE_S] && !kstate[SDL_SCANCODE_W])
+		{
+			Hero->dr.y += speed * (1 + Hero->ItemsInventory[speedboost] / 10.0);
+			ismove = true;
+		}
+
+		if (kstate[SDL_SCANCODE_A] && !kstate[SDL_SCANCODE_D])
+		{
+			Hero->dr.x -= speed * (1 + Hero->ItemsInventory[speedboost] / 10.0);
+			ismove = true;
+		}
+
+		if (kstate[SDL_SCANCODE_D] && !kstate[SDL_SCANCODE_A])
+		{
+			Hero->dr.x += speed * (1 + Hero->ItemsInventory[speedboost] / 10.0);
+			ismove = true;
+		}
+		lt = ct;
+	}
+
+	SpleetAnimation(Hero->TEXTURES, Hero->phaseofanimation, Hero->dr, ismirored, !ismove, Hero->Time);
+}
+
+
+
 void Gamemode(int& mode)
 {
-#pragma region timeofgamemod
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
-	static int dt = 0, lt = 0;
+	static int dt = 0, lt = SDL_GetTicks();
 	int ct = SDL_GetTicks(), FPS = 24;
 	static SDL_Texture* tmp_backgr = nullptr;
-	dt += ct - lt;
 	static int gamemode = 0;
-#pragma endregion
+
+	dt += ct - lt;
+	lt = ct;
 
 	if (kstate[SDL_SCANCODE_1] && Hero->W[0].enabled)
 	{
@@ -280,33 +321,30 @@ void Gamemode(int& mode)
 	case 0:
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 		SDL_RenderClear(ren);
-		if (dt > 1000 / FPS)
-		{
-			HeroMove();
-			HeroShot();
-			enemyprocess();
-			ItemProcess();
-		}
+
+		HeroMove();
+		HeroShot();
+		enemyprocess();
+		ItemProcess();
+		EffectsProc();
 		if (kstate[SDL_SCANCODE_ESCAPE])
 		{
-			Hero->dr = { 0,0,Hero->dr.w,Hero->dr.h };
+			Hero->dr = { 0, 0, Hero->dr.w, Hero->dr.h };
 			FileHeroStatsSave(currentsave);
 			mode = 0;
 		}
-		HeroDv();
-		lt = ct;
+
 		if (Equeue.head == nullptr)
 		{
 			ClearItem(IDeq);
 			tmp_backgr = CaptureScreenTexture(ren);
 			gamemode = 1;
 		}
+		Hero->dr = { Hero->dr.x,Hero->dr.y,(float)Hero->TEXTURES->SR[Hero->phaseofanimation].w,(float)Hero->TEXTURES->SR[Hero->phaseofanimation].h };
 		break;
+
 	case 1:
 		ShopMode(tmp_backgr, gamemode, mode);
 		break;
-	default:
-		break;
 	}
-
 }

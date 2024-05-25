@@ -1,17 +1,31 @@
 #pragma once
 #include <SDL.h>
+#include "All_TextureInit.h"
+
 
 struct enemydata
 {
 
-	int HP, CD;
-	float speed;
+	int HP;
+
+	int CD;
+	TimeStruct ShotTime;
+
+
+	TimeStruct AnimationTime;
+	LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures;
+	int curstage = 0;
+
 	SDL_FRect dr;
-	SDL_Texture* T;
-	int model;
-	int lt;
+
+
+	float speed;
+	
+
 	bool ishit;
 	float angle;
+	
+	int model;
 };
 
 struct enemy

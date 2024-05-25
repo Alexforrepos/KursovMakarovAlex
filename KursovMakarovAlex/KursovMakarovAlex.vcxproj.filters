@@ -73,6 +73,12 @@
     <Filter Include="Исходные файлы\Utility\TextureProcessing\AllGameTextureInit">
       <UniqueIdentifier>{b7ec8b7a-976a-49cd-b0f9-cd0a0dd81036}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Utility\TextureProcessing\Spleet">
+      <UniqueIdentifier>{91a1f897-f8c9-41f4-b9e7-fb51e739dcf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Utility\TextureProcessing\Effects">
+      <UniqueIdentifier>{5d25aab5-87f0-46e3-b512-59532938daa7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KursovMakarovAlex.cpp">
@@ -83,9 +89,6 @@
     </ClCompile>
     <ClCompile Include="SDLProcessing.cpp">
       <Filter>Исходные файлы\Utility\SDL_free_init</Filter>
-    </ClCompile>
-    <ClCompile Include="SpleetProcessing.cpp">
-      <Filter>Исходные файлы\Utility\TextureProcessing</Filter>
     </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Исходные файлы\menu</Filter>
@@ -119,6 +122,12 @@
     </ClCompile>
     <ClCompile Include="All_TextureInit.cpp">
       <Filter>Исходные файлы\Utility\TextureProcessing\AllGameTextureInit</Filter>
+    </ClCompile>
+    <ClCompile Include="SpleetProcessing.cpp">
+      <Filter>Исходные файлы\Utility\TextureProcessing\Spleet</Filter>
+    </ClCompile>
+    <ClCompile Include="Effects.cpp">
+      <Filter>Исходные файлы\Utility\TextureProcessing\Effects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,9 +172,6 @@
     <ClInclude Include="texturesimport.h">
       <Filter>Исходные файлы\Utility\TextureProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="SpleetProcessing.h">
-      <Filter>Исходные файлы\Utility\TextureProcessing</Filter>
-    </ClInclude>
     <ClInclude Include="SDLProcessing.h">
       <Filter>Исходные файлы\Utility\SDL_free_init</Filter>
     </ClInclude>
@@ -202,6 +208,12 @@
     <ClInclude Include="All_TextureInit.h">
       <Filter>Исходные файлы\Utility\TextureProcessing\AllGameTextureInit</Filter>
     </ClInclude>
+    <ClInclude Include="SpleetProcessing.h">
+      <Filter>Исходные файлы\Utility\TextureProcessing\Spleet</Filter>
+    </ClInclude>
+    <ClInclude Include="Effects.h">
+      <Filter>Исходные файлы\Utility\TextureProcessing\Effects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="proba.png">
@@ -218,9 +230,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="EnemyQueue.txt">
-      <Filter>Файлы ресурсов</Filter>
-    </Text>
     <Text Include="TextInformation\Save1.txt">
       <Filter>Файлы ресурсов\txtinfo</Filter>
     </Text>
@@ -228,6 +237,9 @@
       <Filter>Файлы ресурсов\txtinfo</Filter>
     </Text>
     <Text Include="TextInformation\Save3.txt">
+      <Filter>Файлы ресурсов\txtinfo</Filter>
+    </Text>
+    <Text Include="TextInformation\EnemyQueue.txt">
       <Filter>Файлы ресурсов\txtinfo</Filter>
     </Text>
   </ItemGroup>

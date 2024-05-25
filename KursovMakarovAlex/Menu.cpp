@@ -10,6 +10,7 @@
 #include "SDLProcessing.h"
 #include "FileM.h"
 #include <string.h>
+#include "All_TextureInit.h"
 
 enum linkenum
 {
@@ -138,12 +139,11 @@ void MainMenuInit()
 
 
 #pragma region InformationRegion
-	MenuBackground[1] = CreateUTexture("textures/Infobackgr.jpg");
 
 #pragma endregion
 #pragma region MainMenu
 #pragma region mainmenuregion
-	MenuBackground[0] = CreateUTexture("textures/SaveImage.jpg");
+
 	MenuItemElementData PlayGame;
 	PlayGame.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Play", { 120,120,120,255 }, 100, 100);
 	PlayGame.SelectTexture = CreateTextTexture(ren, Fonts[0], "Play", { 255,0,0,255 }, 100, 100);
@@ -192,10 +192,12 @@ void DrowMenu(bool &isrun,int &mod)
 	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
 	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 	SDL_RenderClear(ren);
+	SDL_RenderCopy(ren, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Menu_Background].PrivateTexture[0], NULL, NULL);
+		if (ALL_TEXTURES->ALL_LOCAL_TEXTURES[Menu_Background].PrivateTexture[0] == nullptr)
+			exit(-1);
 	switch (menumod)
 	{
 	case 0:
-		SDL_RenderCopy(ren, MenuBackground[menumod], NULL, NULL);
 		for (MenuElemnt* cur = MainMenuDrow.Head; cur != NULL; cur = cur->Next)
 		{
 			if (isinPoint(mp, cur->Data.Direction))
@@ -227,11 +229,9 @@ void DrowMenu(bool &isrun,int &mod)
 		}
 		break;
 	case 1:
-		SDL_RenderCopy(ren,MenuBackground[1],NULL,NULL);
 		if (kstate[SDL_SCANCODE_ESCAPE]) menumod = 0;
 		break;
 	case 2:
-		SDL_RenderCopy(ren, MenuBackground[0], NULL, NULL);
 		SDL_SetRenderDrawColor(ren, WHITE.r/2, WHITE.g / 2, WHITE.b / 2, 255);
 		SDL_RenderFillRect(ren, &D);
 		for (MenuElemnt* cur = MainPlayDrow.Head; cur != nullptr; cur = cur->Next)

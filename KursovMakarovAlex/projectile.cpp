@@ -8,7 +8,12 @@ ProjectileQueue EnemyProjectiles;
 void PushProjectile(ProjectileQueue& queue, projectiledata data)
 {
     projectile* newProjectile = (projectile*)malloc(sizeof(projectile));
+    if (newProjectile == nullptr)
+        return;
+    data.Textures = &ALL_TEXTURES->ALL_LOCAL_TEXTURES[Bullet];
+    data.drect = { data.drect.x,data.drect.y,(float)ALL_TEXTURES->ALL_LOCAL_TEXTURES[Bullet].SR[&queue==&EnemyProjectiles?1:0].w,(float)ALL_TEXTURES->ALL_LOCAL_TEXTURES[Bullet].SR[&queue==&EnemyProjectiles?1:0].h};
     newProjectile->data = data;
+    
     newProjectile->next = nullptr;
     newProjectile->prev = nullptr;
 

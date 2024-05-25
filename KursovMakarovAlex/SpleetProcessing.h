@@ -1,4 +1,7 @@
 #pragma once
 #include <SDL.h>
+#include "All_TextureInit.h"
 
-void SpleetAnimaticHero(SDL_Texture* Texture, SDL_Rect R[], SDL_FRect Dr, int mkolvo, int FPS, int CRs);
+void SpleetAnimation(LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures, int& currentstag, SDL_FRect Dr, bool ismirored, bool model, TimeStruct& selftime);
+
+void DeathAnimation(LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures, SDL_FRect Dr, bool ismirored);

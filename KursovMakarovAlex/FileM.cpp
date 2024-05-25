@@ -55,7 +55,7 @@ void FileHeroStatsSave(const char filename[50])
         printf("couldn open save-file\n");
         exit(-6);
     };
-    strcpy(currentsave, filename); // Сохранение названия файла в глобальной переменной
+    strcpy(currentsave, filename);
 	fprintf_s(F, "%i\n" ,Hero->HP);
 	fprintf_s(F, "%i\n" ,Hero->Money);
 	fprintf_s(F, "%i\n" ,Hero->currentWeapon);

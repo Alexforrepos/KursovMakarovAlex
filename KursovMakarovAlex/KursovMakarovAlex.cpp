@@ -9,6 +9,8 @@
 #include "enemy.h"
 #include "FileM.h"
 #include "Items.h"
+#include "All_TextureInit.h"
+#include "Effects.h"
 
 enum mode
 {
@@ -27,11 +29,13 @@ int main(int argc, char* argv[])
 	bool isrunning = true;
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
 #pragma endregion
+	InitALLTEXTURES();
 	LoadFonts();
 	MenuInit();
 	HeroInit();
 	IdeqInit();
 	FileEnemyQGet(mode);
+	EffQuue = CreateEffectQueue();
 	while (isrunning)
 	{
 #pragma region event
@@ -47,7 +51,6 @@ int main(int argc, char* argv[])
 				{
 					WIDTH = ev.window.data1;
 					HEIGHT = ev.window.data2;
-
 				}
 				break;
 			default:

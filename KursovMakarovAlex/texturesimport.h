@@ -31,3 +31,5 @@ void GetTextureDimensions(SDL_Texture* texture, int* width, int* height);
 SDL_Texture* CreateUTexture(const char filename[]);
 
 SDL_Texture* CaptureScreenTexture(SDL_Renderer* renderer);
+
+SDL_Rect GetTextureAllRect(SDL_Texture* texture, int scale);

@@ -8,21 +8,24 @@
 #include "enemy.h"
 #include  "texturesimport.h"
 #include "SDLProcessing.h"
-
+#include "SpleetProcessing.h"
+#include "Effects.h"
 
 #define STOPPING_RADIUS 500
-
-SDL_Texture* TextureEnemy[5];
 
 void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep)
 {
 	enemydata TempData = { 0 };
-	TempData.lt = 0;
+	TempData.AnimationTime = { 0,0,0,1000 };
+	TempData.ShotTime = { 0,0,0,0 };
 	TempData.angle = NULL;
-	TempData.T = nullptr;
+	TempData.Textures = nullptr;
+	TempData.curstage = 1;
+
 	switch (model)
 	{
 	case 0:
+		TempData.Textures = &ALL_TEXTURES->ALL_LOCAL_TEXTURES[Distant_Spleet_Animation];
 		TempData.speed = 0.4;
 		TempData.CD = 1000;
 		TempData.HP = 50;
@@ -30,6 +33,7 @@ void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep)
 		TempData.model = model;
 		break;
 	case 1:
+		TempData.Textures = &ALL_TEXTURES->ALL_LOCAL_TEXTURES[Melee_Spleet_Animation];
 		TempData.speed = 0.7;
 		TempData.CD = 0;
 		TempData.HP = 100;
@@ -37,6 +41,7 @@ void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep)
 		TempData.model = model;
 		break;
 	case 2:
+		TempData.Textures = &ALL_TEXTURES->ALL_LOCAL_TEXTURES[Summon_Spleet_Animation];
 		TempData.speed = 0.1;
 		TempData.CD = 0.1;
 		TempData.HP = 300;
@@ -44,6 +49,7 @@ void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep)
 		TempData.model = model;
 		break;
 	case 3:
+		TempData.Textures = &ALL_TEXTURES->ALL_LOCAL_TEXTURES[Saw_Spleet_Animation];
 		TempData.speed = 3;
 		TempData.CD = 0;
 		TempData.HP = 100;
@@ -52,15 +58,18 @@ void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep)
 		TempData.angle = rand();
 		break;
 	case 4:
+		TempData.Textures = &ALL_TEXTURES->ALL_LOCAL_TEXTURES[Boom_Spleet_Animatin];
 		TempData.speed = 0.2;
 		TempData.CD = 0;
 		TempData.HP = 200;
-		TempData.dr = { ep.x , ep.y, 50,50 };
+
 		TempData.model = model;
 		break;
 	default:
 		break;
+
 	}
+	TempData.dr = { ep.x , ep.y, (float)TempData.Textures->SR[TempData.curstage].w,(float)TempData.Textures->SR[TempData.curstage].h};
 	addEnemy(Queue, TempData);
 }
 
@@ -132,29 +141,7 @@ void clearEnemies(EnemyQueue& queue)
 }
 
 #pragma endregion
-#pragma region Texture
-const char* EnemyTextures[4]
-{
-	"",
-	"",
-	"",
-	""
-};
 
-void InitEnemyTexture()
-{
-	for (int i = 0; i < 4; i++)
-		TextureEnemy[i] = CreateUTexture(EnemyTextures[i]);
-}
-
-void DeinitEnemyTexture()
-{
-	for (int i = 0; i < 4; i++)
-	{
-		SDL_DestroyTexture(TextureEnemy[i]);
-	}
-}
-#pragma endregion
 #pragma region beh
 void enemyMoveTowardsPlayer(enemy* en)
 {
@@ -177,6 +164,7 @@ void enemyMoveTowardsPlayer(enemy* en)
 		en->data.dr.y = newY;
 	}
 }
+
 void Mele_Beh(enemy* en)
 {
 	int ct = SDL_GetTicks();
@@ -192,8 +180,8 @@ void Mele_Beh(enemy* en)
 		if(isinRect({ en->data.dr.x - en->data.speed * cos(ang) , en->data.dr.y - en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h }, {0,0,(float)WIDTH,(float)HEIGHT}))
 			en->data.dr = { en->data.dr.x - en->data.speed * cos(ang) , en->data.dr.y - en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h };
 	}
-	en->data.CD -= ct - en->data.lt;
-	en->data.lt = ct;
+	en->data.CD -= ct - en->data.ShotTime.ct;
+	en->data.ShotTime.lt = ct;
 }
 void Sum_Beh(enemy* en)
 {
@@ -210,11 +198,9 @@ void Sum_Beh(enemy* en)
 		CreateNewEnemy(Equeue, rand() % 2 + 3, { en->data.dr.x + rand() % 50 - 25,en->data.dr.y + rand() % 50 - 25 });
 		en->data.CD = 5000;
 	}
-	en->data.CD -= ct - en->data.lt;
-	en->data.lt = ct;
+	en->data.CD -= ct - en->data.ShotTime.lt;
+	en->data.ShotTime.lt = ct;
 }
-
-
 
 void Saw_Beh(enemy*& en)
 {
@@ -253,6 +239,14 @@ void Boom_Beh(enemy* en)
 	if(GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr)) < 40)
 	{
 		en->data.HP = 0;
+		CreateEffect(0, { en->data.dr.x,en->data.dr.y });
+		if (GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr)))
+			Hero->HP -= 40;
+		for (enemy* cur = Equeue.head; cur != nullptr; cur = cur->next)
+		{
+			if (GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(cur->data.dr)) < 300)
+				cur->data.HP -= 100;
+		}
 	}
 }
 #pragma endregion
@@ -289,40 +283,33 @@ void enemyprocessing(enemy* en)
 	if (en->data.model == 0)
 	{
 		enemyMoveTowardsPlayer(en);
-		SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
-		SDL_RenderFillRectF(ren, &en->data.dr);
+
 	}
 	else if (en->data.model == 1)
 	{
 		Mele_Beh(en);
-		SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
-		SDL_RenderFillRectF(ren, &en->data.dr);
 	}
 	else if (en->data.model == 2)
 	{
 		Sum_Beh(en);
-		SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
-		SDL_RenderFillRectF(ren, &en->data.dr);
 	}
 	else if(en->data.model == 3)
 	{
 		Saw_Beh(en);
-		SDL_SetRenderDrawColor(ren, 0, 255, 255, 255);
-		SDL_RenderFillRectF(ren, &en->data.dr);
+
 	}
 	else
 	{
 		Boom_Beh(en);
-		SDL_SetRenderDrawColor(ren, 255, 0, 255, 255);
-		SDL_RenderFillRectF(ren, &en->data.dr);
 	}
 #pragma endregion
+
 
 #pragma region enemyprojectileprocessing
 	for (projectile* cur = EnemyProjectiles.head; cur != nullptr; cur = cur->next)
 	{
 		SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
-		SDL_RenderFillRectF(ren, &cur->data.drect);
+		SDL_RenderCopyExF(ren, cur->data.Textures->PrivateTexture[1], NULL, &cur->data.drect, cur->data.angle, NULL, SDL_FLIP_NONE);
 		if (cur->data.livetime <= 0)
 		{
 			PullProjectile(EnemyProjectiles, cur);
@@ -339,4 +326,6 @@ void enemyprocessing(enemy* en)
 	}
 	lt = ct;
 #pragma endregion
+
+	SpleetAnimation(en->data.Textures, en->data.curstage, en->data.dr, Hero->dr.x < en->data.dr.x ? true : false, false, en->data.AnimationTime);
 }

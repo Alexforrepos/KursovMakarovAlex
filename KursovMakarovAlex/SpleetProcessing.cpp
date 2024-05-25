@@ -5,30 +5,56 @@
 #include "SpleetProcessing.h"
 #include "texturesimport.h"
 #include "SDLProcessing.h"
-
-
-void SpleetAnimaticHero(SDL_Texture* Texture, SDL_Rect R[], SDL_FRect Dr, int mkolvo, int FPS, int CRs)
+#include "All_TextureInit.h"
+#include "Geometry.h"
+void SpleetAnimation(LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures, int& currentstag, SDL_FRect Dr, bool ismirored, bool model, TimeStruct& selftime)
 {
-	static int dt = 0;
-	static int lt = 0;
-	int crt = SDL_GetTicks();
-	dt += crt - lt;
-	static int CurrentSpleetCR = 0;
-	static int lastCr = NULL;
-	if (lastCr != CRs)
+	int ct = SDL_GetTicks();
+
+
+	if (selftime.dt > selftime.selftimefps)
 	{
-		CurrentSpleetCR = 0;
-		lastCr = CRs;
-		dt = 0;
-		lt = 0;
+
+			if (Textures->LocalLen < 5 || (Textures == nullptr && Textures->PrivateTexture[currentstag + 1] == nullptr))
+			{
+				return;
+			}
+
+		if (Textures->LocalLen != 9)
+		{
+
+			if (model)
+			{
+				currentstag = (currentstag % 8) + 1;
+			}
+			else
+			{
+				currentstag = (currentstag - 9 + 1) % 8 + 9;
+			}
+		}
+		else
+		{
+			currentstag = currentstag % 8 + 1;
+		}
+
+		Dr = { Dr.x, Dr.y, (float)Textures->SR[currentstag].w, (float)Textures->SR[currentstag].h };
+		selftime.lt = ct;
+		selftime.dt %= (int)selftime.selftimefps;
 	}
-	if (CurrentSpleetCR == mkolvo)
-		CurrentSpleetCR = 0;
-	if (dt > 1000 / FPS)
-	{
-		dt %= 1000 / FPS;
-		CurrentSpleetCR++;
-	}
-	SDL_RenderCopyF(ren, Texture, &R[CRs * 4 + CurrentSpleetCR], &Dr);
-	lt = crt;
+
+	selftime.dt += ct - selftime.lt;
+
+	SDL_FPoint tmppoint = { Dr.x + Dr.w / 2, Dr.y + Dr.h / 2 }; // Центральная точка
+	if (currentstag >= 16)
+		currentstag = 1;
+	SDL_RenderCopyExF(ren, Textures->PrivateTexture[currentstag], &Textures->SR[currentstag], &Dr, NULL, &tmppoint, ismirored ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);}
+
+void DeathAnimation(LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures, SDL_FRect Dr, bool ismirored)
+{
+	if (Textures->LocalLen < 5)
+		return;
+	if (Textures == nullptr && Textures->PrivateTexture[0] == nullptr)
+		return;
+	SDL_RenderCopyExF(ren, Textures->PrivateTexture[0], &Textures->SR[0], &Dr, NULL, NULL,
+		ismirored ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }

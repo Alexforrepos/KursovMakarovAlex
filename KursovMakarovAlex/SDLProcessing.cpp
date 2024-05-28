@@ -50,8 +50,15 @@ void Init()
 		printf("err init_img %s\n", IMG_GetError());
 		Deinit(-3);
 	}
-	if (r && IMG_INIT_PNG) printf("png_sucs_init\n"); else printf("png_err_init\n");
-	if (r && IMG_INIT_JPG) printf("jpg_sucs_init\n"); else printf("jpg_err_init\n");
+	if (r & IMG_INIT_PNG)
+		printf("png_sucs_init\n");
+	else
+		printf("png_err_init\n");
+	
+	if (r & IMG_INIT_JPG) 
+		printf("jpg_sucs_init\n"); 
+	else 
+		printf("jpg_err_init\n");
 
 	if (TTF_Init())
 	{

@@ -185,7 +185,7 @@
     <Image Include="Infobackgr.jpg" />
     <Image Include="proba.png" />
     <Image Include="SaveImage.jpg" />
-    <Image Include="soul_knight_animation_final.png" />
+    <Image Include="textures\mobs_spleet\Hero\DeathofHero.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TextInformation\EnemyQueue.txt" />

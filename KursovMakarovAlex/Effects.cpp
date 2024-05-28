@@ -109,7 +109,7 @@ void CreateEffect(int model,SDL_FPoint dir)
     case 0:
         TmpEffectData.Effec_Descriptor = &ALL_TEXTURES->ALL_LOCAL_TEXTURES[Exp_Animation];
         TmpEffectData.DirectionRect = { dir.x,dir.y,(float)TmpEffectData.Effec_Descriptor->SR[0].w,(float)TmpEffectData.Effec_Descriptor->SR[0].h };
-        TmpEffectData.TimeData = { 0,0,500 };
+        TmpEffectData.TimeData = { 0,0,20 };
         TmpEffectData.CurFaze = 0;
         TmpEffectData.mustbepooled = false;
         PUSHEFFECT(EffQuue,TmpEffectData);

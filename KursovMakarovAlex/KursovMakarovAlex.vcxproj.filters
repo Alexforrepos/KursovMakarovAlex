@@ -225,7 +225,7 @@
     <Image Include="SaveImage.jpg">
       <Filter>Файлы ресурсов\textures\backgrounds</Filter>
     </Image>
-    <Image Include="soul_knight_animation_final.png">
+    <Image Include="textures\mobs_spleet\Hero\DeathofHero.png">
       <Filter>Файлы ресурсов\textures\splites\knight</Filter>
     </Image>
   </ItemGroup>

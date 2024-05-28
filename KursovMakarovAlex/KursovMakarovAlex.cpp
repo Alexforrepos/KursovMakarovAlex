@@ -20,7 +20,7 @@ enum mode
 
 int main(int argc, char* argv[])
 {
-	system("chcp 1251 > NULL");
+	system("chcp 1251 > 0");
 	srand(time(NULL));
 	Init();
 	SDL_Event ev;

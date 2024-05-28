@@ -76,9 +76,9 @@ SDL_Texture* CaptureScreenTexture(SDL_Renderer* renderer)
 	return texture;
 }
 
-SDL_Rect GetTextureAllRect(SDL_Texture* texture,int scale)
+SDL_Rect GetTextureAllRect(SDL_Texture* texture,float scale)
 {
 	int width=-1,height=-1;
 	GetTextureDimensions(texture, &width, &height);
-	return { 0,0,width * scale ,height * scale };
+	return { 0,0,(int)(width * scale) ,(int)(height*scale) };
 }

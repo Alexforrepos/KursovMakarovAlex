@@ -3,7 +3,7 @@
 
 enum typeofitem
 {
-	speedboost,damageboost,quantboost,firerate
+	speedboost,damageboost,mult,firerate
 };
 
 struct ItemData

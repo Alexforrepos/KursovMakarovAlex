@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#define SIZEOFALLTEXTURE 16
 
 struct TimeStruct
 {
@@ -10,15 +11,16 @@ struct TimeStruct
 // Структура данных для отдельног сплита
 struct LOCAL_MASS_TEXTURE_DESCRIPTOR
 {
-	SDL_Texture* PrivateTexture[20];
-	SDL_Rect SR[20];
+	SDL_Texture* PrivateTexture[40];
+	SDL_Rect SR[40];
 	int LocalLen = 0, li = 0;
+	SDL_Rect MaxRect;
 };
 
 // Структура данных для всех сплитов
 struct PUBLIC_TEXTURE_DESCRIPTOR
 {
-	LOCAL_MASS_TEXTURE_DESCRIPTOR ALL_LOCAL_TEXTURES[14];
+	LOCAL_MASS_TEXTURE_DESCRIPTOR ALL_LOCAL_TEXTURES[SIZEOFALLTEXTURE];
 	int PublicLen = 0;
 };
 
@@ -31,6 +33,7 @@ enum TextureType
 	Boom_Spleet_Animatin,
 	Distant_Spleet_Animation,
 	Hero_Spleet_Animation,
+	Hero_Spleet_Animation_R,
 	Melee_Spleet_Animation,
 	Saw_Spleet_Animation,
 	Summon_Spleet_Animation,
@@ -41,7 +44,8 @@ enum TextureType
 	Battle_Background,
 	Menu_Background,
 	Shot_Effect,
-	Bullet
+	Bullet,
+	Icons
 };
 
 enum SpleetAnimTexturesBoarders

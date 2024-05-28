@@ -47,7 +47,8 @@ void SpleetAnimation(LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures, int& currentstag, 
 	SDL_FPoint tmppoint = { Dr.x + Dr.w / 2, Dr.y + Dr.h / 2 }; // Центральная точка
 	if (currentstag >= 16)
 		currentstag = 1;
-	SDL_RenderCopyExF(ren, Textures->PrivateTexture[currentstag], &Textures->SR[currentstag], &Dr, NULL, &tmppoint, ismirored ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);}
+	SDL_RenderCopyExF(ren, Textures->PrivateTexture[currentstag], NULL, &Dr, NULL, &tmppoint, ismirored ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+}
 
 void DeathAnimation(LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures, SDL_FRect Dr, bool ismirored)
 {

@@ -65,7 +65,7 @@ void BulletsProc()
 		}
 		if (!ispooled)
 		{
-			SDL_RenderCopyExF(ren, cur->data.Textures->PrivateTexture[0], NULL, &cur->data.drect, cur->data.angle*180/M_PI, NULL, SDL_FLIP_NONE);
+			SDL_RenderCopyExF(ren, cur->data.Textures->PrivateTexture[0], NULL, &cur->data.drect, cur->data.angle * 180 / M_PI, NULL, SDL_FLIP_NONE);
 		}
 		cur = nextProjectile;
 	}
@@ -92,9 +92,12 @@ void HeroShot()
 	static int dt = 0, lt = 0;
 	int ct = SDL_GetTicks();
 	dt += ct - lt;
+	static int lastwapon = 0;
 #pragma endregion
 
 #pragma region createProjectile
+	Hero->W[Hero->currentWeapon].dr = { Hero->dr.x + Hero->dr.w / 2 - Hero->W[lastwapon].dr.w / 2,Hero->dr.y + Hero->dr.h / 2 - Hero->W[lastwapon].dr.h / 2,Hero->W[lastwapon].dr.w,Hero->W[lastwapon].dr.h };
+	lastwapon = Hero->currentWeapon;
 	if (mstate & SDL_BUTTON(SDL_BUTTON_LEFT) && Hero->W[Hero->currentWeapon].cd - Hero->ItemsInventory[firerate] < 0)
 	{
 		switch (Hero->currentWeapon)
@@ -118,6 +121,7 @@ void HeroShot()
 		Hero->W[Hero->currentWeapon].cd -= ct - lt;
 	}
 	lt = ct;
+	SDL_RenderCopyExF(ren, Hero->W[Hero->currentWeapon].T, &Hero->W[Hero->currentWeapon].cr, &Hero->W[Hero->currentWeapon].dr, !Hero->isfliped ? GetAlpha(p, GetCenterPointOfRect(Hero->dr)) * 180 / M_PI : GetAlpha(p, GetCenterPointOfRect(Hero->dr)) * 180 / M_PI - 180, NULL, !Hero->isfliped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
 void EffectsProc()
@@ -239,8 +243,11 @@ void HeroMove()
 	int ct = SDL_GetTicks();
 	static int lt = ct;
 
-	if (mp.x < Hero->dr.x)
-		ismirored = true;
+	if (mp.x > Hero->dr.x)
+		Hero->isfliped = true;
+	else
+		Hero->isfliped = false;
+
 
 	if (!isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT })) {
 		Hero->dr = { (float)lastx,(float)lasty,Hero->dr.w,Hero->dr.h };
@@ -282,10 +289,23 @@ void HeroMove()
 		}
 		lt = ct;
 	}
-
-	SpleetAnimation(Hero->TEXTURES, Hero->phaseofanimation, Hero->dr, ismirored, !ismove, Hero->Time);
+	SpleetAnimation(Hero->TEXTURES[Hero->isfliped ? Hero_Spleet_Animation_R - 2 : Hero_Spleet_Animation -2], Hero->phaseofanimation, Hero->dr, true, !ismove, Hero->Time);
 }
 
+void HP_RENDER()
+{
+		int numHearts = Hero->HP > 10 ? Hero->HP / 10 : 0 ; 
+		for (int i = 0; i < numHearts; ++i)
+		{
+			SDL_Rect destRect = { 20 + i * (ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w  + 10), 20, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].h }; // учитываем расстояние между сердечками
+			SDL_RenderCopy(ren, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].PrivateTexture[0], NULL, &destRect);
+		}
+}
+
+void MONEY_RENDER()
+{
+
+}
 
 
 void Gamemode(int& mode)
@@ -298,7 +318,7 @@ void Gamemode(int& mode)
 
 	dt += ct - lt;
 	lt = ct;
-
+	Hero->dr = { Hero->dr.x,Hero->dr.y,(float)Hero->TEXTURES[Hero->isfliped ? Hero_Spleet_Animation_R - 2 : Hero_Spleet_Animation - 2]->SR[Hero->phaseofanimation].w,(float)Hero->TEXTURES[Hero->isfliped ? Hero_Spleet_Animation_R - 2 : Hero_Spleet_Animation - 2]->SR[Hero->phaseofanimation].h };
 	if (kstate[SDL_SCANCODE_1] && Hero->W[0].enabled)
 	{
 		Hero->currentWeapon = 0;
@@ -315,12 +335,12 @@ void Gamemode(int& mode)
 	{
 		Hero->currentWeapon = 3;
 	}
-
 	switch (gamemode)
 	{
 	case 0:
 		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 		SDL_RenderClear(ren);
+		HP_RENDER();
 
 		HeroMove();
 		HeroShot();
@@ -340,7 +360,7 @@ void Gamemode(int& mode)
 			tmp_backgr = CaptureScreenTexture(ren);
 			gamemode = 1;
 		}
-		Hero->dr = { Hero->dr.x,Hero->dr.y,(float)Hero->TEXTURES->SR[Hero->phaseofanimation].w,(float)Hero->TEXTURES->SR[Hero->phaseofanimation].h };
+
 		break;
 
 	case 1:

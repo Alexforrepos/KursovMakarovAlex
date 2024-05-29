@@ -99,7 +99,6 @@ void addEnemy(EnemyQueue& queue, enemydata data)
 	
 void RemoveEnemyQ(EnemyQueue& queue, enemy* removeEnemy)
 {
-	printf("%i \n", removeEnemy->data.model);
 	if (removeEnemy->prev != nullptr)
 	{
 		removeEnemy->prev->next = removeEnemy->next;
@@ -177,10 +176,10 @@ void Mele_Beh(enemy* en)
 	}
 	else
 	{
-		if(isinRect({ en->data.dr.x - en->data.speed * cos(ang) , en->data.dr.y - en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h }, {0,0,(float)WIDTH,(float)HEIGHT}))
+		/*if(isinRect({ en->data.dr.x - en->data.speed * cos(ang) , en->data.dr.y - en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h }, {0,0,(float)WIDTH,(float)HEIGHT}))
 			en->data.dr = { en->data.dr.x - en->data.speed * cos(ang) , en->data.dr.y - en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h };
-	}
-	en->data.CD -= ct - en->data.ShotTime.ct;
+	*/}
+	en->data.CD -= ct - en->data.ShotTime.lt ;
 	en->data.ShotTime.lt = ct;
 }
 void Sum_Beh(enemy* en)
@@ -231,6 +230,8 @@ void Saw_Beh(enemy*& en)
 			en->data.HP = 0;
 		}
 }
+
+
 void Boom_Beh(enemy* en)
 {
 	int ct = SDL_GetTicks();

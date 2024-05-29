@@ -171,6 +171,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="gamemode.h" />
     <ClInclude Include="FileM.h" />
+    <ClInclude Include="Shop.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="projectile.h" />
     <ClInclude Include="Hero.h" />

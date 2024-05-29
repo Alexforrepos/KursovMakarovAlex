@@ -23,6 +23,7 @@ struct MenuItemElementData
 	SDL_Texture* SelectTexture;
 	SDL_Texture* NonSelectTexture;
 	int link;
+	bool isactive;
 };
 
 struct MenuElemnt
@@ -43,6 +44,9 @@ SDL_Texture** MenuBackground = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * 12);
 
 MenuQuery MainMenuDrow;
 MenuQuery MainPlayDrow;
+MenuQuery MainSaveBoost;
+
+
 
 void pushMenuElement(MenuQuery* query, MenuItemElementData data)
 {
@@ -110,8 +114,8 @@ void MainMenuInit()
 #pragma region PlayMenuMode
 
 	MenuItemElementData Save1;
-	Save1.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Save-1", { 0,255,0,255 }, 100, 100);
-	Save1.SelectTexture = CreateTextTexture(ren, Fonts[0], "Save-1", { 255,0,0,255 }, 100, 100);
+	Save1.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Save-1", { 0,255,0,255 }, 200, 200);
+	Save1.SelectTexture = CreateTextTexture(ren, Fonts[0], "Save-1", { 255,0,0,255 }, 200, 200);
 	GetTextureDimensions(Save1.SelectTexture, &Save1.Direction.w, &Save1.Direction.h);
 	Save1.Direction = { (WIDTH - Save1.Direction.w) / 2,300 - Save1.Direction.h,Save1.Direction.w,Save1.Direction.h };
 	Save1.link = 0;
@@ -119,8 +123,8 @@ void MainMenuInit()
 
 
 	MenuItemElementData Save2;
-	Save2.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Save-2", { 0,255,0,255 }, 100, 100);
-	Save2.SelectTexture = CreateTextTexture(ren, Fonts[0], "Save-2", { 255,0,0,255 }, 100, 100);
+	Save2.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Save-2", { 0,255,0,255 }, 200, 200);
+	Save2.SelectTexture = CreateTextTexture(ren, Fonts[0], "Save-2", { 255,0,0,255 }, 200, 200);
 	GetTextureDimensions(Save2.SelectTexture, &Save2.Direction.w, &Save2.Direction.h);
 	Save2.Direction = { (WIDTH - Save2.Direction.w) / 2,500 - Save2.Direction.h,Save2.Direction.w,Save2.Direction.h };
 	Save2.link = 1;
@@ -128,8 +132,8 @@ void MainMenuInit()
 
 
 	MenuItemElementData Save3;
-	Save3.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Save-3", { 0,255,0,255 }, 100, 100);
-	Save3.SelectTexture = CreateTextTexture(ren, Fonts[0], "Save-3", { 255,0,0,255 }, 100, 100);
+	Save3.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Save-3", { 0,255,0,255 }, 200, 200);
+	Save3.SelectTexture = CreateTextTexture(ren, Fonts[0], "Save-3", { 255,0,0,255 }, 200, 200);
 	GetTextureDimensions(Save3.SelectTexture, &Save3.Direction.w, &Save3.Direction.h);
 	Save3.Direction = { (WIDTH - Save3.Direction.w) / 2,700 - Save3.Direction.h,Save3.Direction.w,Save3.Direction.h };
 	Save3.link = 2;
@@ -138,15 +142,89 @@ void MainMenuInit()
 #pragma endregion
 
 
-#pragma region InformationRegion
+#pragma region BoosterRoom
+
+	MenuItemElementData StartGame;
+	StartGame.SelectTexture = CreateTextTexture(ren, Fonts[0], "Start", { 255,255,255,255 }, 400, 200);
+	StartGame.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Start", { 255,255,255,255 }, 400, 200);
+	GetTextureDimensions(StartGame.SelectTexture, &StartGame.Direction.w, &StartGame.Direction.h);
+	StartGame.Direction.x = WIDTH / 2 - StartGame.Direction.w / 2;
+	StartGame.Direction.y = HEIGHT / 2;
+	StartGame.link = startitem;
+	StartGame.isactive = false;
+	MenuItemElementData ContinueGame;
+	ContinueGame.SelectTexture = CreateTextTexture(ren, Fonts[0], "Continue", { 255,255,255,255 }, 400, 200);
+	ContinueGame.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Continue", { 255,255,255,255 }, 400, 200);
+	GetTextureDimensions(ContinueGame.SelectTexture, &ContinueGame.Direction.w, &ContinueGame.Direction.h);
+	ContinueGame.Direction.x = WIDTH / 2 - ContinueGame.Direction.w / 2;
+	ContinueGame.Direction.y = HEIGHT / 2 + 100;
+	ContinueGame.isactive = false;
+	ContinueGame.link = -1;
+
+	pushMenuElement(&MainSaveBoost, StartGame);
+	pushMenuElement(&MainSaveBoost, ContinueGame);
+
+
+#pragma region Boosts
+
+	MenuItemElementData MEGADAMAGE;
+	MEGADAMAGE.SelectTexture = ALL_TEXTURES->ALL_LOCAL_TEXTURES[Boosts_Buttons].PrivateTexture[0];
+	MEGADAMAGE.Direction.x = WIDTH / 5 - 100;
+	MEGADAMAGE.Direction.y = 200;
+	GetTextureDimensions(MEGADAMAGE.SelectTexture, &MEGADAMAGE.Direction.w, &MEGADAMAGE.Direction.h);
+	MEGADAMAGE.link = 1;
+	MEGADAMAGE.isactive = false;
+
+	MenuItemElementData SPEED;
+	SPEED.SelectTexture = ALL_TEXTURES->ALL_LOCAL_TEXTURES[Boosts_Buttons].PrivateTexture[1];
+	SPEED.Direction.x = 2 * WIDTH / 5 - 100;
+	SPEED.Direction.y = 200;
+	GetTextureDimensions(SPEED.SelectTexture, &SPEED.Direction.w, &SPEED.Direction.h);
+	SPEED.link = 2;
+	SPEED.isactive = false;
+
+	MenuItemElementData FLOOR_IS_LAVA;
+	FLOOR_IS_LAVA.SelectTexture = ALL_TEXTURES->ALL_LOCAL_TEXTURES[Boosts_Buttons].PrivateTexture[2];
+	FLOOR_IS_LAVA.Direction.x = 3 * WIDTH / 5 - 100;
+	FLOOR_IS_LAVA.Direction.y = 200;
+	GetTextureDimensions(FLOOR_IS_LAVA.SelectTexture, &FLOOR_IS_LAVA.Direction.w, &FLOOR_IS_LAVA.Direction.h);
+	FLOOR_IS_LAVA.link = 3;
+	FLOOR_IS_LAVA.isactive = false;
+
+	MenuItemElementData IMMUN;
+	IMMUN.SelectTexture = ALL_TEXTURES->ALL_LOCAL_TEXTURES[Boosts_Buttons].PrivateTexture[3];
+	IMMUN.Direction.x = 4 * WIDTH / 5 - 100;
+	IMMUN.Direction.y = 200;
+	GetTextureDimensions(IMMUN.SelectTexture, &IMMUN.Direction.w, &IMMUN.Direction.h);
+	IMMUN.link = 4;
+	IMMUN.isactive = false;
+
+	MenuItemElementData SPIN;
+	SPIN.SelectTexture = ALL_TEXTURES->ALL_LOCAL_TEXTURES[Boosts_Buttons].PrivateTexture[4];
+	SPIN.Direction.x = WIDTH / 2;
+	SPIN.Direction.y = 400;
+	GetTextureDimensions(SPIN.SelectTexture, &SPIN.Direction.w, &SPIN.Direction.h);
+	SPIN.link = 5;
+	SPIN.isactive = false;
+
+	pushMenuElement(&MainSaveBoost, MEGADAMAGE);
+	pushMenuElement(&MainSaveBoost, SPEED);
+	pushMenuElement(&MainSaveBoost, FLOOR_IS_LAVA);
+	pushMenuElement(&MainSaveBoost, IMMUN);
+	pushMenuElement(&MainSaveBoost, SPIN);
+
+#pragma endregion
+
+
+
 
 #pragma endregion
 #pragma region MainMenu
 #pragma region mainmenuregion
 
 	MenuItemElementData PlayGame;
-	PlayGame.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Play", { 120,120,120,255 }, 100, 100);
-	PlayGame.SelectTexture = CreateTextTexture(ren, Fonts[0], "Play", { 255,0,0,255 }, 100, 100);
+	PlayGame.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Play", { 120,120,120,255 }, 200, 100);
+	PlayGame.SelectTexture = CreateTextTexture(ren, Fonts[0], "Play", { 255,0,0,255 }, 200, 100);
 	GetTextureDimensions(PlayGame.SelectTexture, &PlayGame.Direction.w, &PlayGame.Direction.h);
 	PlayGame.Direction = { 100,300 - PlayGame.Direction.h,PlayGame.Direction.w,PlayGame.Direction.h };
 	PlayGame.link = startitem;
@@ -161,8 +239,8 @@ void MainMenuInit()
 	pushMenuElement(&MainMenuDrow, Information);
 
 	MenuItemElementData Exit;
-	Exit.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Exit", { 120,120,120,255 }, 100, 100);
-	Exit.SelectTexture = CreateTextTexture(ren, Fonts[0], "Exit", { 255,0,0,255 }, 100, 100);
+	Exit.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Exit", { 120,120,120,255 }, 200, 100);
+	Exit.SelectTexture = CreateTextTexture(ren, Fonts[0], "Exit", { 255,0,0,255 }, 200, 100);
 	GetTextureDimensions(Exit.SelectTexture, &Exit.Direction.w, &Exit.Direction.h);
 	Exit.Direction = { 100,700 - Exit.Direction.h,Exit.Direction.w,Exit.Direction.h };
 	Exit.link = exitsitem;
@@ -177,12 +255,64 @@ void MenuInit()
 	MainMenuInit();
 }
 
-void BoosterRoom()
-{
 
+
+void BoosterRoom(int& mod)
+{
+	char tmp[100];
+	SDL_Point mp;
+	const Uint8* kstate = SDL_GetKeyboardState(NULL);
+	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
+	for (MenuElemnt* cur = MainSaveBoost.Head; cur != nullptr; cur = cur->Next)
+		if (!isinPoint(mp, cur->Data.Direction))
+		{
+
+			if (cur->Data.isactive)
+				SDL_RenderCopy(ren, cur->Data.SelectTexture, NULL, &cur->Data.Direction);
+			else
+				renderTextureWithAlpha(cur->Data.SelectTexture, cur->Data.Direction.x, cur->Data.Direction.y);
+		}
+		else
+		{
+			SDL_RenderCopy(ren, cur->Data.SelectTexture, NULL, &cur->Data.Direction);
+			if (mstate & SDL_BUTTON(SDL_BUTTON_LEFT))
+			{
+				switch (cur->Data.link)
+				{
+				case -1:
+					strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
+					WavesProcessing(Save, tmp);
+					mod = 1;
+					break;
+				case 0:
+					Save.BSS.Last_Wave = 0;
+					mod = 1;
+					strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
+					WavesProcessing(Save,tmp);
+				case 1:
+					Save.BF.DAMAGEBOOST = !Save.BF.DAMAGEBOOST;
+					break;
+				case 2:
+					Save.BF.FLOOR_IS_LAVA = !Save.BF.FLOOR_IS_LAVA;
+					break;
+				case 3:
+					Save.BF.SPEED = !Save.BF.SPEED;
+					break;
+				case 4:
+					Save.BF.INV = !Save.BF.INV;
+					break;
+				case 5:
+					Save.BF.ORBIT_TRAECTORY = !Save.BF.ORBIT_TRAECTORY;
+					break;
+				default:
+					break;
+				}
+				cur->Data.isactive = !cur->Data.isactive;
+			}
+		}
 }
 
-void DrowMenu(bool &isrun,int &mod)
+void DrowMenu(bool& isrun, int& mod)
 {
 	char tmp[100];
 	SDL_Rect D = { 100, 100, WIDTH - 200, HEIGHT - 200 };
@@ -194,8 +324,8 @@ void DrowMenu(bool &isrun,int &mod)
 	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
 	SDL_RenderClear(ren);
 	SDL_RenderCopy(ren, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Menu_Background].PrivateTexture[0], NULL, NULL);
-		if (ALL_TEXTURES->ALL_LOCAL_TEXTURES[Menu_Background].PrivateTexture[0] == nullptr)
-			exit(-1);
+	if (ALL_TEXTURES->ALL_LOCAL_TEXTURES[Menu_Background].PrivateTexture[0] == nullptr)
+		exit(-1);
 	switch (menumod)
 	{
 	case 0:
@@ -233,7 +363,7 @@ void DrowMenu(bool &isrun,int &mod)
 		if (kstate[SDL_SCANCODE_ESCAPE]) menumod = 0;
 		break;
 	case 2:
-		SDL_SetRenderDrawColor(ren, WHITE.r/2, WHITE.g / 2, WHITE.b / 2, 255);
+		SDL_SetRenderDrawColor(ren, WHITE.r / 2, WHITE.g / 2, WHITE.b / 2, 255);
 		SDL_RenderFillRect(ren, &D);
 		for (MenuElemnt* cur = MainPlayDrow.Head; cur != nullptr; cur = cur->Next)
 			if (isinPoint(mp, cur->Data.Direction))
@@ -245,7 +375,7 @@ void DrowMenu(bool &isrun,int &mod)
 					{
 					case 0:
 						strcpy_s(tmp, "TextInformation/Save1.txt");
-						Save =DATASAVEGET(tmp);
+						Save = DATASAVEGET(tmp);
 						break;
 					case 1:
 						strcpy_s(tmp, "TextInformation/Save2.txt");
@@ -258,15 +388,15 @@ void DrowMenu(bool &isrun,int &mod)
 					default:
 						break;
 					}
-					mod = 1;
-					strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
-					WavesProcessing(Save,tmp);
+					menumod = 3;
 				}
 			}
 			else
 				SDL_RenderCopy(ren, cur->Data.NonSelectTexture, NULL, &cur->Data.Direction);
-			if (kstate[SDL_SCANCODE_ESCAPE]) menumod = 0;
+		if (kstate[SDL_SCANCODE_ESCAPE]) menumod = 0;
 		break;
+	case 3:
+		BoosterRoom(mod);
 	default:
 		break;
 	}

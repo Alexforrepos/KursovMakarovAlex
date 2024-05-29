@@ -220,6 +220,9 @@
     <ClInclude Include="Effects.h">
       <Filter>Исходные файлы\Utility\TextureProcessing\Effects</Filter>
     </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>Исходные файлы\gamemode\ShopMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="proba.png">

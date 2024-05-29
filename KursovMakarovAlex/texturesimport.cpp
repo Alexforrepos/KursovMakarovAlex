@@ -82,3 +82,23 @@ SDL_Rect GetTextureAllRect(SDL_Texture* texture,float scale)
 	GetTextureDimensions(texture, &width, &height);
 	return { 0,0,(int)(width * scale) ,(int)(height*scale) };
 }
+
+void renderTextureWithAlpha(SDL_Texture* texture, int x, int y)
+{
+	// Устанавливаем прозрачность текстуры
+	SDL_SetTextureAlphaMod(texture, 128); // Здесь 128 определяет прозрачность текстуры (от 0 до 255)
+
+	// Получаем ширину и высоту текстуры
+	int texW = 0;
+	int texH = 0;
+	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+
+	// Создаем прямоугольник для позиционирования текстуры
+	SDL_Rect dstRect = { x, y, texW, texH };
+
+	// Отрисовываем текстуру
+	SDL_RenderCopy(ren, texture, NULL, &dstRect);
+
+	// Сбрасываем уровень прозрачности до значения по умолчанию (255 - непрозрачный)
+	SDL_SetTextureAlphaMod(texture, 255);
+}

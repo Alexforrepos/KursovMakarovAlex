@@ -15,6 +15,7 @@
 #include "FileM.h"
 #include "Effects.h"
 #include "TextProcessing.h"
+#include "Shop.h"
 
 
 void InventoryScore(SDL_Texture* T[7], char buf1[], char buf2[], char buf3[], char buf4[])
@@ -95,16 +96,41 @@ void Score_Render(int &mode)
 		isred = 1;
 		strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
 		WavesProcessing(Save, tmp);
-		mode = 0;
+		mode = 2;
 	}
 }
-
 
 enum dirrectionsofhero
 {
 	LeftHero, RightHero, DownHero, UpHero, StayHero
 };
 
+void WALLS(int screenWidth, int screenHeight)
+{
+
+	SDL_SetRenderDrawColor(ren, 255, 223, 130, 255);
+	SDL_Rect screen = { 10, 10, screenWidth - 20, screenHeight - 20 };
+	SDL_RenderFillRect(ren, &screen);
+	
+
+	SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
+	SDL_Rect topWall = { 0, 0, screenWidth, 10 };
+	SDL_RenderFillRect(ren, &topWall);
+
+	SDL_Rect bottomWall = { 0, screenHeight - 10, screenWidth, 10 };
+	SDL_RenderFillRect(ren, &bottomWall);
+
+
+	SDL_Rect leftWall = { 0, 0, 10, screenHeight };
+	SDL_RenderFillRect(ren, &leftWall);
+
+
+	SDL_Rect rightWall = { screenWidth - 10, 0, 10, screenHeight };
+	SDL_RenderFillRect(ren, &rightWall);
+
+
+
+}
 void CreateProjectile(float alpha)
 {
 	SDL_Point mp;
@@ -120,6 +146,9 @@ void CreateProjectile(float alpha)
 
 void BulletsProc()
 {
+	SDL_Point mp;
+	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
+	SDL_FPoint p = { mp.x,mp.y };
 	bool ispooled = false;
 	static int dt = 0, lt = 0;
 	int ct = SDL_GetTicks();
@@ -135,11 +164,20 @@ void BulletsProc()
 		}
 		SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
 		cur->data.livetime -= ct - lt;
-		cur->data.drect.x += cos(cur->data.angle) * (double)cur->data.speed;
-		cur->data.drect.y += sin(cur->data.angle) * (double)cur->data.speed;
+		if (Save.BF.ORBIT_TRAECTORY)
+		{
+			cur->data.drect.x = Hero->dr.x + GetDistance(GetCenterPointOfRect(Hero->dr),p) * cos(cur->data.angle);
+			cur->data.drect.y = Hero->dr.y + GetDistance(GetCenterPointOfRect(Hero->dr), p) * sin(cur->data.angle);
+			cur->data.angle += ((float)cur->data.speed) / GetDistance(GetCenterPointOfRect(Hero->dr), p);
+		}
+		else
+		{
+			cur->data.drect.x += cos(cur->data.angle) * (double)cur->data.speed;
+			cur->data.drect.y += sin(cur->data.angle) * (double)cur->data.speed;
+		}
 		for (enemy* curenemy = Equeue.head; curenemy != nullptr; curenemy = curenemy->next)
 		{
-			if (isinRect(cur->data.drect, curenemy->data.dr))
+			if (SDL_HasIntersectionF(&cur->data.drect, &curenemy->data.dr))
 			{
 				curenemy->data.ishit = true;
 				curenemy->data.HP -= cur->data.damage;
@@ -234,6 +272,7 @@ void ItemProcess()
 		if (GetDistance(GetCenterPointOfRect(Hero->dr), GetCenterPointOfRect(cur->Data.Dr)) < 40)
 		{
 			ItemGet(cur);
+			Save.BSS.Score += 10 * Hero->ItemsInventory[2];
 			break;
 		}
 	}
@@ -252,7 +291,8 @@ void enemyprocess()
 			{
 				RemoveEnemyQ(Equeue, cur);
 				Hero->Money += 100;
-				
+				Save.BSS.Score += 100 *(1 +  Hero->ItemsInventory[mult]/10);
+				Hero->enemK += 1;
 				break;
 			}
 			ItemsFall(GetCenterPointOfRect(cur->data.dr));
@@ -320,7 +360,11 @@ void HeroMove()
 			ismove = 1;
 		}
 		if (!kstate[SDL_SCANCODE_D] && !kstate[SDL_SCANCODE_A] && !kstate[SDL_SCANCODE_S] && !kstate[SDL_SCANCODE_W])
+		{
 			ismove = 0;
+			if (Save.BF.FLOOR_IS_LAVA)
+				Hero->HP -= 10;
+		}
 		lt = ct;
 	}
 	SpleetAnimation(Hero->TEXTURES[Hero->isfliped ? Hero_Spleet_Animation_R - 2 : Hero_Spleet_Animation - 2], Hero->phaseofanimation, Hero->dr, true, ismove, Hero->Time);
@@ -335,11 +379,6 @@ void HP_RENDER()
 				ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].h }; // учитываем расстояние между сердечками
 			SDL_RenderCopy(ren, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].PrivateTexture[0], NULL, &destRect);
 		}
-}
-
-void MONEY_RENDER()
-{
-
 }
 
 
@@ -373,8 +412,7 @@ void Gamemode(int& mode)
 	switch (gamemode)
 	{
 	case 0:
-		SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
-		SDL_RenderClear(ren);
+		WALLS(WIDTH,HEIGHT);
 		HP_RENDER();
 
 		HeroMove();
@@ -395,11 +433,14 @@ void Gamemode(int& mode)
 			tmp_backgr = CaptureScreenTexture(ren);
 			gamemode = 1;
 		}
-
+		if (Save.BF.INV)
+			Hero->HP = 1000;
 		break;
 
 	case 1:
 		Score_Render(gamemode);
 		break;
+	case 2:
+		Shopmode(gamemode);
 	}
 }

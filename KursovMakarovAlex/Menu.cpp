@@ -184,6 +184,7 @@ void BoosterRoom()
 
 void DrowMenu(bool &isrun,int &mod)
 {
+	char tmp[100];
 	SDL_Rect D = { 100, 100, WIDTH - 200, HEIGHT - 200 };
 	SDL_Color WHITE = { 255,255,255,255 };
 	static int menumod = 0;
@@ -243,18 +244,23 @@ void DrowMenu(bool &isrun,int &mod)
 					switch (cur->Data.link)
 					{
 					case 0:
-						FileHeroGet("TextInformation/Save1.txt");
+						strcpy_s(tmp, "TextInformation/Save1.txt");
+						Save =DATASAVEGET(tmp);
 						break;
 					case 1:
-						FileHeroGet("TextInformation/Save2.txt");
+						strcpy_s(tmp, "TextInformation/Save2.txt");
+						Save = DATASAVEGET(tmp);
 						break;
 					case 2:
-						FileHeroGet("TextInformation/Save3.txt");
+						strcpy_s(tmp, "TextInformation/Save3.txt");
+						Save = DATASAVEGET(tmp);
 						break;
 					default:
 						break;
 					}
 					mod = 1;
+					strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
+					WavesProcessing(Save,tmp);
 				}
 			}
 			else

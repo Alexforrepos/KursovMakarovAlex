@@ -61,6 +61,7 @@ void HeroInit()
 	Hero->phaseofanimation = 1;
 	Hero->Time = { 0,0,0,1000 };	
 	Hero->dr = { 100,100,Hero->dr.h,Hero->dr.h };
+	Hero->enemK = 0;
 	HeroWeaponInit();
 	HeroIteminit();
 

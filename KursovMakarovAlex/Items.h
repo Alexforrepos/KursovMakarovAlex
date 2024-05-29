@@ -7,7 +7,7 @@ enum typeofitem
 };
 
 struct ItemData
-{
+{	
 	SDL_Texture* T;
 	typeofitem Type;
 	SDL_FRect Dr;

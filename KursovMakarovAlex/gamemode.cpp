@@ -14,6 +14,91 @@
 #include "Geometry.h"
 #include "FileM.h"
 #include "Effects.h"
+#include "TextProcessing.h"
+
+
+void InventoryScore(SDL_Texture* T[7], char buf1[], char buf2[], char buf3[], char buf4[])
+{
+	T[3] = CreateTextTexture(ren, Fonts[0], buf1, { 255,255,255,255 }, 600, 600);
+	T[4] = CreateTextTexture(ren, Fonts[0], buf2, { 255,255,255,255 }, 600, 600);
+	T[5] = CreateTextTexture(ren, Fonts[0], buf3, { 255,255,255,255 }, 600, 600);
+	T[6] = CreateTextTexture(ren, Fonts[0], buf4, { 255,255,255,255 }, 600, 600);
+}
+
+void InitTexturesForRenderForScore(SDL_Texture* T[7], char buf1[], char buf2[], char buf3[])
+{
+	T[0] = CreateTextTexture(ren, Fonts[0], buf1, { 255,255,255,255 }, 400, 400);
+	T[1] = CreateTextTexture(ren, Fonts[0], buf2, { 255,255,255,255 }, 400, 400);
+	T[2] = CreateTextTexture(ren, Fonts[0], buf3, { 255,255,255,255 }, 400, 400); 
+}
+
+void Score_Render(int &mode)
+{
+	static int lt = SDL_GetTicks();
+	int ct = SDL_GetTicks();
+	const Uint8* kstate = SDL_GetKeyboardState(NULL);
+	char tmp[100];
+	static SDL_Texture* Ts[7];
+	static bool isred = true;
+	SDL_SetRenderDrawColor(ren, 255, 255, 255,255);
+	SDL_RenderClear(ren);
+	SDL_Rect R = { 100,100,1700,800 };
+	SDL_RenderCopy(ren, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Menu_Background].PrivateTexture[1], NULL, &R);
+	char buffforQE[50], buffforMoney[50], bufforscore[50];
+	sprintf_s(buffforQE, "Enemies Killed: %d",Hero->enemK);
+	sprintf_s(bufforscore, "Score Get: %d",Save.BSS.Score);
+	sprintf_s(buffforMoney, "Money Gain: %d",Hero->Money);
+
+	char buffforInvDamage[50], buffforInvSpeed[50], bufforInvScore[50], buffforRate[50];
+	sprintf_s(buffforInvDamage, "Damage MULT: %.2f", 1 + Hero->ItemsInventory[0] / 10.0);
+	sprintf_s(buffforInvSpeed, "Speed MULT: %.2f", 1 + Hero->ItemsInventory[1] / 10.0);
+	sprintf_s(bufforInvScore, "Score MULT: %.2f", 1 + Hero->ItemsInventory[2] / 10.0);
+	sprintf_s(buffforRate, "FireRate MULT: %.2f", 1+Hero->ItemsInventory[3]/10.0);
+	static SDL_Rect QERCT;
+	static SDL_Rect InvDmgR;
+	static SDL_Rect SRCT;
+	static SDL_Rect InvSpeedR;
+	static SDL_Rect MRECT;
+	static SDL_Rect InvScoreR;
+	static SDL_Rect InvFRR;
+
+	if (isred)
+	{
+		InitTexturesForRenderForScore(Ts, buffforQE, bufforscore, buffforMoney);
+		InventoryScore(Ts, buffforInvDamage, buffforInvSpeed, bufforInvScore, buffforRate);
+		isred = false;
+		lt = SDL_GetTicks();
+		 QERCT = GetTextureAllRect(Ts[0], 1); QERCT = { R.x + 100,R.y + 100, QERCT.w ,QERCT.h  };
+		 SRCT = GetTextureAllRect(Ts[1], 1);	SRCT = { QERCT.x,QERCT.y + QERCT.h + 50,SRCT.w ,SRCT.h  };
+		 MRECT = GetTextureAllRect(Ts[2], 1);	MRECT = { SRCT.x,SRCT.y + SRCT.h + 50,MRECT.w ,MRECT.h  };
+
+		 InvFRR = GetTextureAllRect(Ts[3], 1);	InvFRR = { QERCT.x + QERCT.w + 50,R.y + 100,InvFRR.w ,InvFRR.h  };
+		 InvScoreR = GetTextureAllRect(Ts[4], 1);	InvScoreR = { QERCT.x + SRCT.w + 50,QERCT.y + QERCT.h + 50,InvScoreR.w ,InvScoreR.h  };
+		 InvSpeedR = GetTextureAllRect(Ts[5], 1);	InvSpeedR = { QERCT.x + MRECT.w + 50,SRCT.y + SRCT.h + 50,InvSpeedR.w ,InvSpeedR.h  };
+		 InvDmgR = GetTextureAllRect(Ts[6], 1);	InvDmgR = { QERCT.x + QERCT.w,InvSpeedR.y + InvSpeedR.h + 50,InvDmgR.w ,InvDmgR.h  };
+
+	}
+
+	SDL_RenderCopy(ren, Ts[0], NULL, &QERCT);
+	SDL_RenderCopy(ren, Ts[1], NULL, &SRCT);
+	SDL_RenderCopy(ren, Ts[2], NULL, &MRECT);
+	SDL_RenderCopy(ren, Ts[3], NULL, &InvFRR);
+	SDL_RenderCopy(ren, Ts[4], NULL, &InvScoreR);
+	SDL_RenderCopy(ren, Ts[5], NULL, &InvSpeedR);
+	SDL_RenderCopy(ren, Ts[6], NULL, &InvDmgR);
+	
+	if (ct - lt > 10000)
+	{
+		SDL_DestroyTexture(Ts[0]);
+		SDL_DestroyTexture(Ts[1]);
+		SDL_DestroyTexture(Ts[2]);
+		isred = 1;
+		strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
+		WavesProcessing(Save, tmp);
+		mode = 0;
+	}
+}
+
 
 enum dirrectionsofhero
 {
@@ -166,7 +251,8 @@ void enemyprocess()
 			if (N == nullptr)
 			{
 				RemoveEnemyQ(Equeue, cur);
-				Hero->Money += 999;
+				Hero->Money += 100;
+				
 				break;
 			}
 			ItemsFall(GetCenterPointOfRect(cur->data.dr));
@@ -180,63 +266,14 @@ void enemyprocess()
 	}
 }
 
-void ShopMode(SDL_Texture* bacgr, int& gamemode, int& mode)
-{
-	SDL_Point mp;
-	const Uint8* kstate = SDL_GetKeyboardState(NULL);
-	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
-	SDL_FPoint p = { mp.x,mp.y };
-
-
-	SDL_SetRenderDrawColor(ren, 120, 0, 255, 255);
-	SDL_RenderClear(ren);
-
-	SDL_Rect LeftRect = { 0,0,WIDTH / 2,HEIGHT };
-	SDL_Rect RightRect = { WIDTH / 2,0,WIDTH / 2,HEIGHT };
-
-	SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
-	SDL_RenderFillRect(ren, &LeftRect);
-	SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
-	SDL_RenderFillRect(ren, &RightRect);
-
-
-	if (isinPoint(mp, LeftRect))
-	{
-		if (mstate && SDL_BUTTON(SDL_BUTTON_LEFT))
-		{
-			Hero->Money -= 200 * (1 + ItemSumm() / 10);
-			Hero->HP += 200;
-			gamemode = 0;
-			FileEnemyQGet(mode);
-		}
-	}
-	else
-	{
-		if (mstate && SDL_BUTTON(SDL_BUTTON_LEFT))
-		{
-			Hero->Money -= 200 * (1 + ItemSumm() / 10);
-			for (int i = 0; i < 4; i++)
-			{
-				if (!Hero->W[i].enabled)
-				{
-					Hero->W[i].enabled = !Hero->W[i].enabled;
-					return;
-				}
-			}
-			gamemode = 0;
-			FileEnemyQGet(mode);
-		}
-	}
-}
 
 void HeroMove()
 {
-
 	SDL_Point mp;
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
 	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
-	bool ismirored = false;
-	bool ismove = false;
+	bool ismirrored = false;
+	static int ismove = 0;
 	static int lastx = 0, lasty = 0;
 	int speed = 10;
 
@@ -247,7 +284,6 @@ void HeroMove()
 		Hero->isfliped = true;
 	else
 		Hero->isfliped = false;
-
 
 	if (!isinRect(Hero->dr, { 0,0,(float)WIDTH,(float)HEIGHT })) {
 		Hero->dr = { (float)lastx,(float)lasty,Hero->dr.w,Hero->dr.h };
@@ -260,44 +296,43 @@ void HeroMove()
 		if (Hero->dr.y + Hero->dr.h > HEIGHT)
 			Hero->dr.y = HEIGHT - Hero->dr.h;
 	}
-
+	ismove = 0;
 	if (ct - lt > 1000 / 24)
 	{
-
 		if (kstate[SDL_SCANCODE_W] && !kstate[SDL_SCANCODE_S])
 		{
 			Hero->dr.y -= speed * (1 + Hero->ItemsInventory[speedboost] / 10.0);
-			ismove = true;
+			ismove = 1;
 		}
-
 		if (kstate[SDL_SCANCODE_S] && !kstate[SDL_SCANCODE_W])
 		{
 			Hero->dr.y += speed * (1 + Hero->ItemsInventory[speedboost] / 10.0);
-			ismove = true;
+			ismove = 1;
 		}
-
 		if (kstate[SDL_SCANCODE_A] && !kstate[SDL_SCANCODE_D])
 		{
 			Hero->dr.x -= speed * (1 + Hero->ItemsInventory[speedboost] / 10.0);
-			ismove = true;
+			ismove = 1;
 		}
-
 		if (kstate[SDL_SCANCODE_D] && !kstate[SDL_SCANCODE_A])
 		{
 			Hero->dr.x += speed * (1 + Hero->ItemsInventory[speedboost] / 10.0);
-			ismove = true;
+			ismove = 1;
 		}
+		if (!kstate[SDL_SCANCODE_D] && !kstate[SDL_SCANCODE_A] && !kstate[SDL_SCANCODE_S] && !kstate[SDL_SCANCODE_W])
+			ismove = 0;
 		lt = ct;
 	}
-	SpleetAnimation(Hero->TEXTURES[Hero->isfliped ? Hero_Spleet_Animation_R - 2 : Hero_Spleet_Animation -2], Hero->phaseofanimation, Hero->dr, true, !ismove, Hero->Time);
+	SpleetAnimation(Hero->TEXTURES[Hero->isfliped ? Hero_Spleet_Animation_R - 2 : Hero_Spleet_Animation - 2], Hero->phaseofanimation, Hero->dr, true, ismove, Hero->Time);
 }
 
 void HP_RENDER()
 {
-		int numHearts = Hero->HP > 10 ? Hero->HP / 10 : 0 ; 
+		int numHearts =  Hero->HP / 100 ; 
 		for (int i = 0; i < numHearts; ++i)
 		{
-			SDL_Rect destRect = { 20 + i * (ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w  + 10), 20, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].h }; // учитываем расстояние между сердечками
+			SDL_Rect destRect = { 20 + i * (ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w  + 10), 20,
+				ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].h }; // учитываем расстояние между сердечками
 			SDL_RenderCopy(ren, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].PrivateTexture[0], NULL, &destRect);
 		}
 }
@@ -315,7 +350,7 @@ void Gamemode(int& mode)
 	int ct = SDL_GetTicks(), FPS = 24;
 	static SDL_Texture* tmp_backgr = nullptr;
 	static int gamemode = 0;
-
+	
 	dt += ct - lt;
 	lt = ct;
 	Hero->dr = { Hero->dr.x,Hero->dr.y,(float)Hero->TEXTURES[Hero->isfliped ? Hero_Spleet_Animation_R - 2 : Hero_Spleet_Animation - 2]->SR[Hero->phaseofanimation].w,(float)Hero->TEXTURES[Hero->isfliped ? Hero_Spleet_Animation_R - 2 : Hero_Spleet_Animation - 2]->SR[Hero->phaseofanimation].h };
@@ -350,7 +385,7 @@ void Gamemode(int& mode)
 		if (kstate[SDL_SCANCODE_ESCAPE])
 		{
 			Hero->dr = { 0, 0, Hero->dr.w, Hero->dr.h };
-			FileHeroStatsSave(currentsave);
+			DataSave(Save, LastFileSaveUsed);
 			mode = 0;
 		}
 
@@ -364,7 +399,7 @@ void Gamemode(int& mode)
 		break;
 
 	case 1:
-		ShopMode(tmp_backgr, gamemode, mode);
+		Score_Render(gamemode);
 		break;
 	}
 }

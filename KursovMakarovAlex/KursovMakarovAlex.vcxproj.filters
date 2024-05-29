@@ -79,6 +79,9 @@
     <Filter Include="Исходные файлы\Utility\TextureProcessing\Effects">
       <UniqueIdentifier>{5d25aab5-87f0-46e3-b512-59532938daa7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\gamemode\ShopMode">
+      <UniqueIdentifier>{01e537e2-2927-422a-909d-d7a32f7c0e6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KursovMakarovAlex.cpp">
@@ -128,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="Effects.cpp">
       <Filter>Исходные файлы\Utility\TextureProcessing\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>Исходные файлы\gamemode\ShopMode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

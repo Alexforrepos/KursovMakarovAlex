@@ -39,6 +39,7 @@ struct player
 
 
 	int ItemsInventory[4] = { 0 }; // גסו ןנוהלועû 
+	int enemK = 0;
 };
 
 

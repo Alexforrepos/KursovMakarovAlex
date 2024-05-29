@@ -3,6 +3,7 @@
 #include "Items.h"
 #include "Hero.h"
 #include "SDLProcessing.h"
+#include "All_TextureInit.h"
 
 #define BULL {}
 #define FALLCHANCE 100
@@ -124,24 +125,8 @@ void ItemRender(ItemDeq* Deq)
 		Item* cur = Deq->Head;
 		while (cur != nullptr)
 		{
-			switch (cur->Data.Type) {
-			case 0:
-				SDL_SetRenderDrawColor(ren, 99, 0, 120, 255);
-				break;
-			case 1:
-				SDL_SetRenderDrawColor(ren, 99, 255, 120, 255);
-				break;
-			case 3:
-				SDL_SetRenderDrawColor(ren, 255, 123, 120, 255);
-				break;
-			case 4:
-				SDL_SetRenderDrawColor(ren, 99, 255, 255, 255);
-				break;
-			default:
-				SDL_SetRenderDrawColor(ren, 85, 78, 99, 255);
-				break;
-			}
-			SDL_RenderDrawRectF(ren, &cur->Data.Dr);
+			
+			SDL_RenderCopyF(ren, cur->Data.T,NULL,&cur->Data.Dr);
 			cur = cur->Next;
 		}
 	}
@@ -149,7 +134,19 @@ void ItemRender(ItemDeq* Deq)
 
 void CreateItem(typeofitem model, SDL_FPoint p)
 {
-	addItem(IDeq, { nullptr ,model ,{ p.x,p.y,20,20 } }); // добавить текстуру
+	int m = 0;
+	if (model == 0)
+		m = 2;
+	else
+		if (model == 1)
+			m = 3;
+		else
+			if (model == 2)
+				m = 0;
+			else
+				m = 3;
+
+	addItem(IDeq, { ALL_TEXTURES->ALL_LOCAL_TEXTURES[Items_Textures].PrivateTexture[m] ,model ,{p.x,p.y,40,40}}); 
 }
 
 void ItemsFall(SDL_FPoint p)

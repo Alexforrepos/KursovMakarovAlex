@@ -145,6 +145,7 @@
     <ClCompile Include="Geomery.cpp" />
     <ClCompile Include="projectile.cpp" />
     <ClCompile Include="Effects.cpp" />
+    <ClCompile Include="Shop.cpp" />
     <ClCompile Include="SpleetProcessing.cpp" />
     <ClCompile Include="TextProcessing.cpp" />
     <ClCompile Include="texturesimport.cpp" />

@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL.h>
-#define SIZEOFALLTEXTURE 16
+#define SIZEOFALLTEXTURE 17
 
 struct TimeStruct
 {
@@ -45,14 +45,15 @@ enum TextureType
 	Menu_Background,
 	Shot_Effect,
 	Bullet,
-	Icons
+	Icons,
+	Items_Textures
 };
 
 enum SpleetAnimTexturesBoarders
 {
 	BeginOfStay = 1,
-	EndOfStay = 8,
-	BeginOfRun = 8,
+	EndOfStay = 9,
+	BeginOfRun = 9,
 	EndOfRun = 18
 };
 

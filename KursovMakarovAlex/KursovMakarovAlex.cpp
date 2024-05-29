@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <string.h>
 #include "texturesimport.h"
 #include "TextProcessing.h"
 #include "SDLProcessing.h"
@@ -20,6 +21,7 @@ enum mode
 
 int main(int argc, char* argv[])
 {
+	char tmps[100];
 	system("chcp 1251 > 0");
 	srand(time(NULL));
 	Init();
@@ -34,8 +36,14 @@ int main(int argc, char* argv[])
 	MenuInit();
 	HeroInit();
 	IdeqInit();
-	FileEnemyQGet(mode);
 	EffQuue = CreateEffectQueue();
+	SAVEDATAS tmp = { {0,0,0},{0,0,0,0,0} };
+	strcpy_s(tmps, "TextInformation/Save1.txt");
+	DataSave(tmp, tmps);
+	strcpy_s(tmps, "TextInformation/Save2.txt");
+	DataSave(tmp, tmps);
+	strcpy_s(tmps, "TextInformation/Save3.txt");
+	DataSave(tmp, tmps);
 	while (isrunning)
 	{
 #pragma region event
@@ -75,9 +83,7 @@ int main(int argc, char* argv[])
 		}
 		SDL_RenderPresent(ren);
 	}
-	FileHeroStatsSave("TextInformation/Save1.txt");
-	FileHeroStatsSave("TextInformation/Save2.txt");
-	FileHeroStatsSave("TextInformation/Save3.txt");
+
 	DeinitIDeq();
 	CloseFonts();
 	Deinit(0);

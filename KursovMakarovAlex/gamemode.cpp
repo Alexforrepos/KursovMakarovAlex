@@ -18,6 +18,8 @@
 #include "Shop.h"
 
 
+
+
 void InventoryScore(SDL_Texture* T[7], char buf1[], char buf2[], char buf3[], char buf4[])
 {
 	T[3] = CreateTextTexture(ren, Fonts[0], buf1, { 255,255,255,255 }, 600, 600);
@@ -41,20 +43,23 @@ void Score_Render(int &mode)
 	char tmp[100];
 	static SDL_Texture* Ts[7];
 	static bool isred = true;
-	SDL_SetRenderDrawColor(ren, 255, 255, 255,255);
+	SDL_SetRenderDrawColor(ren, 120, 120, 120,255);
 	SDL_RenderClear(ren);
 	SDL_Rect R = { 100,100,1700,800 };
 	SDL_RenderCopy(ren, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Menu_Background].PrivateTexture[1], NULL, &R);
 	char buffforQE[50], buffforMoney[50], bufforscore[50];
+
 	sprintf_s(buffforQE, "Enemies Killed: %d",Hero->enemK);
 	sprintf_s(bufforscore, "Score Get: %d",Save.BSS.Score);
 	sprintf_s(buffforMoney, "Money Gain: %d",Hero->Money);
 
 	char buffforInvDamage[50], buffforInvSpeed[50], bufforInvScore[50], buffforRate[50];
+
 	sprintf_s(buffforInvDamage, "Damage MULT: %.2f", 1 + Hero->ItemsInventory[0] / 10.0);
 	sprintf_s(buffforInvSpeed, "Speed MULT: %.2f", 1 + Hero->ItemsInventory[1] / 10.0);
 	sprintf_s(bufforInvScore, "Score MULT: %.2f", 1 + Hero->ItemsInventory[2] / 10.0);
 	sprintf_s(buffforRate, "FireRate MULT: %.2f", 1+Hero->ItemsInventory[3]/10.0);
+
 	static SDL_Rect QERCT;
 	static SDL_Rect InvDmgR;
 	static SDL_Rect SRCT;
@@ -93,10 +98,36 @@ void Score_Render(int &mode)
 		SDL_DestroyTexture(Ts[0]);
 		SDL_DestroyTexture(Ts[1]);
 		SDL_DestroyTexture(Ts[2]);
+		SDL_DestroyTexture(Ts[3]);
+		SDL_DestroyTexture(Ts[4]);
+		SDL_DestroyTexture(Ts[5]);
+		SDL_DestroyTexture(Ts[6]);
 		isred = 1;
 		strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
 		WavesProcessing(Save, tmp);
 		mode = 2;
+	}
+}
+
+void Death(int &mode)
+{
+	static bool newran = false;
+	if (newran)
+		newran = false;
+	int ct = SDL_GetTicks();
+	static int lt = SDL_GetTicks();
+	Score_Render(mode);
+	char tmp[100] = "You Are Dead";
+	static SDL_Texture * T = CreateTextTexture(ren, Fonts[0], tmp, { 255,255,255,255 }, 400, 200);
+	int w, h;
+	GetTextureDimensions(T, &w, &h);
+	static SDL_Rect Dr = { WIDTH / 2,50,w,h };
+	SDL_RenderCopy(ren, T, NULL, &Dr);
+	if (ct - lt > 10000 && !newran)
+	{
+		mode = 0;
+		Save.BSS.is_running = 0;
+		newran = true;
 	}
 }
 
@@ -131,6 +162,7 @@ void WALLS(int screenWidth, int screenHeight)
 
 
 }
+
 void CreateProjectile(float alpha)
 {
 	SDL_Point mp;
@@ -205,12 +237,52 @@ void ShotgunShoot()
 	CreateProjectile(GetAlpha(GetCenterPointOfRect(Hero->dr), p) - M_PI / 6);
 }
 
+
+
+void DrawAndShootLaser(int startX, int startY, int length, int height, float angle, int lineWidth) {
+	SDL_SetRenderDrawColor(ren, 255, 0, 0, 255); // Устанавливаем цвет лазерного луча
+	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND); // Устанавливаем режим наложения для управления толщиной линии
+
+
+	// Рассчитываем координаты конечной точки лазерного луча
+	int endX = startX + length * cos(angle);
+	int endY = startY + length * sin(angle);
+
+	// Устанавливаем толщину линии
+	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
+	SDL_RenderDrawLine(ren, startX, startY, endX, endY);
+
+	// "Выстрел" лазером (можно добавить дополнительные эффекты или действия)
+}
+
+bool CheckLaserRectangleIntersection(int startX, int startY, float angle, int length, const SDL_FRect& rect) {
+	float radianAngle = angle;
+
+	// Вычисляем координаты конечной точки луча
+	int endX = startX + static_cast<int>(length * cos(radianAngle));
+	int endY = startY + static_cast<int>(length * sin(radianAngle));
+
+	// Проверяем пересечение луча и прямоугольника
+	// Проверяем пересечение с левой, правой, верхней и нижней сторонами прямоугольника
+	if ((startX <= static_cast<int>(rect.x + rect.w) && endX >= static_cast<int>(rect.x) &&
+		startY <= static_cast<int>(rect.y + rect.h) && endY >= static_cast<int>(rect.y)) ||
+		(startX >= static_cast<int>(rect.x) && endX <= static_cast<int>(rect.x + rect.w) &&
+			startY <= static_cast<int>(rect.y) && endY >= static_cast<int>(rect.y))) {
+		// Произошло пересечение
+		return true;
+	}
+
+	return false;
+}
+
+
 void HeroShot()
 {
 
 	SDL_Point mp;
 	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
 	SDL_FPoint p = { mp.x,mp.y };
+	enemy* cur = Equeue.head;
 #pragma region timeofHeroshot
 	static int dt = 0, lt = 0;
 	int ct = SDL_GetTicks();
@@ -231,6 +303,20 @@ void HeroShot()
 		case 1:
 			ShotgunShoot();
 			break;
+		case 2:
+			CreateProjectile(GetAlpha(GetCenterPointOfRect(Hero->dr), p));
+			break;
+		case 3:
+			DrawAndShootLaser(Hero->dr.x + Hero->dr.w / 2, Hero->dr.y + Hero->dr.h / 2, 4000, 10, GetAlpha({ Hero->dr.x + Hero->dr.w / 2, Hero->dr.y + Hero->dr.h / 2 }, p), 10);
+
+			while (cur != nullptr)
+			{
+				if (CheckLaserRectangleIntersection(Hero->dr.x + Hero->dr.w / 2, Hero->dr.y + Hero->dr.h / 2, GetAlpha({ Hero->dr.x + Hero->dr.w / 2, Hero->dr.y + Hero->dr.h / 2 }, p) , 1, cur->data.dr))
+				{
+					cur->data.HP -= Hero->W[3].damage + (1 + Hero->ItemsInventory[1] / 10);
+				}
+				cur = cur->next;
+			}
 		default:
 			break;
 		}
@@ -244,7 +330,8 @@ void HeroShot()
 		Hero->W[Hero->currentWeapon].cd -= ct - lt;
 	}
 	lt = ct;
-	SDL_RenderCopyExF(ren, Hero->W[Hero->currentWeapon].T, &Hero->W[Hero->currentWeapon].cr, &Hero->W[Hero->currentWeapon].dr, !Hero->isfliped ? GetAlpha(p, GetCenterPointOfRect(Hero->dr)) * 180 / M_PI : GetAlpha(p, GetCenterPointOfRect(Hero->dr)) * 180 / M_PI - 180, NULL, !Hero->isfliped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+	SDL_RenderCopyExF(ren, Hero->W[Hero->currentWeapon].T, &Hero->W[Hero->currentWeapon].cr, &Hero->W[Hero->currentWeapon].dr, 
+		!Hero->isfliped ? GetAlpha(p, GetCenterPointOfRect(Hero->dr)) * 180 / M_PI : GetAlpha(p, GetCenterPointOfRect(Hero->dr)) * 180 / M_PI - 180, NULL, !Hero->isfliped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
 void EffectsProc()
@@ -291,10 +378,13 @@ void enemyprocess()
 			{
 				RemoveEnemyQ(Equeue, cur);
 				Hero->Money += 100;
-				Save.BSS.Score += 100 *(1 +  Hero->ItemsInventory[mult]/10);
+				Save.BSS.Score += 100 * (1 + Hero->ItemsInventory[mult] / 10);
 				Hero->enemK += 1;
 				break;
 			}
+			Hero->Money += 100;
+			Save.BSS.Score += 100 * (1 + Hero->ItemsInventory[mult] / 10);
+			Hero->enemK += 1;
 			ItemsFall(GetCenterPointOfRect(cur->data.dr));
 			RemoveEnemyQ(Equeue, cur);
 			cur = N;
@@ -306,7 +396,6 @@ void enemyprocess()
 	}
 }
 
-
 void HeroMove()
 {
 	SDL_Point mp;
@@ -315,7 +404,7 @@ void HeroMove()
 	bool ismirrored = false;
 	static int ismove = 0;
 	static int lastx = 0, lasty = 0;
-	int speed = 10;
+	static int speed = Save.BF.SPEED?100: 10;
 
 	int ct = SDL_GetTicks();
 	static int lt = ct;
@@ -381,7 +470,6 @@ void HP_RENDER()
 		}
 }
 
-
 void Gamemode(int& mode)
 {
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
@@ -432,7 +520,11 @@ void Gamemode(int& mode)
 			ClearItem(IDeq);
 			tmp_backgr = CaptureScreenTexture(ren);
 			gamemode = 1;
+			Hero->dr.x = WIDTH / 2;
+			Hero->dr.h = HEIGHT - 100;
 		}
+		if (Hero->HP <= 0)
+			gamemode = 3;
 		if (Save.BF.INV)
 			Hero->HP = 1000;
 		break;
@@ -442,5 +534,8 @@ void Gamemode(int& mode)
 		break;
 	case 2:
 		Shopmode(gamemode);
+		break;
+	case 3:
+		Death(mode);
 	}
 }

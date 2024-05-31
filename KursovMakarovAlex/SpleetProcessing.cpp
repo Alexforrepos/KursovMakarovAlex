@@ -47,10 +47,6 @@ void SpleetAnimation(LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures, int& currentstag, 
 		{
 			Dr.y += (Textures->SR[currentstag - 1].h - Textures->SR[currentstag].h);
 		}
-		/* else if (Textures->SR[currentstag].h > Textures->SR[currentstag - 1].h)
-		 {
-			 Dr.y -= (Textures->SR[currentstag].h - Textures->SR[currentstag - 1].h);
-		 }*/
 
 		Dr.w = (float)Textures->SR[currentstag].w;
 		Dr.h = (float)Textures->SR[currentstag].h;
@@ -75,12 +71,12 @@ void SpleetAnimation(LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures, int& currentstag, 
 	selftime.dt += ct - selftime.lt;
 }
 
-void DeathAnimation(LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures, SDL_FRect Dr, bool ismirored)
-{
-	if (Textures->LocalLen < 5)
-		return;
-	if (Textures == nullptr && Textures->PrivateTexture[0] == nullptr)
-		return;
-	SDL_RenderCopyExF(ren, Textures->PrivateTexture[0], &Textures->SR[0], &Dr, NULL, NULL,
-		ismirored ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-}
+//void DeathAnimation(LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures, SDL_FRect Dr, bool ismirored)
+//{
+//	if (Textures->LocalLen < 5)
+//		return;
+//	if (Textures == nullptr && Textures->PrivateTexture[0] == nullptr)
+//		return;
+//	SDL_RenderCopyExF(ren, Textures->PrivateTexture[0], &Textures->SR[0], &Dr, NULL, NULL,
+//		ismirored ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+//}

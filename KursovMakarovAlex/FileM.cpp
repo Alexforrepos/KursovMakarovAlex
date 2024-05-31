@@ -24,19 +24,19 @@ SAVEDATAS DATASAVEGET(char Domen[100])
 	}
 	SAVEDATAS LOCAL_SAVEDATA;
 	fscanf_s(F, "%i %i", &LOCAL_SAVEDATA.BSS.is_running, &LOCAL_SAVEDATA.BSS.Score);
-	if (!(LOCAL_SAVEDATA.BSS.is_running || LOCAL_SAVEDATA.BSS.Score)) // так как иггра не была запущена он возвращает 0 - SAVE + проверка на score а вдруг было запущено и даже рекорд есть
+	if (!(LOCAL_SAVEDATA.BSS.is_running || LOCAL_SAVEDATA.BSS.Score)) // так как иггра не была запущена он возвращает 0 - SAVE + проверка на score 
 	{
 		LOCAL_SAVEDATA.BSS = { 0,0,0 };
 		LOCAL_SAVEDATA.BF = { 0,0,0,0,0 };
 		return LOCAL_SAVEDATA;
 	}
 
-	fscanf(F, "%i %i", &LOCAL_SAVEDATA.BSS.in_shop, &LOCAL_SAVEDATA.BSS.Last_Wave);
-
+	fscanf(F, "%i",  &LOCAL_SAVEDATA.BSS.Last_Wave);
 	fscanf(F, "%i %i %i %i %i", &LOCAL_SAVEDATA.BF.DAMAGEBOOST, &LOCAL_SAVEDATA.BF.FLOOR_IS_LAVA, &LOCAL_SAVEDATA.BF.INV
 		, &LOCAL_SAVEDATA.BF.ORBIT_TRAECTORY, &LOCAL_SAVEDATA.BF.SPEED);
 	fscanf_s(F, "%i %i\n", &Hero->Money, &Hero->HP);
 	fscanf_s(F, "%i %i %i %i\n", &Hero->ItemsInventory[0], &Hero->ItemsInventory[1], &Hero->ItemsInventory[2], &Hero->ItemsInventory[3]);
+	fscanf_s(F, "%i %i %i %i\n", &Hero->W[0].isanable, &Hero->W[1].isanable, &Hero->W[2].isanable, &Hero->W[3].isanable);
 	strcpy(LastFileSaveUsed, Domen);
 	fclose(F);
 	return LOCAL_SAVEDATA;
@@ -62,15 +62,16 @@ void DataSave(SAVEDATAS Save, char Destination[100])
 	}
 	else
 	{
-		fprintf(F, "\n%d %d\n", Save.BSS.in_shop, Save.BSS.Last_Wave);
+		fprintf(F, "\n%d\n", Save.BSS.Last_Wave);
 		fprintf(F, "%d %d %d %d %d\n", Save.BF.DAMAGEBOOST, Save.BF.FLOOR_IS_LAVA, Save.BF.INV, Save.BF.ORBIT_TRAECTORY, Save.BF.SPEED);
 		fprintf(F, "%i %i\n", Hero->Money, Hero->HP);
 		fprintf(F, "%i %i %i %i\n", Hero->ItemsInventory[0], Hero->ItemsInventory[1], Hero->ItemsInventory[2], Hero->ItemsInventory[3]);
+		fprintf(F, "%i %i %i %i\n", Hero->W[0].isanable, Hero->W[1].isanable, Hero->W[2].isanable, Hero->W[3].isanable);
 	}
 	fclose(F);
 }
 
-void WavesProcessing(SAVEDATAS& CURSAVE, char Domen[100])
+int WavesProcessing(SAVEDATAS& CURSAVE, char Domen[100])
 {
 	int Enem_Q;
 	int tmpmpdel;
@@ -88,6 +89,10 @@ void WavesProcessing(SAVEDATAS& CURSAVE, char Domen[100])
 	}
 
 	fseek(F, CURSAVE.BSS.Last_Wave, SEEK_SET);
+	if (feof(F))
+	{
+		return 0;
+	}
 	fscanf_s(F, "%i", &Enem_Q);
 
 	for (int i = 0; i < Enem_Q; i++)
@@ -97,6 +102,7 @@ void WavesProcessing(SAVEDATAS& CURSAVE, char Domen[100])
 	}
 	CURSAVE.BSS.Last_Wave = ftell(F);
 	fclose(F);
+	return 1;
 }
 
 

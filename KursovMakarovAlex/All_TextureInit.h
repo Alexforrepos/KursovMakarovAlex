@@ -48,7 +48,8 @@ enum TextureType
 	Icons,
 	Items_Textures,
 	Button_Textures,
-	Boosts_Buttons
+	Boosts_Buttons,
+	Lazer
 };
 
 enum SpleetAnimTexturesBoarders

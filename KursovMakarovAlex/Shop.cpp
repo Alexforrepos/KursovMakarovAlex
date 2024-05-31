@@ -70,6 +70,11 @@ void Shopmode(int& mode)
 
 	SDL_SetRenderDrawColor(ren, 120, 120, 120, 255);
 	SDL_RenderClear(ren);
+	{
+		Hero->dr = { 0, 0, Hero->dr.w, Hero->dr.h };
+		DataSave(Save, LastFileSaveUsed);
+		mode = 0;
+	}
 	HP_RENDER();
 	HeroMove();
 	Button_Ren(mode);

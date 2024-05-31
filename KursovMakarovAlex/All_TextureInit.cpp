@@ -138,10 +138,12 @@ void InitALLTEXTURES()
         {"textures/icons/health.png"},
         {"textures/icons/Items/part_atkspd2multicount.png","textures/icons/Items/part_crit_rate.png","textures/icons/Items/part_fragment_move_speed #325249.png","textures/icons/Items/part_melee_range.png" },
         {"textures/effects/button/healingbox.png","textures/effects/button/mall_button_1 #476568.png"},
-        {"textures/icons/boosts/ATKS.png","textures/icons/boosts/level_buff_fire_breath.png","textures/icons/boosts/SPEED.png","textures/icons/boosts/level_buff_TempImmuneFire #365502.png","textures/icons/boosts/ui_buff_2174 #373039.png"}
+        {"textures/icons/boosts/ATKS.png","textures/icons/boosts/level_buff_fire_breath.png","textures/icons/boosts/SPEED.png","textures/icons/boosts/level_buff_TempImmuneFire #365502.png","textures/icons/boosts/ui_buff_2174 #373039.png"},
+        {"textures/effects/guns/RedSq_S.png"}
     };
 
-    int lengths[SIZEOFALLTEXTURE] = { 17,17,17,17,17,9,17,9,4,9,1,4,2,1,2,1,4,2,5};
+    int lengths[SIZEOFALLTEXTURE] = { 17,17,17,17,17,9,17,9,4,9,1,4,2,1,2,1,4,2,5,1};
+
     for(int i = 0; i < SIZEOFALLTEXTURE; i++)
     {
         ALL_TEXTURES->ALL_LOCAL_TEXTURES[i].LocalLen = lengths[i];

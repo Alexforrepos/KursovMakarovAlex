@@ -38,12 +38,6 @@ int main(int argc, char* argv[])
 	IdeqInit();
 	EffQuue = CreateEffectQueue();
 	SAVEDATAS tmp = { {0,0,0},{0,0,0,0,0} };
-	strcpy_s(tmps, "TextInformation/Save1.txt");
-	DataSave(tmp, tmps);
-	strcpy_s(tmps, "TextInformation/Save2.txt");
-	DataSave(tmp, tmps);
-	strcpy_s(tmps, "TextInformation/Save3.txt");
-	DataSave(tmp, tmps);
 	while (isrunning)
 	{
 #pragma region event

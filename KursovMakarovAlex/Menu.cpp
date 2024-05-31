@@ -41,12 +41,9 @@ struct MenuQuery
 
 SDL_Texture** MenuBackground = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * 12);
 
-
 MenuQuery MainMenuDrow;
 MenuQuery MainPlayDrow;
 MenuQuery MainSaveBoost;
-
-
 
 void pushMenuElement(MenuQuery* query, MenuItemElementData data)
 {
@@ -152,6 +149,7 @@ void MainMenuInit()
 	StartGame.Direction.y = HEIGHT / 2;
 	StartGame.link = startitem;
 	StartGame.isactive = false;
+
 	MenuItemElementData ContinueGame;
 	ContinueGame.SelectTexture = CreateTextTexture(ren, Fonts[0], "Continue", { 255,255,255,255 }, 400, 200);
 	ContinueGame.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "Continue", { 255,255,255,255 }, 400, 200);
@@ -255,8 +253,6 @@ void MenuInit()
 	MainMenuInit();
 }
 
-
-
 void BoosterRoom(int& mod)
 {
 	char tmp[100];
@@ -268,12 +264,26 @@ void BoosterRoom(int& mod)
 		{
 
 			if (cur->Data.isactive)
+			{
+				if (cur->Data.link == -1 && !Save.BSS.is_running)
+					continue;
 				SDL_RenderCopy(ren, cur->Data.SelectTexture, NULL, &cur->Data.Direction);
+				if (cur->Data.link == -1)
+					cur->Data.isactive = 0;
+				if (cur->Data.link == 0)
+					cur->Data.isactive = 0;
+			}
 			else
+			{
+				if (cur->Data.link == -1 && !Save.BSS.is_running)
+					continue;
 				renderTextureWithAlpha(cur->Data.SelectTexture, cur->Data.Direction.x, cur->Data.Direction.y);
+			}
 		}
 		else
 		{
+			if (cur->Data.link == -1 && !Save.BSS.is_running)
+				continue;
 			SDL_RenderCopy(ren, cur->Data.SelectTexture, NULL, &cur->Data.Direction);
 			if (mstate & SDL_BUTTON(SDL_BUTTON_LEFT))
 			{
@@ -286,9 +296,11 @@ void BoosterRoom(int& mod)
 					break;
 				case 0:
 					Save.BSS.Last_Wave = 0;
+					Save.BSS.is_running = 1;
 					mod = 1;
 					strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
-					WavesProcessing(Save,tmp);
+					WavesProcessing(Save, tmp);
+					break;
 				case 1:
 					Save.BF.DAMAGEBOOST = !Save.BF.DAMAGEBOOST;
 					break;
@@ -314,6 +326,8 @@ void BoosterRoom(int& mod)
 
 void DrowMenu(bool& isrun, int& mod)
 {
+	int ct = SDL_GetTicks();
+	static int lt = ct;
 	char tmp[100];
 	SDL_Rect D = { 100, 100, WIDTH - 200, HEIGHT - 200 };
 	SDL_Color WHITE = { 255,255,255,255 };
@@ -371,6 +385,7 @@ void DrowMenu(bool& isrun, int& mod)
 				SDL_RenderCopy(ren, cur->Data.SelectTexture, NULL, &cur->Data.Direction);
 				if (mstate & SDL_BUTTON(SDL_BUTTON_LEFT))
 				{
+
 					switch (cur->Data.link)
 					{
 					case 0:
@@ -393,11 +408,20 @@ void DrowMenu(bool& isrun, int& mod)
 			}
 			else
 				SDL_RenderCopy(ren, cur->Data.NonSelectTexture, NULL, &cur->Data.Direction);
-		if (kstate[SDL_SCANCODE_ESCAPE]) menumod = 0;
+		if (kstate[SDL_SCANCODE_ESCAPE] && ct - lt > 200) {
+			menumod = 0;
+			lt = ct;
+		};
 		break;
 	case 3:
+		if (kstate[SDL_SCANCODE_ESCAPE] && ct - lt > 200) 
+		{
+			menumod = 2;
+			lt = ct;
+		}
 		BoosterRoom(mod);
 	default:
 		break;
 	}
+
 }

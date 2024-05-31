@@ -34,14 +34,4 @@ SAVEDATAS DATASAVEGET(char Domen[100]);
 
 void DataSave(SAVEDATAS Save, char Destination[100]);
 
-void WavesProcessing(SAVEDATAS& CURSAVE, char Domen[100]);
-
-
-
-//void FileEnemyQGet(int &mode);
-//
-//
-//void FileHeroGet(const char filename[50]);
-//
-//
-//void FileHeroStatsSave(const char filename[50]);
+int WavesProcessing(SAVEDATAS& CURSAVE, char Domen[100]);

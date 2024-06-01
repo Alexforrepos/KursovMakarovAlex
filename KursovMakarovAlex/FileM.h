@@ -26,13 +26,12 @@ struct SAVEDATAS
 	boost_flags BF; //boost flags
 };
 
-
 extern char LastFileSaveUsed[100];
 
 extern SAVEDATAS Save;
 
-SAVEDATAS DATASAVEGET(const char Domen[100]);
+SAVEDATAS DATASAVEGET(const char* Domen);
 
-void DataSave(SAVEDATAS Save,const char Destination[100]);
+void DataSave(SAVEDATAS Save,const char* Destination);
 
 int WavesProcessing(SAVEDATAS& CURSAVE, const char* Domen);

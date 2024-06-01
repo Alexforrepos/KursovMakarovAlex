@@ -39,14 +39,14 @@ void Button_Ren(int &mode)
 		isboughtItem = !isboughtItem;
 		for (int i = 0; i < 4; i++)
 		{
-			if (flagofAllW && i == 4 && Hero->W[4].isanable)
+			if (flagofAllW && i == 3 && Hero->W[3].isanable)
 			{
 				Save.BSS.Score += 1000;
 				break;
 			}
-			if (!Hero->W[i].isanable)
+			if (Hero->W[i].isanable == false)
 			{
-				Hero->W[i].isanable = !Hero->W[i].isanable;
+				Hero->W[i].isanable = true; 
 				break;
 			}
 		}

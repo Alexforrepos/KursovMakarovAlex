@@ -29,9 +29,11 @@ SAVEDATAS DATASAVEGET(const char *Domen)
 		Hero->HP = 1000;
 		LOCAL_SAVEDATA.BSS = { 0,0,0,1000,0 };
 		LOCAL_SAVEDATA.BF = { 0,0,0,0,0 };
+		strcpy(LastFileSaveUsed, Domen);
 		Hero->W[0].enabled = 1;
 		for (int i = 1; i < 4; i++)
 			Hero->W[i].enabled = 0;
+		fclose(F);
 		return LOCAL_SAVEDATA;
 	}
 
@@ -46,13 +48,13 @@ SAVEDATAS DATASAVEGET(const char *Domen)
 	return LOCAL_SAVEDATA;
 }
 
-void DataSave(SAVEDATAS Save,const char Destination[100])
+void DataSave(SAVEDATAS Save,const char* Destination)
 {
 
 	FILE* F = nullptr;
 	if (fopen_s(&F, Destination, "wt"))
 	{
-		printf("Error opening save file for writing\n");
+		printf("Error opening save file for writing: %s\n",Destination);
 		exit(-1);
 	}
 
@@ -105,7 +107,7 @@ int WavesProcessing(SAVEDATAS& CURSAVE, const char* Domen)
 	{
 		if (feof(F)) {
 			fclose(F);
-			return 0; // Возвращаем 0 если достигнут конец файла во время чтения данных о врагах
+			return 0; 
 		}
 		fscanf_s(F, "%i", &tmpmpdel);
 		CreateNewEnemy(Equeue, tmpmpdel, { (float)(rand() % 1000 + 100),(float)(rand() % 1000 + 100) });

@@ -27,10 +27,10 @@ void DeleteEffectQueue(EFFECT_QUEUE* queue)
         // Освобождаем память, выделенную для данных элемента
         if (current->Data.Effec_Descriptor)
         {
-            delete current->Data.Effec_Descriptor;
+            free(current->Data.Effec_Descriptor);
         }
         // Освобождаем память, выделенную для самого элемента
-        delete current;
+        free(current);
         current = next;
     }
 

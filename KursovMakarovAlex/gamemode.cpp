@@ -471,7 +471,7 @@ void HP_RENDER()
 		for (int i = 0; i < numHearts; ++i)
 		{
 			SDL_Rect destRect = { 20 + i * (ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w  + 10), 20,
-				ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].h }; // учитываем расстояние между сердечками
+				ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].h }; 
 			SDL_RenderCopy(ren, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].PrivateTexture[0], NULL, &destRect);
 		}
 }
@@ -522,7 +522,6 @@ void Gamemode(int& mode)
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
 	static int dt = 0, lt = SDL_GetTicks();
 	int ct = SDL_GetTicks(), FPS = 24;
-	static SDL_Texture* tmp_backgr = nullptr;
 	static int gamemode = 0;
 	
 	dt += ct - lt;
@@ -558,13 +557,13 @@ void Gamemode(int& mode)
 		if (kstate[SDL_SCANCODE_ESCAPE])
 		{
 			Hero->dr = { 0, 0, Hero->dr.w, Hero->dr.h };
-			//DataSave(Save, LastFileSaveUsed);
+			DataSave(Save, LastFileSaveUsed);
 			mode = 0;
+			ClearItem(IDeq);
 		}
 
 		if (Equeue.head == nullptr)
 		{
-			tmp_backgr = CaptureScreenTexture(ren);
 			gamemode = 1;
 			Hero->dr.x = WIDTH / 2;
 			Hero->dr.h = HEIGHT - 100;

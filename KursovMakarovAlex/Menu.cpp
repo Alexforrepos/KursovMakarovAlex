@@ -289,10 +289,7 @@ void BoosterRoom(int& mod,int menumode)
 				switch (cur->Data.link)
 				{
 				case -1:
-					Save.BSS = { 1,0,1000,0 };
-
-					strcpy_s(tmp, "EnemyQueue.txt");
-					WavesProcessing(Save, tmp);
+					WavesProcessing(Save, "EnemyQueue.txt");
 					mod = 1;
 					menumode = 0;
 					break;
@@ -410,10 +407,7 @@ void DrowMenu(bool& isrun, int& mod)
 			}
 			else
 				SDL_RenderCopy(ren, cur->Data.NonSelectTexture, NULL, &cur->Data.Direction);
-		if (kstate[SDL_SCANCODE_ESCAPE] && ct - lt > 200) {
-			menumod = 0;
-			lt = ct;
-		};
+		if (kstate[SDL_SCANCODE_ESCAPE] && ct - lt > 200) {menumod = 0;lt = ct;};
 		break;
 	case 3:
 		if (kstate[SDL_SCANCODE_ESCAPE] && ct - lt > 200) 
@@ -428,9 +422,4 @@ void DrowMenu(bool& isrun, int& mod)
 
 }
 
-void DeinitMenu()
-{
-	DeleteMenuQuery(&MainMenuDrow);
-	DeleteMenuQuery(&MainPlayDrow);
-	DeleteMenuQuery(&MainSaveBoost);
-}
+void DeinitMenu(){DeleteMenuQuery(&MainMenuDrow);DeleteMenuQuery(&MainPlayDrow);DeleteMenuQuery(&MainSaveBoost);}

@@ -13,7 +13,7 @@
 char LastFileSaveUsed[100];
 SAVEDATAS Save;
 
-SAVEDATAS DATASAVEGET(char Domen[100])
+SAVEDATAS DATASAVEGET(const char *Domen)
 {
 	FILE* F = nullptr;
 	if (fopen_s(&F, Domen, "rt"))
@@ -26,8 +26,12 @@ SAVEDATAS DATASAVEGET(char Domen[100])
 	fscanf_s(F, "%i %i", &LOCAL_SAVEDATA.BSS.is_running, &LOCAL_SAVEDATA.BSS.Score);
 	if (!(LOCAL_SAVEDATA.BSS.is_running || LOCAL_SAVEDATA.BSS.Score)) // так как иггра не была запущена он возвращает 0 - SAVE + проверка на score 
 	{
-		LOCAL_SAVEDATA.BSS = { 0,0,0 };
+		Hero->HP = 1000;
+		LOCAL_SAVEDATA.BSS = { 0,0,0,1000,0 };
 		LOCAL_SAVEDATA.BF = { 0,0,0,0,0 };
+		Hero->W[0].enabled = 1;
+		for (int i = 1; i < 4; i++)
+			Hero->W[i].enabled = 0;
 		return LOCAL_SAVEDATA;
 	}
 
@@ -42,7 +46,7 @@ SAVEDATAS DATASAVEGET(char Domen[100])
 	return LOCAL_SAVEDATA;
 }
 
-void DataSave(SAVEDATAS Save, char Destination[100])
+void DataSave(SAVEDATAS Save,const char Destination[100])
 {
 
 	FILE* F = nullptr;
@@ -71,7 +75,7 @@ void DataSave(SAVEDATAS Save, char Destination[100])
 	fclose(F);
 }
 
-int WavesProcessing(SAVEDATAS& CURSAVE, char Domen[100])
+int WavesProcessing(SAVEDATAS& CURSAVE, const char* Domen)
 {
 	int Enem_Q;
 	int tmpmpdel;
@@ -91,12 +95,18 @@ int WavesProcessing(SAVEDATAS& CURSAVE, char Domen[100])
 	fseek(F, CURSAVE.BSS.Last_Wave, SEEK_SET);
 	if (feof(F))
 	{
-		return 0;
+		fclose(F);
+		return 0; // Возвращаем 0 при достижении конца файла
 	}
+
 	fscanf_s(F, "%i", &Enem_Q);
 
 	for (int i = 0; i < Enem_Q; i++)
 	{
+		if (feof(F)) {
+			fclose(F);
+			return 0; // Возвращаем 0 если достигнут конец файла во время чтения данных о врагах
+		}
 		fscanf_s(F, "%i", &tmpmpdel);
 		CreateNewEnemy(Equeue, tmpmpdel, { (float)(rand() % 1000 + 100),(float)(rand() % 1000 + 100) });
 	}
@@ -104,5 +114,3 @@ int WavesProcessing(SAVEDATAS& CURSAVE, char Domen[100])
 	fclose(F);
 	return 1;
 }
-
-

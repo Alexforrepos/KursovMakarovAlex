@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 	HeroInit();
 	IdeqInit();
 	EffQuue = CreateEffectQueue();
-	SAVEDATAS tmp = { {0,0,0},{0,0,0,0,0} };
+
 	while (isrunning)
 	{
 #pragma region event
@@ -77,7 +77,9 @@ int main(int argc, char* argv[])
 		}
 		SDL_RenderPresent(ren);
 	}
-
+	DeleteEffectQueue(EffQuue);
+	FreeTextures();
+	DeinitMenu();
 	DeinitIDeq();
 	CloseFonts();
 	Deinit(0);

@@ -5,8 +5,10 @@
 
 struct projectiledata
 {
+	TimeStruct VTIME;
 	double angle;
-	int speed, livetime = 2500,damage;
+	int lt = 0;
+	float speed ;int livetime = 2500, damage;
 	LOCAL_MASS_TEXTURE_DESCRIPTOR* Textures;
 	SDL_FRect drect;
 };

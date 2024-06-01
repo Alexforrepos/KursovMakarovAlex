@@ -14,7 +14,9 @@
 
 void Button_Ren(int &mode)
 {
-	char tmp[100] = "TextInformation/EnemyQueue.txt";
+	char tmps[100];
+
+	char tmp[100] = "EnemyQueue.txt";
 	bool flagofAllW = false;
 	static SDL_FRect ItemRect = { 300,300,50,50 };
 	static SDL_FRect HealtRect = { WIDTH - 300,300,50,50 };
@@ -37,7 +39,7 @@ void Button_Ren(int &mode)
 		isboughtItem = !isboughtItem;
 		for (int i = 0; i < 4; i++)
 		{
-			if (flagofAllW || i == 4 || Hero->W[i].isanable)
+			if (flagofAllW && i == 4 && Hero->W[4].isanable)
 			{
 				Save.BSS.Score += 1000;
 				break;
@@ -61,21 +63,20 @@ void Button_Ren(int &mode)
 		isboughtHealth = false;
 		phazeofportal = 0;
 		mode = 0;
-		strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
 	}
 }
 
 void Shopmode(int& mode)
 {
-
+	static int ismode = 0;
 	SDL_SetRenderDrawColor(ren, 120, 120, 120, 255);
 	SDL_RenderClear(ren);
-	{
-		Hero->dr = { 0, 0, Hero->dr.w, Hero->dr.h };
-		DataSave(Save, LastFileSaveUsed);
-		mode = 0;
-	}
 	HP_RENDER();
 	HeroMove();
 	Button_Ren(mode);
+	if (!ismode && mode!=0)
+	{
+		Hero->dr = { 0, 0, Hero->dr.w, Hero->dr.h };
+		ismode = 1;
+	}
 }

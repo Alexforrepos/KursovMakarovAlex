@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #define SIZEOFALLTEXTURE 20
+#define MAX_SIZE_OFLOCAL_DESCRIPTOR 40
 
 struct TimeStruct
 {
@@ -11,8 +12,8 @@ struct TimeStruct
 // Структура данных для отдельног сплита
 struct LOCAL_MASS_TEXTURE_DESCRIPTOR
 {
-	SDL_Texture* PrivateTexture[40];
-	SDL_Rect SR[40];
+	SDL_Texture* PrivateTexture[MAX_SIZE_OFLOCAL_DESCRIPTOR];
+	SDL_Rect SR[MAX_SIZE_OFLOCAL_DESCRIPTOR];
 	int LocalLen = 0, li = 0;
 	SDL_Rect MaxRect;
 };
@@ -61,3 +62,5 @@ enum SpleetAnimTexturesBoarders
 };
 
 void InitALLTEXTURES();
+
+void FreeTextures();

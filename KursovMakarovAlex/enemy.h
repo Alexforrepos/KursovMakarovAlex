@@ -17,7 +17,7 @@ struct enemydata
 	int curstage = 0;
 
 	SDL_FRect dr;
-
+	int ltshot;
 
 	float speed;
 	
@@ -52,3 +52,5 @@ void RemoveEnemyQ(EnemyQueue& queue, enemy* removeEnemy);
 void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep);
 
 bool isQueueEmpty(const EnemyQueue& queue);
+
+void processEnemyProjectiles();

@@ -17,6 +17,7 @@ struct BASIC_SAVE_STRUCT
 	bool in_shop;
 	int Last_Wave;
 	int Score;
+	int Money;
 };
 
 struct SAVEDATAS
@@ -30,8 +31,8 @@ extern char LastFileSaveUsed[100];
 
 extern SAVEDATAS Save;
 
-SAVEDATAS DATASAVEGET(char Domen[100]);
+SAVEDATAS DATASAVEGET(const char Domen[100]);
 
-void DataSave(SAVEDATAS Save, char Destination[100]);
+void DataSave(SAVEDATAS Save,const char Destination[100]);
 
-int WavesProcessing(SAVEDATAS& CURSAVE, char Domen[100]);
+int WavesProcessing(SAVEDATAS& CURSAVE, const char* Domen);

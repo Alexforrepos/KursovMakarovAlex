@@ -155,4 +155,17 @@ void InitALLTEXTURES()
     }
 }
 
+void FreeTextures()
+{
+    for (int i = 0; i < ALL_TEXTURES->PublicLen; i++)
+    {
+        for (int j = 0; j < ALL_TEXTURES->ALL_LOCAL_TEXTURES[i].LocalLen; j++)
+        {
+            SDL_DestroyTexture(ALL_TEXTURES->ALL_LOCAL_TEXTURES[i].PrivateTexture[j]);
+        }
+    }
+    FreePublicTextureDescriptor(ALL_TEXTURES);
+    ALL_TEXTURES = NULL;
+}
+
 #pragma endregion

@@ -103,9 +103,13 @@ void Score_Render(int &mode)
 		SDL_DestroyTexture(Ts[5]);
 		SDL_DestroyTexture(Ts[6]);
 		isred = 1;
-		strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
-		WavesProcessing(Save, tmp);
-		mode = 2;
+		strcpy_s(tmp, "EnemyQueue.txt");
+		if (!WavesProcessing(Save, tmp))
+		{
+			mode = 4;
+		}
+		else
+			mode = 2;
 	}
 }
 
@@ -127,6 +131,8 @@ void Death(int &mode)
 	{
 		mode = 0;
 		Save.BSS.is_running = 0;
+		Save.BSS.Money = 0;
+		Hero->Money = 0;
 		newran = true;
 	}
 }
@@ -237,8 +243,6 @@ void ShotgunShoot()
 	CreateProjectile(GetAlpha(GetCenterPointOfRect(Hero->dr), p) - M_PI / 6);
 }
 
-
-
 void DrawAndShootLaser(int startX, int startY, int length, int height, float angle, int lineWidth) {
 	SDL_SetRenderDrawColor(ren, 255, 0, 0, 255); // Устанавливаем цвет лазерного луча
 	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND); // Устанавливаем режим наложения для управления толщиной линии
@@ -274,7 +278,6 @@ bool CheckLaserRectangleIntersection(int startX, int startY, float angle, int le
 
 	return false;
 }
-
 
 void HeroShot()
 {
@@ -394,6 +397,7 @@ void enemyprocess()
 			cur = cur->next;
 		}
 	}
+	processEnemyProjectiles();
 }
 
 void HeroMove()
@@ -455,6 +459,8 @@ void HeroMove()
 				Hero->HP -= 10;
 		}
 		lt = ct;
+		lastx = Hero->dr.x;
+		lasty = Hero->dr.y;
 	}
 	SpleetAnimation(Hero->TEXTURES[Hero->isfliped ? Hero_Spleet_Animation_R - 2 : Hero_Spleet_Animation - 2], Hero->phaseofanimation, Hero->dr, true, ismove, Hero->Time);
 }
@@ -468,6 +474,47 @@ void HP_RENDER()
 				ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].w, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].SR[0].h }; // учитываем расстояние между сердечками
 			SDL_RenderCopy(ren, ALL_TEXTURES->ALL_LOCAL_TEXTURES[Icons].PrivateTexture[0], NULL, &destRect);
 		}
+}
+
+
+void Cong(int &mode)
+{
+	int ct = SDL_GetTicks();
+	static int lt = SDL_GetTicks();
+
+
+	SDL_Rect R = { 0,0,WIDTH,HEIGHT };
+	static SDL_Texture *T[2] = { CreateTextTexture(ren,Fonts[0],"CONGRATULATIONS",{255,255,255,255},400,400), CreateTextTexture(ren,Fonts[0],"YOU WON",{255,255,255,255},400,400) };
+	SDL_Rect T1 = GetTextureAllRect(T[0], 1), T2 = GetTextureAllRect(T[1], 1);
+	static bool ISREN = true;
+	if (!ISREN)
+	{
+		T[0] = CreateTextTexture(ren, Fonts[0], "CONGRATULATIONS", { 255,255,255,255 }, 400, 400);
+		T1.x = WIDTH / 2 - T1.w / 2;
+		T2.x = WIDTH / 2 - T2.w / 2;
+		T2.y = HEIGHT / 2;
+		T1.y = HEIGHT / 2 + 100;
+		T[1] = CreateTextTexture(ren, Fonts[0], "YOU WON", { 255,255,255,255 }, 400, 400);
+		ISREN = !ISREN;
+		lt = ct;
+	}
+	if (ISREN)
+	{
+		if (ct - lt > 10000)
+		{
+			SDL_DestroyTexture(T[0]);
+			SDL_DestroyTexture(T[1]);
+			ISREN = !ISREN;
+			mode = 0;
+		}
+		SDL_SetRenderDrawColor(ren, 120, 120, 120, 255);
+		SDL_RenderFillRect(ren, &R);
+		SDL_RenderCopy(ren, T[0], NULL, &T1);
+		SDL_RenderCopy(ren, T[1], NULL, &T2);
+	}
+	
+
+
 }
 
 void Gamemode(int& mode)
@@ -511,20 +558,21 @@ void Gamemode(int& mode)
 		if (kstate[SDL_SCANCODE_ESCAPE])
 		{
 			Hero->dr = { 0, 0, Hero->dr.w, Hero->dr.h };
-			DataSave(Save, LastFileSaveUsed);
+			//DataSave(Save, LastFileSaveUsed);
 			mode = 0;
 		}
 
 		if (Equeue.head == nullptr)
 		{
-			ClearItem(IDeq);
 			tmp_backgr = CaptureScreenTexture(ren);
 			gamemode = 1;
 			Hero->dr.x = WIDTH / 2;
 			Hero->dr.h = HEIGHT - 100;
 		}
 		if (Hero->HP <= 0)
+		{
 			gamemode = 3;
+		}
 		if (Save.BF.INV)
 			Hero->HP = 1000;
 		break;
@@ -537,5 +585,9 @@ void Gamemode(int& mode)
 		break;
 	case 3:
 		Death(mode);
+		break;
+	case 4:
+		Cong(mode);
+		break;
 	}
 }

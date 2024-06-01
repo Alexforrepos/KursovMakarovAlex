@@ -11,6 +11,7 @@
 #include "FileM.h"
 #include <string.h>
 #include "All_TextureInit.h"
+#include "Hero.h"
 
 enum linkenum
 {
@@ -39,7 +40,6 @@ struct MenuQuery
 	MenuElemnt* Tail;
 };
 
-SDL_Texture** MenuBackground = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * 12);
 
 MenuQuery MainMenuDrow;
 MenuQuery MainPlayDrow;
@@ -102,7 +102,6 @@ void DeleteMenuQuery(MenuQuery* query)
 		current = next;
 	}
 
-	free(query);
 }
 
 void MainMenuInit()
@@ -253,7 +252,7 @@ void MenuInit()
 	MainMenuInit();
 }
 
-void BoosterRoom(int& mod)
+void BoosterRoom(int& mod,int menumode)
 {
 	char tmp[100];
 	SDL_Point mp;
@@ -290,16 +289,22 @@ void BoosterRoom(int& mod)
 				switch (cur->Data.link)
 				{
 				case -1:
-					strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
+					Save.BSS = { 1,0,1000,0 };
+
+					strcpy_s(tmp, "EnemyQueue.txt");
 					WavesProcessing(Save, tmp);
 					mod = 1;
+					menumode = 0;
 					break;
 				case 0:
+
+					Hero->HP = 1000;
 					Save.BSS.Last_Wave = 0;
 					Save.BSS.is_running = 1;
 					mod = 1;
-					strcpy_s(tmp, "TextInformation/EnemyQueue.txt");
+					strcpy_s(tmp, "EnemyQueue.txt");
 					WavesProcessing(Save, tmp);
+					menumode = 0;
 					break;
 				case 1:
 					Save.BF.DAMAGEBOOST = !Save.BF.DAMAGEBOOST;
@@ -389,16 +394,13 @@ void DrowMenu(bool& isrun, int& mod)
 					switch (cur->Data.link)
 					{
 					case 0:
-						strcpy_s(tmp, "TextInformation/Save1.txt");
-						Save = DATASAVEGET(tmp);
+						Save = DATASAVEGET("Save1.txt");
 						break;
 					case 1:
-						strcpy_s(tmp, "TextInformation/Save2.txt");
-						Save = DATASAVEGET(tmp);
+						Save = DATASAVEGET("Save2.txt");
 						break;
 					case 2:
-						strcpy_s(tmp, "TextInformation/Save3.txt");
-						Save = DATASAVEGET(tmp);
+						Save = DATASAVEGET("Save3.txt");
 						break;
 					default:
 						break;
@@ -419,9 +421,16 @@ void DrowMenu(bool& isrun, int& mod)
 			menumod = 2;
 			lt = ct;
 		}
-		BoosterRoom(mod);
+		BoosterRoom(mod,menumod);
 	default:
 		break;
 	}
 
+}
+
+void DeinitMenu()
+{
+	DeleteMenuQuery(&MainMenuDrow);
+	DeleteMenuQuery(&MainPlayDrow);
+	DeleteMenuQuery(&MainSaveBoost);
 }

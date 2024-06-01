@@ -22,7 +22,7 @@ void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep)
 	TempData.angle = NULL;
 	TempData.Textures = nullptr;
 	TempData.curstage = 1;
-
+	TempData.ltshot = 0;
 	switch (model)
 	{
 	case 0:
@@ -145,6 +145,22 @@ void clearEnemies(EnemyQueue& queue)
 #pragma region beh
 void enemyMoveTowardsPlayer(enemy* en)
 {
+	static int lt = 0;
+	int ct = SDL_GetTicks();
+	if (ct - en->data.ltshot > en->data.CD) // Пример для модели 0
+	{
+		// Создание снаряда
+		projectiledata tempdata;
+		tempdata.angle = SDL_atan2(Hero->dr.y - en->data.dr.y, Hero->dr.x - en->data.dr.x);
+		tempdata.drect = { en->data.dr.x, en->data.dr.y, 20, 20 };
+		tempdata.livetime = 3000;
+		tempdata.speed = 0.1;
+		tempdata.damage = 100;
+		PushProjectile(EnemyProjectiles, tempdata);
+		en->data.CD = 1000;
+		en->data.ltshot = ct;
+	}
+
 	if (en == NULL)
 	{
 		return;
@@ -173,7 +189,10 @@ void Mele_Beh(enemy* en)
 	{
 		en->data.dr = { en->data.dr.x + en->data.speed * cos(ang) , en->data.dr.y + en->data.speed * sin(ang),en->data.dr.w,en->data.dr.h };
 		if (GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(Hero->dr)) < 50)
+		{
+			Hero->HP -= 50;
 			en->data.CD = 3000;
+		}
 	}
 	else
 	{
@@ -250,12 +269,51 @@ void Boom_Beh(enemy* en)
 			if (GetDistance(GetCenterPointOfRect(en->data.dr), GetCenterPointOfRect(cur->data.dr)) < 300)
 			{
 				cur->data.HP = -1;
-				Save.BSS.Score += 100 * (1+Hero->ItemsInventory[2]/10.0);
+				Save.BSS.Score += 100 * (1 + Hero->ItemsInventory[2] / 10.0);
 			}
 		}
 	}
 }
 #pragma endregion
+
+void processEnemyProjectiles()
+{
+	static int lt = 0;
+	int ct = SDL_GetTicks();
+	projectile* cur = EnemyProjectiles.head;
+	projectile* tmps;
+
+	if (cur != nullptr)
+	{
+		do {
+			SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
+			SDL_RenderCopyExF(ren, cur->data.Textures->PrivateTexture[1], NULL, &cur->data.drect, cur->data.angle, NULL, SDL_FLIP_NONE);
+
+			if (cur->data.livetime <= 0) {
+				tmps = cur->next;
+				PullProjectile(EnemyProjectiles, cur);
+				cur = tmps;
+				continue;
+			}
+
+			if (SDL_HasIntersectionF(&cur->data.drect,&Hero->dr))
+			{
+				Hero->HP -= cur->data.damage;
+				tmps = cur->next;
+				PullProjectile(EnemyProjectiles, cur);
+				cur = tmps;
+				continue;
+			}
+
+			cur->data.drect = { cur->data.drect.x + (float)cos(cur->data.angle), cur->data.drect.y + (float)sin(cur->data.angle), cur->data.drect.w, cur->data.drect.h };
+			cur->data.livetime -= ct - lt;
+
+			cur = cur->next;
+		} while (cur != nullptr);
+
+		lt = ct;
+	}
+}
 
 void enemyprocessing(enemy* en)
 {
@@ -268,23 +326,8 @@ void enemyprocessing(enemy* en)
 #pragma region createnemyprojectile
 
 
-	if (en->data.CD < 0 && en->data.model == 0)
-	{
-		projectiledata tempdata;
-		tempdata.angle = SDL_atan2(Hero->dr.y - en->data.dr.y, Hero->dr.x - en->data.dr.x);
-		tempdata.drect = { en->data.dr.x, en->data.dr.y, 20, 20 };
-		tempdata.livetime = 3000;
-		tempdata.speed = 5;
-		tempdata.damage = 10;
-		PushProjectile(EnemyProjectiles, tempdata);
-		en->data.CD = 1000;
-	}
-	else
-	{
-		en->data.CD -= ct - lt;
-	}
+	
 #pragma endregion
-
 #pragma region enemymove
 	if (en->data.model == 0)
 	{
@@ -309,29 +352,7 @@ void enemyprocessing(enemy* en)
 		Boom_Beh(en);
 	}
 #pragma endregion
-
-
-#pragma region enemyprojectileprocessing
-	for (projectile* cur = EnemyProjectiles.head; cur != nullptr; cur = cur->next)
-	{
-		SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
-		SDL_RenderCopyExF(ren, cur->data.Textures->PrivateTexture[1], NULL, &cur->data.drect, cur->data.angle, NULL, SDL_FLIP_NONE);
-		if (cur->data.livetime <= 0)
-		{
-			PullProjectile(EnemyProjectiles, cur);
-			break;
-		}
-		if (isinRect(cur->data.drect, Hero->dr))
-		{
-			Hero->HP -= cur->data.damage;
-			PullProjectile(EnemyProjectiles, cur);
-			break;
-		}
-		cur->data.drect = { cur->data.drect.x + (float)cos(cur->data.angle),cur->data.drect.y + (float)sin(cur->data.angle),cur->data.drect.w,cur->data.drect.h };
-		cur->data.livetime -= ct - lt;
-	}
 	lt = ct;
-#pragma endregion
 
 	SpleetAnimation(en->data.Textures, en->data.curstage, en->data.dr, Hero->dr.x < en->data.dr.x ? true : false, false, en->data.AnimationTime);
 }

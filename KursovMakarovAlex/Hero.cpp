@@ -54,7 +54,7 @@ void HeroInit()
 
 	Hero->TEXTURES[0] = &ALL_TEXTURES->ALL_LOCAL_TEXTURES[Hero_Spleet_Animation];
 	Hero->TEXTURES[1] = &ALL_TEXTURES->ALL_LOCAL_TEXTURES[Hero_Spleet_Animation_R];
-	Hero->HP = -1;
+	Hero->HP = 1000;
 	Hero->Money = -1;
 	Hero->currentWeapon = 0;
 	Hero->phaseofanimation = 1;

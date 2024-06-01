@@ -44,3 +44,5 @@ EFFECT_QUEUE* CreateEffectQueue();
 void PULLEFFECT(EFFECT_QUEUE*& queue);
 
 void EffectRender(EFFECT_ELEMENT* reneffect);
+
+void DeleteEffectQueue(EFFECT_QUEUE* queue);

@@ -251,5 +251,14 @@
     <Text Include="TextInformation\EnemyQueue.txt">
       <Filter>Файлы ресурсов\txtinfo</Filter>
     </Text>
+    <Text Include="Save1.txt">
+      <Filter>Файлы ресурсов\txtinfo</Filter>
+    </Text>
+    <Text Include="Save2.txt">
+      <Filter>Файлы ресурсов\txtinfo</Filter>
+    </Text>
+    <Text Include="Save3.txt">
+      <Filter>Файлы ресурсов\txtinfo</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@ SDL_Texture* GetTextureFromWindow()
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(ren, s);
 	if (texture == NULL)
 	{
-		printf("errn get window surf texture \n");
+		printf("errn get window surf texture\n");
 		return NULL;
 	}
 	SDL_FreeSurface(s);

@@ -44,6 +44,7 @@ struct MenuQuery
 MenuQuery MainMenuDrow;
 MenuQuery MainPlayDrow;
 MenuQuery MainSaveBoost;
+MenuQuery MenuInformation;
 
 void pushMenuElement(MenuQuery* query, MenuItemElementData data)
 {
@@ -244,6 +245,18 @@ void MainMenuInit()
 	pushMenuElement(&MainMenuDrow, Exit);
 #pragma endregion
 
+
+
+#pragma region InformationRoom
+
+	MenuItemElementData TextInformationAboutMe;
+	TextInformationAboutMe.NonSelectTexture = CreateTextTexture(ren, Fonts[0], "This application was developed by the 1st year student of the group O-23-IVT-2-Po-B Makarov Alexander", 
+		{ 255,255,255,255 }, 1500, 700);
+	SDL_Rect TMPDM = GetTextureAllRect(TextInformationAboutMe.NonSelectTexture, 1);
+	TextInformationAboutMe.Direction = { WIDTH / 2 - TMPDM.w / 2, HEIGHT / 2 - TMPDM.h / 2,TMPDM.w,TMPDM.h };
+	pushMenuElement(&MenuInformation, TextInformationAboutMe);
+#pragma endregion
+
 #pragma endregion
 }
 
@@ -252,30 +265,33 @@ void MenuInit()
 	MainMenuInit();
 }
 
-void BoosterRoom(int& mod,int menumode)
+
+void BoosterRoom(int& mod, int& menumode)
 {
 	char tmp[100];
 	SDL_Point mp;
 	const Uint8* kstate = SDL_GetKeyboardState(NULL);
 	Uint32 mstate = SDL_GetMouseState(&mp.x, &mp.y);
+
 	for (MenuElemnt* cur = MainSaveBoost.Head; cur != nullptr; cur = cur->Next)
+	{
 		if (!isinPoint(mp, cur->Data.Direction))
 		{
-
 			if (cur->Data.isactive)
 			{
 				if (cur->Data.link == -1 && !Save.BSS.is_running)
 					continue;
+
 				SDL_RenderCopy(ren, cur->Data.SelectTexture, NULL, &cur->Data.Direction);
-				if (cur->Data.link == -1)
-					cur->Data.isactive = 0;
-				if (cur->Data.link == 0)
-					cur->Data.isactive = 0;
+
+				if (cur->Data.link == -1 || cur->Data.link == 0)
+					cur->Data.isactive = false;
 			}
 			else
 			{
 				if (cur->Data.link == -1 && !Save.BSS.is_running)
 					continue;
+
 				renderTextureWithAlpha(cur->Data.SelectTexture, cur->Data.Direction.x, cur->Data.Direction.y);
 			}
 		}
@@ -283,24 +299,49 @@ void BoosterRoom(int& mod,int menumode)
 		{
 			if (cur->Data.link == -1 && !Save.BSS.is_running)
 				continue;
+
 			SDL_RenderCopy(ren, cur->Data.SelectTexture, NULL, &cur->Data.Direction);
+
 			if (mstate & SDL_BUTTON(SDL_BUTTON_LEFT))
 			{
 				switch (cur->Data.link)
 				{
 				case -1:
-					WavesProcessing(Save, "EnemyQueue.txt");
+					Save.BSS.is_running = true;
+					Hero->HP = Save.HSS.HeroLastHp;
+					Hero->Money = Save.HSS.HeroMoney;
+					Hero->enemK = Save.HSS.HeroEnemyKill;
+
+					FOR(0, 4) Hero->W[i].enabled = Save.HSS.WeaponEnabled[i];
+					FOR(0, 4) Hero->ItemsInventory[i] = Save.HSS.HeroItem[i];
+
 					mod = 1;
+					WavesProcessing(Save, "EnemyQueue.txt");
 					menumode = 0;
 					break;
 				case 0:
+					Save.BSS.is_running = true;
+					Save.HSS.HeroEnemyKill = 0;
+
+					FOR(0, 4) Save.HSS.WeaponEnabled[i] = 0;
+					FOR(0, 4) Save.HSS.HeroItem[i] = 0;
+
+					FOR(1, 4) Hero->W[i].enabled = 0;
+					Hero->W[0].enabled = true;
+					FOR(0, 4) Hero->ItemsInventory[i] = Save.HSS.HeroItem[i];
+					Save.HSS.WeaponEnabled[0] = 1;
 
 					Hero->HP = 1000;
+					Save.HSS.HeroMoney = 0;
+					Save.HSS.HeroLastHp = 1000;
+
+					Save.BSS.Money = 0;
 					Save.BSS.Last_Wave = 0;
-					Save.BSS.is_running = 1;
+					Save.BSS.is_running = true;
+					Save.BSS.in_shop = false;
+					DataSave(Save, LastFileSaveUsed);
 					mod = 1;
-					strcpy_s(tmp, "EnemyQueue.txt");
-					WavesProcessing(Save, tmp);
+					WavesProcessing(Save, "EnemyQueue.txt");
 					menumode = 0;
 					break;
 				case 1:
@@ -321,9 +362,11 @@ void BoosterRoom(int& mod,int menumode)
 				default:
 					break;
 				}
+
 				cur->Data.isactive = !cur->Data.isactive;
 			}
 		}
+	}
 }
 
 void DrowMenu(bool& isrun, int& mod)
@@ -376,6 +419,7 @@ void DrowMenu(bool& isrun, int& mod)
 		}
 		break;
 	case 1:
+		SDL_RenderCopy(ren, MenuInformation.Head->Data.NonSelectTexture, NULL, &MenuInformation.Head->Data.Direction);
 		if (kstate[SDL_SCANCODE_ESCAPE]) menumod = 0;
 		break;
 	case 2:
@@ -391,13 +435,13 @@ void DrowMenu(bool& isrun, int& mod)
 					switch (cur->Data.link)
 					{
 					case 0:
-						Save = DATASAVEGET("Save1.txt");
+						DATASAVEGET("Save1.txt");
 						break;
 					case 1:
-						Save = DATASAVEGET("Save2.txt");
+						 DATASAVEGET("Save2.txt");
 						break;
 					case 2:
-						Save = DATASAVEGET("Save3.txt");
+						DATASAVEGET("Save3.txt");
 						break;
 					default:
 						break;
@@ -422,4 +466,10 @@ void DrowMenu(bool& isrun, int& mod)
 
 }
 
-void DeinitMenu(){DeleteMenuQuery(&MainMenuDrow);DeleteMenuQuery(&MainPlayDrow);DeleteMenuQuery(&MainSaveBoost);}
+void DeinitMenu()
+{
+	DeleteMenuQuery(&MainMenuDrow); 
+	DeleteMenuQuery(&MainPlayDrow); 
+	DeleteMenuQuery(&MainSaveBoost);
+	DeleteMenuQuery(&MenuInformation);
+}

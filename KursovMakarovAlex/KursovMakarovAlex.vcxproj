@@ -194,6 +194,9 @@
     <Image Include="textures\mobs_spleet\Hero\DeathofHero.png" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Save1.txt" />
+    <Text Include="Save2.txt" />
+    <Text Include="Save3.txt" />
     <Text Include="TextInformation\EnemyQueue.txt" />
     <Text Include="TextInformation\Save1.txt" />
     <Text Include="TextInformation\Save2.txt" />

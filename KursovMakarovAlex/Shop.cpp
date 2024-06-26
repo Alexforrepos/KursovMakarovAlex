@@ -14,13 +14,12 @@
 
 void Button_Ren(int &mode)
 {
-	char tmps[100];
 
-	char tmp[100] = "EnemyQueue.txt";
 	bool flagofAllW = false;
 	static SDL_FRect ItemRect = { 300,300,50,50 };
 	static SDL_FRect HealtRect = { WIDTH - 300,300,50,50 };
 	static SDL_Rect PortalRectT = GetTextureAllRect(ALL_TEXTURES->ALL_LOCAL_TEXTURES[Portal_Texture].PrivateTexture[0], 2);
+
 	static SDL_FRect PortalRect = { WIDTH / 2,300,(float)PortalRectT.w,(float)PortalRectT.h };
 	static TimeStruct Portal_Time = { 0,0,0,500 };
 	static bool isboughtItem = false;
@@ -39,15 +38,15 @@ void Button_Ren(int &mode)
 		isboughtItem = !isboughtItem;
 		for (int i = 0; i < 4; i++)
 		{
-			if (flagofAllW && i == 3 && Hero->W[3].isanable)
+
+			if (Hero->W[i].enabled == false)
 			{
-				Save.BSS.Score += 1000;
+				Hero->W[i].enabled = true; 
 				break;
 			}
-			if (Hero->W[i].isanable == false)
+			else
 			{
-				Hero->W[i].isanable = true; 
-				break;
+				Save.BSS.Score += 1000;
 			}
 		}
 	}

@@ -1,6 +1,16 @@
 #pragma once
 #include <SDL.h>
 
+#define FOR(Start,END) for(int i = (Start);i <(END);i++) 
+
+struct HeroSaveStats
+{
+	int HeroLastHp;
+	int HeroMoney;
+	bool WeaponEnabled[4];
+	int HeroItem[4];
+	int HeroEnemyKill;
+};
 
 struct boost_flags
 {
@@ -24,14 +34,15 @@ struct SAVEDATAS
 {
 	BASIC_SAVE_STRUCT BSS; // flag of start
 	boost_flags BF; //boost flags
+	HeroSaveStats HSS; //Hero Save Stats
 };
 
 extern char LastFileSaveUsed[100];
 
 extern SAVEDATAS Save;
 
-SAVEDATAS DATASAVEGET(const char* Domen);
+void DATASAVEGET(const char* Domen);
 
-void DataSave(SAVEDATAS Save,const char* Destination);
+void DataSave(SAVEDATAS Save, const char* Destination);
 
 int WavesProcessing(SAVEDATAS& CURSAVE, const char* Domen);

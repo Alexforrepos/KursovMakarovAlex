@@ -49,6 +49,8 @@ void enemyprocessing(enemy* en);
 
 void RemoveEnemyQ(EnemyQueue& queue, enemy* removeEnemy);
 
+void clearEnemies(EnemyQueue& queue);
+
 void CreateNewEnemy(EnemyQueue& Queue, int model, SDL_FPoint ep);
 
 bool isQueueEmpty(const EnemyQueue& queue);

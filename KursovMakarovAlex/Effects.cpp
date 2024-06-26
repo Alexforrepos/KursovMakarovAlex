@@ -24,17 +24,17 @@ void DeleteEffectQueue(EFFECT_QUEUE* queue)
     while (current)
     {
         EFFECT_ELEMENT* next = current->Next;
-        // Освобождаем память, выделенную для данных элемента
+  
         if (current->Data.Effec_Descriptor)
         {
             free(current->Data.Effec_Descriptor);
         }
-        // Освобождаем память, выделенную для самого элемента
+   
         free(current);
         current = next;
     }
 
-    // Освобождаем память, выделенную для очереди
+ 
     free(queue);
 }
 
@@ -62,7 +62,6 @@ void PUSHEFFECT(EFFECT_QUEUE*& queue, EFFECT_ELEMENT_DATA data)
     
 }
 
-// Функция для удаления элемента из очереди
 void PULLEFFECT(EFFECT_QUEUE*& queue)
 {
     if (!queue->Head) 
@@ -93,14 +92,11 @@ void ClearEffect(EFFECT_QUEUE*& EQ)
     }
 }
 
-// Функция для проверки, пуста ли очередь
 bool isEmptyEffect(EFFECT_QUEUE*& queue) 
 {
     return queue->Head == nullptr;
 }
 
-
-// 0 - boom effect
 void CreateEffect(int model,SDL_FPoint dir)
 {
     EFFECT_ELEMENT_DATA  TmpEffectData = { 0 };
@@ -117,7 +113,6 @@ void CreateEffect(int model,SDL_FPoint dir)
         break;
     }
 }
-
 
 void EffectRender(EFFECT_ELEMENT* reneffect)
 {
